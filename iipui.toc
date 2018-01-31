@@ -1,0 +1,120 @@
+## Interface: 70000
+## Title: iip ui
+## Author: modernist
+## Dependencies: oUF
+## OptionalDeps: Clique
+## SavedVariables: iipAlwaysActionBar, iipCombatActionBar, iipRaidLayout, iipRaidX, iipRaidY
+## X-credits: haste, lyn
+## Notes: a ui
+
+#  ~pre-load custom behaviour
+customise\preload.lua
+
+#  ~libraries first
+core\plugins\Libstub.lua
+core\plugins\NoTaint_UIDropDownMenu\UIDropDownMenuTemplates.xml
+core\plugins\NoTaint_UIDropDownMenu\UIDropDownMenu.lua
+core\plugins\NoTaint_UIDropDownMenu\EasyMenu.lua
+core\plugins\oUF_Smooth\oUF_Smooth.lua
+
+#  ~insert templates
+templates.xml
+
+#  ~load in an order so that our settings are applied evenly
+core\typeface\text.lua
+core\colour\class.lua
+core\colour\reaction.lua
+core\api\events.lua
+core\api\skins.lua
+core\api\style.lua
+core\api\values.lua
+core\delegate\position.lua
+core\var\svar.lua
+
+#  ~mid-load custom behaviour
+customise\customise.lua
+
+#  ~modular elements
+elements\aura\aura.lua
+#
+elements\bag\bag\bag.lua
+elements\bag\button.lua
+elements\bag\bank\bank.lua
+elements\bag\tools\greys.lua
+elements\bag\tools\tradeskills.lua
+elements\bag\update.lua
+#
+elements\bar\bar.lua
+elements\bar\backpack.lua
+elements\bar\clock.lua
+elements\bar\skin.lua
+elements\bar\buttons.lua
+elements\bar\hide.lua
+elements\bar\update.lua
+elements\bar\bindings.lua
+#
+elements\boss\warnings.lua
+#
+elements\chat\chat.lua
+elements\chat\cmd.lua
+elements\chat\event.lua
+elements\chat\tab.lua
+elements\chat\toast.lua
+elements\chat\url.lua
+#
+elements\gossip\gossip.lua
+#
+elements\loss_of_control\lossofcontrol.lua
+#
+elements\menu\menu.lua
+#
+elements\minimap\cluster.lua
+elements\minimap\difficulty.lua
+elements\minimap\icons.lua
+elements\minimap\minimap.lua
+#
+elements\nameplates\nameplates.lua
+elements\nameplates\resource.lua
+#
+elements\objectives\objectives.lua
+#
+elements\order_hall\commandbar.lua
+#
+elements\talking_head\talkinghead.lua
+#
+elements\groupframe\auras\spelllist.lua
+elements\groupframe\auras\auras.lua
+elements\groupframe\info\info.lua
+elements\groupframe\tags.lua
+elements\groupframe\update.lua
+elements\groupframe\sizing.lua
+elements\groupframe\tanks\layout.lua
+elements\groupframe\healers\layout.lua
+elements\groupframe\dps\layout.lua
+elements\groupframe\generate.lua
+#
+elements\unitframe\auras.lua
+elements\unitframe\tags.lua
+elements\unitframe\update.lua
+elements\unitframe\shared\layout.lua
+elements\unitframe\player\layout.lua
+elements\unitframe\target\layout.lua
+elements\unitframe\pet\layout.lua
+elements\unitframe\tot\layout.lua
+elements\unitframe\boss\layout.lua
+elements\unitframe\arena\layout.lua
+elements\unitframe\focus\layout.lua
+elements\unitframe\generate.lua
+#
+elements\tooltip\content.lua
+elements\tooltip\layout.lua
+#
+elements\world_map\pins.lua
+elements\world_map\map.lua
+#
+elements\xp\xp.lua
+#
+elements\addons\addonusage.lua
+
+#  ~post-load custom behaviour
+customise\postload.lua

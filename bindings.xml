@@ -1,0 +1,7 @@
+
+
+<Bindings>
+	<Binding name='IIPBAR_TOGGLE' description='Toggle' category='ADDONS'>
+		iipBarToggle()
+	</Binding>
+</Bindings>
