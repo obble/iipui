@@ -16,29 +16,6 @@
 	end
 
 	oUF:Factory(function(self)
-		self:SetActiveStyle'iip - Party'
-		local party = self:SpawnHeader(
-			'oUF_party', nil, 'raid,party,solo',
-			'showRaid',          true,
-			'showParty',         true,
-			'showPlayer',        true,
-			'showSolo',          true,
-			'xOffset',           12,
-			'yOffset',           12,
-			'groupFilter',       '1,2,3,4,5,6',
-	    	'groupingOrder',     '1,2,3,4,5,6',
-	    	'groupBy',           'GROUP',
-			'sortMethod',        'INDEX',
-	    	'maxColumns',        6,
-	    	'unitsPerColumn',    5,
-	    	'columnSpacing',     12,
-			'point',             'LEFT',
-			'columnAnchorPoint', 'BOTTOM',
-			'oUF-initialConfigFunction', [[
-				self:SetHeight(iipRaidX and iipRaidX or 35)
-				self:SetWidth(iipRaidY and iipRaidY or 50)
-			]]
-)
 		self:SetActiveStyle'iip - Tank'
         local tanks = self:SpawnHeader(
             'oUF_tank', nil, 'raid',
