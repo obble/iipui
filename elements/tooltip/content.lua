@@ -26,7 +26,9 @@
 
     local AddStatusBarColour = function(bar, unit)
         local colour = UnitColours(unit)
-        bar:SetStatusBarColor(colour.r, colour.g, colour.b)
+        if  colour then
+            bar:SetStatusBarColor(colour.r, colour.g, colour.b)
+        end
     end
 
     local AddRaidIcon = function(unit)

@@ -230,7 +230,7 @@
             rep:SetStatusBarColor(colour.r, colour.g, colour.b)
             rep:SetAnimatedTextureColors(colour.r, colour.g, colour.b)
             rep:ClearAllPoints()
-            rep:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -105, artifact:IsShown() and -35 or xp:IsShown() and -35 or -13)
+            rep:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -105, artifact:IsShown() and -32 or xp:IsShown() and -32 or -13)
 
             rep.spark:SetPoint('CENTER', rep, 'LEFT', ((v - min)/(max - min))*rep:GetWidth(), -.5)
             rep.spark:SetVertexColor(colour.r, colour.g, colour.b)

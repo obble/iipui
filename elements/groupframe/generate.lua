@@ -24,8 +24,8 @@
             'showPlayer', 		true,
             'xOffset',          30,
             'columnSpacing',    20,
-            'groupBy',          'GROUP',
             'roleFilter',      	'MAINTANK,MAINASSIST,TANK',
+            'unitsPerColumn',	2,
             'point',           	'LEFT',
             'oUF-initialConfigFunction', [[
 				self:SetHeight(25)
@@ -49,13 +49,13 @@
 			]]
         )
 
-        self:SetActiveStyle'iip - DPS'
+        self:SetActiveStyle'iip - Dps'
         local dps = self:SpawnHeader(
             'oUF_dps', nil, 'raid',
             'showRaid',         true,
             'showParty', 		true,
             'showPlayer', 		true,
-            'xOffset',          0,
+            'xOffset',          22,
             'columnSpacing',    20,
 			'roleFilter', 		'DAMAGER,NONE',
             'point',            'LEFT',
@@ -65,10 +65,9 @@
 			]]
         )
 
-        party:SetPoint('TOP', UIParent)
         tanks:SetPoint('TOPLEFT', 	ChatFrame1, 'BOTTOMLEFT', 0, -20)
-		support:SetPoint('TOPLEFT', tank, 		'BOTTOMLEFT', 0, -20)
-		dps:SetPoint('TOPLEFT', 	support, 	'BOTTOMLEFT', 0, -20)
+		support:SetPoint('TOPLEFT', ChatFrame1, 'BOTTOMLEFT', 0, -60)
+		dps:SetPoint('TOPLEFT', 	ChatFrame1, 'BOTTOMLEFT', 0, -100)
 	end)
 
 
