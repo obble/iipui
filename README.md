@@ -3,7 +3,7 @@ iipui
 ![Demo](https://i.pi.gy/E1b9x.gif)
 ======
 #### Fonts ####
-insert directory into interface folder
+insert 'Fonts' directory into Interface folder
 
 #### Options ####
 Click the menu (bottom-left underneath the minimap) and select from 'iipui' at the top.
