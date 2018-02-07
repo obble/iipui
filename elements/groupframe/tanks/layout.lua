@@ -68,12 +68,34 @@
 		return ResurrectIcon
 	end
 
+	local AddLFDRole = function(self)
+		local LFDRole = self.Health:CreateTexture(nil, 'OVERLAY')
+		LFDRole:SetSize(22, 22)
+		LFDRole:SetPoint('CENTER', 0, 1)
+		LFDRole:Hide()
+		return LFDRole
+	end
+
 	local AddRaidIcon = function(self)
 		local RaidIcon = self.Health:CreateTexture(nil, 'OVERLAY')
 		RaidIcon:SetTexture[[Interface\AddOns\iipui\art\raidicons\raidicons]]
 		RaidIcon:SetSize(24, 24)
 		RaidIcon:SetPoint'CENTER'
 		return RaidIcon
+	end
+
+	local AddPortrait = function(self)
+		local Portrait = self.Health:CreateTexture(nil, 'ARTWORK')
+		Portrait:SetSize(32, 32)
+		Portrait:SetPoint('RIGHT', self.Health, 'LEFT', -5, 1)
+
+		--[[Portrait.border = self.Health:CreateTexture(nil, 'OVERLAY')
+		Portrait.border:SetSize(53, 30)
+		Portrait.border:SetTextureInterface/GUILDFRAME/GuildExtra
+		Portrait.border:SetPoint('CENTER', Portrait)
+		Portrait.border:SetTexCoord(.565, .8, 0, .59)]]
+
+		return Portrait
 	end
 
 	local AddPrediction = function(self)
@@ -127,7 +149,7 @@
 
 	ns.UnitSpecific.tank = function(self, ...)
 		--
-		self:SetSize(80, 20)
+		self:SetSize(95, 17)
 		-- self:SetResizable(true)
 		self:SetScript('OnEnter', UnitFrame_OnEnter)
 		self:SetScript('OnLeave', UnitFrame_OnLeave)
@@ -137,7 +159,9 @@
 		self.BD, self.Border 		= AddBorder(self)
 		self.Modifier				= AddModifier(self)
 		self.ResurrectIcon 			= AddResurrectIcon(self)
-		RaidTargetIndicator			= AddRaidIcon(self)
+		self.RaidTargetIndicator	= AddRaidIcon(self)
+		self.Portrait 				= AddPortrait(self)
+		self.LFDRole 				= AddLFDRole(self)
 		self.Range					= range
 
 		--  TODO:  insert BuilderSpender

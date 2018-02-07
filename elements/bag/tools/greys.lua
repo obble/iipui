@@ -7,8 +7,9 @@
 	local bu = CreateFrame('Button', nil, bag, 'ActionButtonTemplate')
 	ns.BU(bu)
 	ns.BDStone(bu)
-	bu:SetPoint('TOP', bag, 'BOTTOMLEFT',  35, 7)
-	bu:SetFrameStrata'LOW'
+	bu:SetSize(11, 11)
+	bu:SetPoint('BOTTOMLEFT', 35, 7)
+	bu:SetFrameStrata'MEDIUM'
 	bu:Hide()
 
 	bu.i = bu:CreateTexture(nil, 'ARTWORK')

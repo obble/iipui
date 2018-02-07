@@ -11,23 +11,21 @@
 
 	local AddBorder = function(self)
 		local BD = CreateFrame('Frame', nil, self)
-        ns.BD(BD)
         BD:SetBackdropColor(.05, .05, .05)
 		BD:SetPoint('TOPLEFT', self, -4, 4)
 		BD:SetPoint('BOTTOMRIGHT', self, 4, -4)
         BD:SetFrameLevel(0)
 
 		BD.t = BD:CreateTexture(nil, 'ARTWORK')
-		BD.t:SetPoint('TOPLEFT', -5, 6)
-		BD.t:SetPoint('BOTTOMRIGHT', 4, -6)
-		BD.t:SetTexture[[Interface/Glues/CHARACTERCREATE/UI-CharacterCreatePatchwerk]]
-		BD.t:SetTexCoord(0, .42, .6, .69)
+		BD.t:SetPoint('TOPLEFT', -10, 19)
+		BD.t:SetPoint('BOTTOMRIGHT', 10, -19)
+		BD.t:SetTexture[[Interface\Glues\CHARACTERCREATE\CharacterCreate-LabelFrame]]
 
 		local border = self:CreateTexture(nil, 'OVERLAY')
 		border:SetPoint('TOPLEFT', -4, 4)
 		border:SetPoint('BOTTOMRIGHT', 4, -4)
-		border:SetTexture[[Interface/Glues/CHARACTERCREATE/UI-CharacterCreatePatchwerk]]
-		border:SetTexCoord(.6505, .835, .33825, .425)
+		border:SetTexture[[Interface\GuildBankFrame\UI-TabNameBorder]]
+		border:SetTexCoord(0, .6, 0, .6)
 		return BD, border
 	end
 
@@ -35,6 +33,7 @@
 		local Health = CreateFrame('StatusBar', nil, self)
 		ns.BD(Health)
 		ns.SB(Health)
+		ns.BDStone(Health, 5)
 		Health:SetHeight(35)
 		Health:SetStatusBarColor(.25, .25, .25)
 		Health:SetAllPoints()
@@ -127,7 +126,7 @@
 
 	ns.UnitSpecific.dps = function(self, ...)
 		--
-		self:SetSize(30, 15)
+		self:SetSize(36, 10)
 		-- self:SetResizable(true)
 		self:SetScript('OnEnter', UnitFrame_OnEnter)
 		self:SetScript('OnLeave', UnitFrame_OnLeave)

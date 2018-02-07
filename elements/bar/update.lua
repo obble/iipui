@@ -113,7 +113,7 @@
   	end
 
 	onUpdateShrink = function(self)
-		if ns.ALWAYS_UP_BAR then return end
+		if ns.ALWAYS_UP_BAR or ns.SPELLBOOK_BAR then return end
 		self:SetScript('OnUpdate', ns.BarShrink)
 	end
 
@@ -185,7 +185,11 @@
 
   	local InitialiseBar = function(self, event)--  fire on load, and then AGAIN when variables load in
 	  	ns.STICKY_BAR_MOUSEOVER()		--  hijack to scoop up majority of BAR_ELEMENTS
-	  	onUpdateShrink(bar)
+	  	if ns.ALWAYS_UP_BAR then
+	  		onUpdateGrow(bar)
+	  	else
+	  		onUpdateShrink(bar)
+	  	end
 	 	lip:UnregisterEvent('PLAYER_ENTERING_WORLD', InitialiseBar)
   	end
 
@@ -197,11 +201,11 @@
 	f:SetScript('OnLeave',  function() onUpdateShrink(bar) end)
 
 	SpellBookFrame:HookScript('OnShow', function()
-		ns.ALWAYS_UP_BAR = true
+		ns.SPELLBOOK_BAR = true
 		onUpdateGrow(bar)
 	end)
 	SpellBookFrame:HookScript('OnHide', function()
-		ns.ALWAYS_UP_BAR = false
+		ns.SPELLBOOK_BAR = false
 		onUpdateShrink(bar)
 	end)
 

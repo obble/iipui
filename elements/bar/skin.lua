@@ -9,9 +9,22 @@
 	local Zone = function(self)
 		if  ZoneAbilityFrame then
 			UIPARENT_MANAGED_FRAME_POSITIONS.ZoneAbilityFrame = nil
+			ZoneAbilityFrame:SetParent(UIParent)
 			ZoneAbilityFrame:SetScale(.7)
 			ZoneAbilityFrame:ClearAllPoints()
-			ns.DELEGATE_FRAMES_TO_POSITION[ZoneAbilityFrame] = {'BOTTOM', 0, 63}
+			ZoneAbilityFrame:SetFrameStrata'HIGH'
+
+			ns.BU(ZoneAbilityFrame.SpellButton)
+			ns.BUElements(ZoneAbilityFrame.SpellButton)
+			ZoneAbilityFrame.SpellButton:SetSize(36, 36)
+
+			ZoneAbilityFrame.SpellButton.Style:SetDrawLayer'BACKGROUND'
+
+			ZoneAbilityFrame.SpellButton.Icon:SetDrawLayer'ARTWORK'
+			ZoneAbilityFrame.SpellButton.Icon:SetTexCoord(.1, .9, .1, .9)
+			
+			ZoneAbilityFrame.SpellButton:GetNormalTexture():SetTexture''
+			ns.DELEGATE_FRAMES_TO_POSITION[ZoneAbilityFrame] = {'BOTTOM', 0, 20}
 		end
 	end
 
@@ -38,8 +51,6 @@
 							bu:SetSize(32, 32)
 						end
 
-						bu:GetCheckedTexture():SetTexture''
-
 						--ic:SetTexCoord(.1, .9, .3, .7)
 
 						local mask = bu:CreateMaskTexture()
@@ -52,6 +63,10 @@
 						mask2:SetPoint('BOTTOMRIGHT', 5, -5)
 
 						ic:AddMaskTexture(mask)
+
+						bu:GetCheckedTexture():AddMaskTexture(mask)
+						bu:GetPushedTexture():AddMaskTexture(mask)
+						bu:GetHighlightTexture():AddMaskTexture(mask)
 
 						if  not bu.bg then
 							bu.bg = bu:CreateTexture(nil, 'BACKGROUND', nil, -4)

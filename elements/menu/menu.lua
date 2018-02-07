@@ -17,9 +17,20 @@
 	bu:SetPoint('BOTTOMRIGHT', MainMenuBarBackpackButton, 'BOTTOMLEFT', -18, 0)
 	-- ns.BU(bu, 1, true)
 
+	local allied = {
+		['nightborne'] 			= {
+			male 	= {},
+			female 	= {},
+		},
+		['highmountain tauren'] = {
+			male 	= {},
+			female 	= {},
+		}
+	}
+
 	bu.hamburger = bu:CreateTexture(nil, 'ARTWORK')
 	bu.hamburger:SetAllPoints()
-	SetPortraitToTexture(bu.hamburger, 'Interface\\Icons\\Achievement_character_'..strlower(race == 'Scourge' and 'undead' or race)..'_'..Gender[UnitSex'player'])
+	SetPortraitToTexture(bu.hamburger, 'Interface\\Icons\\race_'..strlower(race == 'Scourge' and 'undead' or race)..'_'..Gender[UnitSex'player'])
 
 	--[[bu.bo.m = bu:CreateMaskTexture()
 	bu.bo.m:SetTextureInterface\Minimap\UI-Minimap-Background

@@ -13,7 +13,7 @@
 
 	ns.AddBackpack = function()
 		local bu = MainMenuBarBackpackButton
-		bu:SetParent(ActionButton1)
+		bu:SetParent(UIParent)
 		bu:ClearAllPoints()
 		bu:SetPoint('BOTTOMRIGHT', UIParent, -42, 16)
 		bu:SetSize(21, 21)

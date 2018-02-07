@@ -71,7 +71,8 @@
 		ExtraActionBarFrame:SetParent(UIParent)
 		ExtraActionBarFrame:ClearAllPoints()
 		ExtraActionBarFrame.ignoreFramePositionManager = true
-		ExtraActionBarFrame:SetPoint'BOTTOM'
+		ExtraActionBarFrame:SetPoint('BOTTOM', UIParent, 0, 12)
+		ExtraActionBarFrame:SetFrameLevel(4)
 		tinsert(ns.BAR_ELEMENTS, ExtraActionBarFrame)
 		tinsert(ns.BAR_ELEMENTS, ExtraActionButton1)
 	end
@@ -298,10 +299,24 @@
 		end
 	end
 
+	local ShowBar = function(parent)
+		if  parent then
+			if  InCombatLockdown() then
+				parent:RegisterEvent'PLAYER_REGEN_ENABLED'
+				parent:SetScript('OnEvent', function(self)
+					self:Show()
+					self:UnregisterAllEvents()
+				end)
+			else
+				parent:Show()
+			end
+		end
+	end
+
 	local AddEAB = function(self)
 		if  HasExtraActionBar() then
 			local bar = ExtraActionBarFrame
-			bar.button.style:SetSize(180, 90)
+			bar.button.style:SetSize(140, 70)
 			bar.button.style:SetDrawLayer('BACKGROUND', -7)
 			ns.BD(bar.button)
 		end
@@ -406,6 +421,9 @@
 	hooksecurefunc('MultiActionBar_UpdateGridVisibility', AddFloatingGrid)
 	hooksecurefunc('HidePetActionBar', function()
 		HideBar(_G['iipBar7'])
+	end)
+	hooksecurefunc('ShowPetActionBar', function()
+		ShowBar(_G['iipBar7'])
 	end)
 
 	local e = CreateFrame'Frame'

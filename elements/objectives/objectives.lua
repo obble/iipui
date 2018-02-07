@@ -74,6 +74,7 @@
                 ns.BDStone(bu, 4, [[Interface\HELPFRAME\Tileable-Parchment]])
                 bu:SetSize(21, 14)
                 bu.icon:SetTexCoord(.1, .9, .25, .75)
+                bu:SetFrameLevel(3)
                 bu.skinned = true
             end
         end
@@ -113,7 +114,7 @@
     local OnEvent = function(self, event)
         CollapseTracker()
         if  event == 'PLAYER_ENTERING_WORLD' then
-            AddHooks()
+            -- AddHooks()
         end
     end
 
@@ -121,7 +122,7 @@
 
     hooksecurefunc('ObjectiveTracker_MinimizeButton_OnClick',   OnClick)
     hooksecurefunc('ObjectiveTracker_Update',                   AddHeader)
-    hooksecurefunc('QuestObjectiveItem_OnUpdate',               AddItem)
+    -- hooksecurefunc('QuestObjectiveItem_OnUpdate',               AddItem)
 
     local e = CreateFrame'Frame'
     e:SetScript('OnEvent', OnEvent)

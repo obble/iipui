@@ -23,6 +23,7 @@
             'showParty', 		true,
             'showPlayer', 		true,
             'xOffset',          30,
+            'yOffset',			30,
             'columnSpacing',    20,
             'roleFilter',      	'MAINTANK,MAINASSIST,TANK',
             'unitsPerColumn',	2,
@@ -39,10 +40,14 @@
             'showRaid',         true,
             'showParty', 		true,
             'showPlayer', 		true,
-            'xOffset',          15,
-            'columnSpacing',    20,
+            'xOffset',          16,
+            'yOffset',          16,
+            'maxColumns',        6,
+            'unitsPerColumn',    3,
+            'columnSpacing',     20,
 			'roleFilter', 		'HEALER',
             'point',            'LEFT',
+            'columnAnchorPoint', 'TOP',
             'oUF-initialConfigFunction', [[
 				self:SetHeight(25)
 				self:SetWidth(100)	
@@ -56,9 +61,13 @@
             'showParty', 		true,
             'showPlayer', 		true,
             'xOffset',          22,
-            'columnSpacing',    20,
+            'yOffset',			23,
+            'maxColumns',        6,
+            'unitsPerColumn',    4,
+            'columnSpacing',     20,
 			'roleFilter', 		'DAMAGER,NONE',
-            'point',            'LEFT',
+            'point',             'LEFT',
+            'columnAnchorPoint', 'TOP',
             'oUF-initialConfigFunction', [[
 				self:SetHeight(25)
 				self:SetWidth(100)	
@@ -66,8 +75,8 @@
         )
 
         tanks:SetPoint('TOPLEFT', 	ChatFrame1, 'BOTTOMLEFT', 0, -20)
-		support:SetPoint('TOPLEFT', ChatFrame1, 'BOTTOMLEFT', 0, -60)
-		dps:SetPoint('TOPLEFT', 	ChatFrame1, 'BOTTOMLEFT', 0, -100)
+		support:SetPoint('TOPLEFT', tanks, 'BOTTOMLEFT', 0, -30)
+		dps:SetPoint('TOPLEFT', 	support, 'BOTTOMLEFT', 0, -30)
 	end)
 
 

@@ -18,10 +18,10 @@
         BD:SetFrameLevel(0)
 
 		BD.t = BD:CreateTexture(nil, 'ARTWORK')
-		BD.t:SetPoint('TOPLEFT', -5, 6)
-		BD.t:SetPoint('BOTTOMRIGHT', 4, -6)
-		BD.t:SetTexture[[Interface/Glues/CHARACTERCREATE/UI-CharacterCreatePatchwerk]]
-		BD.t:SetTexCoord(0, .42, .6, .69)
+		BD.t:SetPoint('TOPLEFT', -7, 8)
+		BD.t:SetPoint('BOTTOMRIGHT', 7, -8)
+		BD.t:SetTexture[[Interface\Glues\AccountUpgrade\upgrade-texture]]
+		BD.t:SetTexCoord(.225, .45, 0, .0925)
 
 		local border = self:CreateTexture(nil, 'OVERLAY')
 		border:SetPoint('TOPLEFT', -4, 4)
@@ -66,6 +66,14 @@
 		ResurrectIcon:SetPoint'CENTER'
 		ResurrectIcon:Hide()
 		return ResurrectIcon
+	end
+
+	local AddLFDRole = function(self)
+		local LFDRole = self.Health:CreateTexture(nil, 'OVERLAY')
+		LFDRole:SetSize(18, 18)
+		LFDRole:SetPoint('CENTER', 0, 1)
+		LFDRole:Hide()
+		return LFDRole
 	end
 
 	local AddRaidIcon = function(self)
@@ -127,7 +135,7 @@
 
 	ns.UnitSpecific.support = function(self, ...)
 		--
-		self:SetSize(50, 15)
+		self:SetSize(60, 15)
 		-- self:SetResizable(true)
 		self:SetScript('OnEnter', UnitFrame_OnEnter)
 		self:SetScript('OnLeave', UnitFrame_OnLeave)
@@ -138,6 +146,7 @@
 		self.Modifier				= AddModifier(self)
 		self.ResurrectIcon 			= AddResurrectIcon(self)
 		self.RaidTargetIndicator	= AddRaidIcon(self)
+		self.LFDRole 				= AddLFDRole(self)
 		self.Range					= range
 
 		--  TODO:  insert BuilderSpender
