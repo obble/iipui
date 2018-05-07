@@ -37,6 +37,8 @@ customise\customise.lua
 #  ~modular elements
 elements\aura\aura.lua
 #
+elements\backpack\backpack.lua
+#
 elements\bag\bag\bag.lua
 elements\bag\button.lua
 elements\bag\bank\bank.lua
@@ -45,14 +47,12 @@ elements\bag\tools\tradeskills.lua
 elements\bag\update.lua
 #
 elements\bar\bar.lua
-elements\bar\backpack.lua
 elements\bar\clock.lua
 elements\bar\skin.lua
 elements\bar\buttons.lua
 elements\bar\hide.lua
 elements\bar\update.lua
 elements\bar\bindings.lua
-#
 elements\boss\warnings.lua
 #
 elements\chat\chat.lua

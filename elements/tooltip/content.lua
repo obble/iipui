@@ -21,6 +21,8 @@
     		return ns.INTERNAL_CLASS_COLORS[class]
     	elseif UnitReaction(unit, 'player') then
     		return FACTION_BAR_COLORS[UnitReaction(unit, 'player')]
+        else
+            return nil
     	end
     end
 
@@ -33,7 +35,7 @@
 
     local AddRaidIcon = function(unit)
         local  index = GetRaidTargetIndex(unit)
-        return index and ICON_LIST[icon]..'14|t' or ''
+        return index and '  '..ICON_LIST[index]..'10|t' or ''
     end
 
     local AddRelationship  = function(unit)
@@ -62,13 +64,15 @@
     end
 
     local AddName = function(unit)
-        local colour        = ConvertRGBtoColorString(UnitColours(unit))
+        local colour        = UnitColours(unit) and ConvertRGBtoColorString(UnitColours(unit)) or nil
         local icon          = AddRaidIcon(unit)
-        local name          = GetUnitName(unit, false)
+        local name          = UnitName(unit)
         local relationship  = AddRelationship(unit)
         local faction       = AddFaction(unit)
         local flag          = AddFlag(unit)
-        GameTooltipTextLeft1:SetFormattedText('%s%s%s%s%s%s', icon, faction, flag, colour, name, relationship)
+        if colour then -- band-aid fix the error from zoning -_-
+            GameTooltipTextLeft1:SetFormattedText('%s%s%s%s%s%s', faction, flag, colour, name, relationship, icon)
+        end
     end
 
     local AddGuild = function(unit, line, Guild)

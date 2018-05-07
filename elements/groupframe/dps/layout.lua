@@ -26,6 +26,12 @@
 		border:SetPoint('BOTTOMRIGHT', 4, -4)
 		border:SetTexture[[Interface\GuildBankFrame\UI-TabNameBorder]]
 		border:SetTexCoord(0, .6, 0, .6)
+
+		border.t = self:CreateTexture(nil, 'OVERLAY', nil, 7)
+		border.t:SetPoint('TOPLEFT', -4, 4)
+		border.t:SetPoint('BOTTOMRIGHT', 4, -4)
+		border.t:SetTexture[[Interface\Artifacts/\rtifactPower-QuestBorder]]
+
 		return BD, border
 	end
 
@@ -49,6 +55,16 @@
 		ns.SB(Health.back)
 		Health.back:SetVertexColor(.2, .2, .2)
 		return Health
+	end
+
+	local AddName = function(self)
+		local Name = self.Health:CreateFontString(nil, 'OVERLAY', 'iipNameFont')
+		Name:SetFont(STANDARD_TEXT_FONT, 11)
+		Name:SetJustifyH'CENTER'
+		Name:SetWidth(40)
+		Name:SetPoint('TOP', 0, -2)
+		self:Tag(Name, '[iip:groupname]')
+		return Name
 	end
 
 	local AddModifier = function(self)
@@ -126,14 +142,16 @@
 
 	ns.UnitSpecific.dps = function(self, ...)
 		--
-		self:SetSize(36, 10)
+		self:SetSize(47, 30)
+		ns.BD(self)
+		ns.BDStone(self)
 		-- self:SetResizable(true)
 		self:SetScript('OnEnter', UnitFrame_OnEnter)
 		self:SetScript('OnLeave', UnitFrame_OnLeave)
 		self:RegisterForClicks'AnyUp'
 
 		self.Health 				= AddHealth(self)
-		self.BD, self.Border 		= AddBorder(self)
+		self.Name					= AddName(self)
 		self.Modifier				= AddModifier(self)
 		self.ResurrectIcon 			= AddResurrectIcon(self)
 		self.RaidTargetIndicator	= AddRaidIcon(self)

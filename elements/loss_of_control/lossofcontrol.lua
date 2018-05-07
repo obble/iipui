@@ -21,8 +21,8 @@
 
         local bu = CreateFrame('Frame', nil, bar)
         ns.BD(bu)
-        bu:SetPoint('TOPRIGHT', bar, 'TOPLEFT', -18, 0)
-        bu:SetSize(20, 20)
+        bu:SetPoint('TOPRIGHT', bar, 'TOPLEFT', -30, -20)
+        bu:SetSize(70, 70)
         bu:SetFrameLevel(0)
         LoC.bu = bu
 
@@ -61,8 +61,8 @@
             --  ns.PLAYER_RESOURCE is the player "personal resource" nameplate
             --  cached in nameplates/nameplates.lua on show
         if  ns.PLAYER_RESOURCE and ns.PLAYER_RESOURCE:IsShown() then
-            bar:SetPoint('BOTTOMLEFT',  ns.PLAYER_RESOURCE, 'TOPLEFT', 0, 20)
-            bar:SetPoint('BOTTOMRIGHT', ns.PLAYER_RESOURCE, 'TOPRIGHT', 0, 20)
+            bar:SetPoint('BOTTOMLEFT',  ns.PLAYER_RESOURCE, 'TOPLEFT', 0, 50)
+            bar:SetPoint('BOTTOMRIGHT', ns.PLAYER_RESOURCE, 'TOPRIGHT', 0, 50)
         else
             bar:SetPoint('BOTTOMLEFT',  UIParent, 'CENTER', -48, -60)
             bar:SetPoint('BOTTOMRIGHT', UIParent, 'CENTER', 48, -60)

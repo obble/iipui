@@ -221,5 +221,36 @@
         end
     end
 
+    local OnEvent = function(self, event)
+        local frames = {
+            ['tank']    = 'TANK',
+            ['support'] = 'HEALER',
+            ['dps']     = 'DAMAGER' or 'NONE',
+        }
+        if  event == 'PLAYER_REGEN_ENABLED' then
+            e:UnregisterEvent'PLAYER_REGEN_ENABLED'
+        end
+        for  i, v in pairs(frames) do
+            local f = _G['oUF_'..i]
+            if f and f.header then
+                if InCombatLockdown() then
+                    e:RegisterEvent'PLAYER_REGEN_ENABLED'
+                    return
+                elseif  RaidInfoCounts and RaidInfoCounts['totalRole'..v] > 0 then
+                    f.header:Show()
+                    f.header.t:Show()
+                else
+                    f.header:Hide()
+                    f.header.t:Hide()
+                end
+            end
+        end
+    end
+
+    local e = CreateFrame'Frame'
+    e:RegisterEvent'PLAYER_ENTERING_WORLD'
+    e:RegisterEvent'GROUP_ROSTER_UPDATE'
+    e:SetScript('OnEvent', OnEvent)
+
 
     --

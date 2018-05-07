@@ -6,7 +6,7 @@
 
     -- *.*°.*°...*°.°*..*. SETTINGS *..*..**.*
     local collapse  = false                                            -- collapse chat with actionbar
-    local XY        = {'TOPLEFT', 50, -30}    -- base position for chat (influenced by actionbar size)
+    local XY        = {'BOTTOMLEFT', 50, 30}    -- base position for chat (influenced by actionbar size)
     -- ......***.*.*..°.*.*.***.*°.*.*°*.*
 
     DEFAULT_CHATFRAME_ALPHA  = .25
@@ -76,8 +76,8 @@
 
     local PlaceChat = function(chat)
         if  collapse then
-            tinsert(ns.BAR_ELEMENTS, chat)
-            chat:SetParent(_G['modbar'])
+            tinsert(ns.bar_elements, chat)
+            chat:SetParent(_G['iipbar'])
             chat:SetFrameLevel(10)
         end
         ns.DELEGATE_FRAMES_TO_POSITION[chat] = XY
@@ -93,7 +93,7 @@
 
             SetChatWindowAlpha(i, 0)
             HideChatElements(v)
-            if not chat.loaded and i == 1 then PlaceChat(chat) end --  is this a default boolean or something i forgot to add/remove?
+            if not chat.loaded and i == 1 then PlaceChat(chat) end
 
             chat:SetFrameLevel(3)
             chat:SetShadowOffset(1, -1)
@@ -102,6 +102,7 @@
             chat:SetMaxResize(UIParent:GetWidth(), UIParent:GetHeight())
             chat:SetMinResize(150, 25)
 
+
             edit:SetFrameLevel(0)
             edit:Hide()
             edit:SetSize(320, 20)
@@ -109,7 +110,7 @@
             edit:SetFont(FONT_REGULAR, 12)
             edit:SetTextInsets(11 + header:GetWidth() + (suffix:IsShown() and suffix:GetWidth() or 0), 11, 0, 0)
             edit:ClearAllPoints()
-            edit:SetPoint('BOTTOM',  _G['iipbar_collapse'], 'TOP', 0, 69) -- ..nice
+            edit:SetPoint('BOTTOM',  _G['iipbar'].collapse, 'TOP', 0, 69*ns.DELEGATE_ACTUAL_BARS_SHOWN)
 
             if not edit.f then
                 edit.f = CreateFrame('Frame', nil, edit)

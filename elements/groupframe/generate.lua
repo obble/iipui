@@ -22,15 +22,17 @@
             'showRaid',         true,
             'showParty', 		true,
             'showPlayer', 		true,
-            'xOffset',          30,
-            'yOffset',			30,
-            'columnSpacing',    20,
+            'xOffset',          55,
+            'yOffset',			36,
+            'maxColumns',        5,
+            'unitsPerColumn',		2,
+            'columnSpacing',    32,
             'roleFilter',      	'MAINTANK,MAINASSIST,TANK',
-            'unitsPerColumn',	2,
             'point',           	'LEFT',
+            'columnAnchorPoint', 'TOP',
             'oUF-initialConfigFunction', [[
-				self:SetHeight(25)
-				self:SetWidth(100)	
+				self:SetWidth(75)
+				self:SetHeight(17)
 			]]
         )
 
@@ -49,8 +51,8 @@
             'point',            'LEFT',
             'columnAnchorPoint', 'TOP',
             'oUF-initialConfigFunction', [[
-				self:SetHeight(25)
-				self:SetWidth(100)	
+				self:SetWidth(60)
+				self:SetHeight(22)
 			]]
         )
 
@@ -60,23 +62,68 @@
             'showRaid',         true,
             'showParty', 		true,
             'showPlayer', 		true,
-            'xOffset',          22,
-            'yOffset',			23,
+            'showSolo',         true,
+            'xOffset',          8,
+            'yOffset',			3,
             'maxColumns',        6,
             'unitsPerColumn',    4,
-            'columnSpacing',     20,
+            'columnSpacing',     8,
 			'roleFilter', 		'DAMAGER,NONE',
             'point',             'LEFT',
             'columnAnchorPoint', 'TOP',
             'oUF-initialConfigFunction', [[
-				self:SetHeight(25)
-				self:SetWidth(100)	
+				self:SetWidth(47)
+				self:SetHeight(30)
 			]]
         )
 
-        tanks:SetPoint('TOPLEFT', 	ChatFrame1, 'BOTTOMLEFT', 0, -20)
-		support:SetPoint('TOPLEFT', tanks, 'BOTTOMLEFT', 0, -30)
-		dps:SetPoint('TOPLEFT', 	support, 'BOTTOMLEFT', 0, -30)
+        tanks:SetPoint('TOPLEFT', 	UIParent, 60, -67)
+
+        tanks.header = tanks:CreateTexture(nil, 'OVERLAY')
+        tanks.header:SetPoint('TOPLEFT', tanks, -40, 60)
+        tanks.header:SetTexture[[Interface\QuestFrame\AutoQuest-Parts]]
+        tanks.header:SetTexCoord(.42, .96, 1, 0)
+        tanks.header:SetSize(300, 42)
+        tanks.header:SetAlpha(.9)
+        tanks.header:Hide()
+
+        tanks.header.t = tanks:CreateFontString(nil, 'OVERLAY', 'ObjectiveFont')
+		tanks.header.t:SetFont(STANDARD_TEXT_FONT, 14)
+        tanks.header.t:SetTextColor(.75, .61, 0)
+		tanks.header.t:SetPoint('TOPLEFT', tanks.header, 30, -18)
+        tanks.header.t:SetText'Tanks'
+
+		support:SetPoint('TOPLEFT', tanks, 'BOTTOMLEFT', -10, -60)
+
+        support.header = support:CreateTexture(nil, 'OVERLAY')
+        support.header:SetPoint('TOPLEFT', support, -30, 60)
+        support.header:SetTexture[[Interface\QuestFrame\AutoQuest-Parts]]
+        support.header:SetTexCoord(.42, .96, 1, 0)
+        support.header:SetSize(300, 42)
+        support.header:SetAlpha(.7)
+        support.header:Hide()
+
+        support.header.t = support:CreateFontString(nil, 'OVERLAY', 'ObjectiveFont')
+		support.header.t:SetFont(STANDARD_TEXT_FONT, 14)
+        support.header.t:SetTextColor(.75, .61, 0)
+		support.header.t:SetPoint('TOPLEFT', support.header, 30, -18)
+        support.header.t:SetText'Support'
+
+		dps:SetPoint('TOPLEFT', 	support, 'BOTTOMLEFT', 0, -60)
+
+        dps.header = dps:CreateTexture(nil, 'OVERLAY')
+        dps.header:SetPoint('TOPLEFT', dps, -30, 60)
+        dps.header:SetTexture[[Interface\QuestFrame\AutoQuest-Parts]]
+        dps.header:SetTexCoord(.42, .96, 1, 0)
+        dps.header:SetSize(300, 42)
+        dps.header:SetAlpha(.7)
+        dps.header:Hide()
+
+        dps.header.t = dps:CreateFontString(nil, 'OVERLAY', 'ObjectiveFont')
+		dps.header.t:SetFont(STANDARD_TEXT_FONT, 14)
+        dps.header.t:SetTextColor(.75, .61, 0)
+		dps.header.t:SetPoint('TOPLEFT', dps.header, 30, -18)
+        dps.header.t:SetText'DPS'
 	end)
 
 

@@ -83,7 +83,7 @@
         else
             local bar = _G['iipbar_collapse']
             tooltip:ClearAllPoints()
-            tooltip:SetPoint('BOTTOMRIGHT', UIParent, -170, 100)
+            tooltip:SetPoint('BOTTOMRIGHT', UIParent, -40, 222)
             AddStatusBar(GameTooltipStatusBar, tooltip, false)
         end
     end

@@ -29,7 +29,6 @@
         for _, frame in pairs(C_NamePlate.GetNamePlates()) do
             frame.UnitFrame.target:Hide()
             if  frame.namePlateUnitToken and UnitIsUnit(frame.namePlateUnitToken, 'target') then
-                -- print'true'
                 frame.UnitFrame.target:Show()
             end
         end
@@ -70,7 +69,11 @@
                 frame.flag:SetAtlas'worldquest-questmarker-dragon'
                 frame.flag:SetSize(22, 22)
                 frame.flag:Show()
-                if c == 'elite' then frame.flag:SetDesaturated(false) else frame.flag:SetDesaturated(true) end
+                if  c == 'elite' then
+                    frame.flag:SetDesaturated(false)
+              else
+                    frame.flag:SetDesaturated(true)
+                end
             elseif q then
                 frame.flag:SetAtlas'worldquest-questmarker-questbang'
                 frame.flag:SetSize(6, 15)
@@ -277,9 +280,10 @@
         options()
     end
 
-    local e = CreateFrame'Frame'
-    e:RegisterEvent'PLAYER_TARGET_CHANGED'
-    e:SetScript('OnEvent', AddTarget)
+    -- drop this just for now
+    -- local e = CreateFrame'Frame'
+    -- e:RegisterEvent'PLAYER_TARGET_CHANGED'
+    -- e:SetScript('OnEvent', AddTarget)
 
     lip:RegisterEvent('NAME_PLATE_CREATED',     NAME_PLATE_CREATED)
 

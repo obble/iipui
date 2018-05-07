@@ -14,23 +14,26 @@
 
 	local bu = CreateFrame('Button', 'iipMenuButton', MainMenuBarBackpackButton)
 	bu:SetSize(21, 21)
-	bu:SetPoint('BOTTOMRIGHT', MainMenuBarBackpackButton, 'BOTTOMLEFT', -18, 0)
+	bu:SetPoint('BOTTOMRIGHT', UIParent, -82, 20)
 	-- ns.BU(bu, 1, true)
 
 	local allied = {
-		['nightborne'] 			= {
-			male 	= {},
-			female 	= {},
-		},
-		['highmountain tauren'] = {
-			male 	= {},
-			female 	= {},
-		}
+		['highmountaintauren'] 	= true,
+		['lightforgeddraenei'] 	= true,
+		['nightborne'] 			= true,
+		['voidelf']				= true,
 	}
 
-	bu.hamburger = bu:CreateTexture(nil, 'ARTWORK')
-	bu.hamburger:SetAllPoints()
-	SetPortraitToTexture(bu.hamburger, 'Interface\\Icons\\race_'..strlower(race == 'Scourge' and 'undead' or race)..'_'..Gender[UnitSex'player'])
+	local mask = bu:CreateMaskTexture()
+	mask:SetTexture[[Interface\Minimap\UI-Minimap-Background]]
+	mask:SetPoint('TOPLEFT', -3, 3)
+	mask:SetPoint('BOTTOMRIGHT', 3, -3)
+
+	bu.icon = bu:CreateTexture(nil, 'ARTWORK')
+	bu.icon:SetPoint('TOPLEFT', -4, 4)
+	bu.icon:SetPoint('BOTTOMRIGHT', 4, -4)
+	bu.icon:SetTexture(allied[strlower(race)] and 'Interface\\AddOns\\iipui\\art\\alliedraces\\race_'..strlower(race)..'_'..Gender[UnitSex'player']..'.tga' or 'Interface\\Icons\\Achievement_character_'..strlower(race == 'Scourge' and 'undead' or race)..'_'..Gender[UnitSex'player'])
+	bu.icon:AddMaskTexture(mask)
 
 	--[[bu.bo.m = bu:CreateMaskTexture()
 	bu.bo.m:SetTextureInterface\Minimap\UI-Minimap-Background
@@ -156,9 +159,9 @@
 		elseif level == 2 and LIB_UIDROPDOWNMENU_MENU_VALUE == 'iipui' then
 			add(
 				level, i, nil,
-				'Raid Frame Layout', nil, true,
+				'UnitFrame Layout', nil, true,
 				nil,
-				nil, true, 'RaidLayout'
+				nil, true, 'UFLayout'
 			)
 			add(
 				level, i, nil,
@@ -169,7 +172,7 @@
 					else
 						iipAlwaysActionBar = 1
 					end
-					ns.BAR_VAR_UPDATE()
+					ns.AddBarLocks()
 				end,
 				iipAlwaysActionBar == 1, nil
 			)
@@ -182,44 +185,26 @@
 					else
 						iipCombatActionBar = 1
 					end
-					ns.BAR_VAR_UPDATE()
+					ns.AddBarLocks()
 				end,
 				iipCombatActionBar == 1, nil,
 				iipAlwaysActionBar == 1
 			)
-		elseif level == 3 and LIB_UIDROPDOWNMENU_MENU_VALUE == 'RaidLayout' then
+		elseif level == 3 and LIB_UIDROPDOWNMENU_MENU_VALUE == 'UFLayout' then
 			add(
 				level, i, nil,
-				'Spec-based Layout (default)', nil, nil,
+				'This is Coming Soon', '|cff999999', nil,
 				function()
-					if  iipRaidLayout ~= 1 then
-						iipRaidLayout = 1
-					end
-					ns.RAIDUPDATE()
+
 				end,
-				iipRaidLayout == nil or iipRaidLayout == 1, nil
+				true, nil
 			)
+			-- old i.checked ----- iipRaidLayout == nil or iipRaidLayout == 1
 			add(
 				level, i, nil,
-				'GRID-style Support Layout', nil, nil,
-				function()
-					if  iipRaidLayout ~= 2 then
-						iipRaidLayout = 2
-					end
-					ns.RAIDUPDATE()
-				end,
-				iipRaidLayout == 2, nil
-			)
-			add(
-				level, i, nil,
-				'DPS-style Raid Stats Layout', nil, nil,
-				function()
-					if  iipRaidLayout ~= 3 then
-						iipRaidLayout = 3
-					end
-					ns.RAIDUPDATE()
-				end,
-				iipRaidLayout == 3, nil
+				'This one too', '|cff999999', nil,
+				function() end,
+				true, nil
 			)
 		end
 	end
@@ -237,7 +222,7 @@
 
 	bu:SetScript('OnMouseUp', function(self, button)
 		if button == 'RightButton' then
-			securecall(ToggleCharacter, 'PaperDollFrame')
+			ToggleCharacter'PaperDollFrame'
 		else
 			Lib_ToggleDropDownMenu(1, nil, f, self, -160, 400)
 		end

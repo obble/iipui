@@ -2,6 +2,17 @@
 
     local _, ns = ...
 
+    local reactions   = {
+        [1] = {r =  1,  g =  0,     b = 0},
+        [2] = {r =  1,  g =  0,     b = 0},
+        [3] = {r =  1,  g =  0,     b = 0},
+        [4] = {r =  1,  g =  1,     b = 0},
+        [5] = {r =  0,  g =  1,     b = 0},
+        [6] = {r =  0,  g =  1,     b = 0},
+        [7] = {r =  0,  g =  1,     b = 0},
+        [8] = {r =  0,  g =  1,     b = 0},
+    }
+
     local AddNameAnimation = function(Name, parent)
         local offset = -18
 
@@ -37,10 +48,17 @@
 		if self.unit == unit then
 			local r, g, b, t
 
+            if unit == 'target' or unit == 'targettarget' then
+                if  self.RaidTargetIndicator then
+                    self.RaidTargetIndicator:ClearAllPoints()
+                    self.RaidTargetIndicator:SetPoint('RIGHT', self.Name, -self.Name:GetStringWidth(), 2)
+                end
+            end
+
 			if unit:sub(1, 4) == 'boss' or unit == 'focus' then
 				r, g, b = 1, 1, 1
 			elseif UnitIsTapDenied(unit) or not UnitIsConnected(unit) then
-				r, g, b = .6, .6, .6
+				r, g, b = .9, .9, .9
 			elseif UnitIsPlayer(unit) then
 				local _, class = UnitClass(unit)
 				t = self.colors.class[class]
@@ -57,7 +75,8 @@
 	end
 
     local PostUpdateHealth = function(Health, unit, min, max)
-        local parent = Health:GetParent()
+        local parent    = Health:GetParent()
+
         if  UnitIsDead(unit) or UnitIsGhost(unit) then
 			Health:SetValue(0)
 		end
@@ -117,12 +136,12 @@
             end
         end
 
-		if  parent.Name and unit:sub(1, 4) == 'boss' then
-            parent.Name:SetText(unit:sub(1, 4) == 'boss' and spell:gsub('(%u)%S*', '%1 ') or t)
+		if  parent.Name then
+            parent.Name:SetText(unit:sub(1, 4) == 'boss' and spell:gsub('(%u)%S*', '%1 ') or unit == 'target' and '' or UnitName(unit))
         end
 
 		if  Castbar.text then
-			Castbar.text:SetText(spell)
+			Castbar.text:SetText((Castbar.notInterruptible and '|TInterface\\TargetingFrame\\Nameplates:18:18:0:-1:256:128:95:113:46:66|t' or '')..spell)
 		end
 
         if  parent.Portrait and unit ~= 'player' then
@@ -194,40 +213,48 @@
     end]]
 
     local PostUpdatePortraitRing = function(self)
-        if self.unit ~= 'target' then return end
-		local classification  = UnitClassification'target'
-		local path            = 'Interface\\AddOns\\iipui\\art\\target\\'
-
-		self.Portrait.Elite:Hide()
-        
-		if  classification == 'elite' or classification == 'worldboss' then
-			self.Portrait.Elite:SetTexture(path..'elite')
-			self.Portrait.Elite:Show()
-		elseif classification == 'rareelite' or classification == 'rare' then
-			self.Portrait.Elite:SetTexture(path..'r-elite')
-            self.Portrait.Elite:Show()
+    	local classification  = UnitClassification(self.unit)
+        if  self.unit == 'target' then
+			local path            = 'Interface\\AddOns\\iipui\\art\\target\\'
+			self.Portrait.Elite:Hide()
+			if  classification == 'elite' or classification == 'worldboss' then
+				self.Portrait.Elite:SetTexture(path..'elite')
+				self.Portrait.Elite:Show()
+			elseif classification == 'rareelite' or classification == 'rare' then
+				self.Portrait.Elite:SetTexture(path..'r-elite')
+            	self.Portrait.Elite:Show()
+			end
+		elseif  self.unit == 'targettarget' then
+				if  classification == 'elite' or classification == 'worldboss' or classification == 'rareelite' or classification == 'rare' then
+				self.Portrait.Elite:Show()
+				if classification == 'rareelite' or classification == 'rare' then
+						self.Portrait.Elite:SetDesaturated(true)
+				else
+						self.Portrait.Elite:SetDesaturated(false)
+				end
+			end
 		end
 	end
 
     ns.AddAuraElement = function(frame, unit)
         -- TODO:  consider writing these as single buff/debuff elements?
-		local BUFF_HEIGHT = 16
+		local BUFF_HEIGHT = 24
 		local BUFF_SPACING = 1
 		local MAX_NUM_BUFFS = 10
 
 		local Auras = CreateFrame('Frame', nil, frame)
 		Auras:ClearAllPoints()
-		Auras:SetPoint('RIGHT', frame, 115, 23)
+		Auras:SetPoint('BOTTOMRIGHT', frame, 'TOPRIGHT', -44, 100)
 		Auras:SetWidth(BUFF_HEIGHT*6 + BUFF_SPACING)
 		Auras:SetHeight(10)
 
 		Auras['initialAnchor'] = 'RIGHT'
-		Auras['growth-x']	   = 'RIGHT'
-		Auras['growth-y']	   = 'DOWN'
-		Auras['spacing-y']     = 18
+		Auras['growth-x']	   = 'LEFT'
+		Auras['growth-y']	   = 'UP'
+		Auras['spacing-y']     = 30
 		Auras['spacing-x']     = 3
 		Auras['num']           = MAX_NUM_BUFFS
-		Auras['size']          = 18
+		Auras['size']          = 26
 
 		Auras.disableCooldown  = true
 

@@ -1,30 +1,106 @@
 
 
-	local _, ns = ...
+	local _, ns 	= ...
+	local _, class 	= UnitClass'player'
+
+	local AddCombo = function(self)
+		ComboPointPlayerFrame:SetParent(self)
+		ComboPointPlayerFrame:ClearAllPoints()
+		ComboPointPlayerFrame:SetPoint('TOPLEFT', self, 'BOTTOM', -63, 0)
+	end
+
+	local AddPaladinPower = function(self)
+		PaladinPowerBarFrame:SetParent(self)
+		PaladinPowerBarFrame:ClearAllPoints()
+		PaladinPowerBarFrame:SetPoint('TOPLEFT', self, 'BOTTOM', -67, -5)
+	end
+
+	local AddMagePower = function(self)
+		MageArcaneChargesFrame:SetParent(self)
+		MageArcaneChargesFrame:ClearAllPoints()
+		MageArcaneChargesFrame:SetPoint('TOPLEFT', self, 'BOTTOM', -62, -6)
+	end
+
+	local AddMonkPower = function(self)
+		MonkHarmonyBarFrame:SetParent(self)
+		MonkHarmonyBarFrame:ClearAllPoints()
+		MonkHarmonyBarFrame:SetPoint('TOPLEFT', self, 'BOTTOM', 0, 13)
+	end
+
+	local AddWarlockPower = function(self)
+		WarlockPowerFrame:SetParent(self)
+		WarlockPowerFrame:ClearAllPoints()
+		WarlockPowerFrame:SetPoint('TOPLEFT', self, 'BOTTOM', -55, -4)
+	end
 
 	ns.UnitSpecific.player = function(self, ...)
 		ns.SharedLayout(self, ...)
 
-		self:SetFrameLevel(1)	-- for layering
+		self:SetFrameLevel(2)	-- for layering
 		self:SetSize(137, 20)
 
 		local Health, Power, Castbar, RaidIcon = self.Health, self.Power, self.Castbar, self.RaidTargetIndicator
 
+		Health:SetFrameLevel(2)
 		Health:SetHeight(9)
+		Health:SetFrameStrata'HIGH'
+
+		local HealthPoints = Health:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+		HealthPoints:SetPoint('RIGHT', Health, 'LEFT', -16, 0)
+		HealthPoints:SetJustifyH'RIGHT'
+		HealthPoints:SetFont(GameFontNormal:GetFont(), 10)
+		HealthPoints:SetTextColor(1, 1, 1)
+
+		self:Tag(HealthPoints, '[iip:hp]')
+		Health.value = HealthPoints
+
+		local HealthPercent = Health:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+		HealthPercent:SetPoint('LEFT', Health, 2, 0)
+		HealthPercent:SetJustifyH'RIGHT'
+		HealthPercent:SetFont(GameFontNormal:GetFont(), 10)
+		HealthPercent:SetTextColor(1, 1, 1)
+
+		self:Tag(HealthPercent, '[iip:perhp]')
+		Health.percent = HealthPercent
+
+		local PowerPoints = Power:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+		PowerPoints:SetPoint('RIGHT', Power, 'LEFT', -16, 0)
+		PowerPoints:SetJustifyH'RIGHT'
+		PowerPoints:SetFont(GameFontNormal:GetFont(), 10)
+		PowerPoints:SetTextColor(1, 1, 1)
+
+		self:Tag(PowerPoints, '[iip:pp]')
+		Power.value = PowerPoints
+
+		local PowerPercent = Power:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+		PowerPercent:SetPoint('LEFT', Power, 2, 0)
+		PowerPercent:SetJustifyH'RIGHT'
+		PowerPercent:SetFont(GameFontNormal:GetFont(), 10)
+		PowerPercent:SetTextColor(1, 1, 1)
+
+		self:Tag(PowerPercent, '[iip:perpp]')
+		Power.percent = PowerPercent
 
 		local Portrait = self.Health:CreateTexture(nil, 'ARTWORK')
 		Portrait:SetSize(46, 46)
-		Portrait:SetPoint('LEFT', self, -70, 0)
+		Portrait:SetPoint('RIGHT', self, 70, 0)
 
 		Portrait.BG = self.Health:CreateTexture(nil, 'BACKGROUND')
 		Portrait.BG:SetSize(128, 128)
 		Portrait.BG:SetTexture[[Interface\COMMON\portrait-ring-withbg]]
-		Portrait.BG:SetPoint('LEFT', self, -110, 0)
+		Portrait.BG:SetPoint('RIGHT', self, 110, 0)
+
+		local mask = self.Health:CreateMaskTexture()
+		mask:SetTexture[[Interface\Minimap\UI-Minimap-Background]]
+		mask:SetPoint('TOPLEFT', Portrait, -3, 3)
+		mask:SetPoint('BOTTOMRIGHT', Portrait, 3, -3)
+
+		Portrait:AddMaskTexture(mask)
 
 		Portrait.vehicle = self.Health:CreateTexture(nil, 'OVERLAY')
 		Portrait.vehicle:SetSize(80, 80)
 		Portrait.vehicle:SetTexture[[Interface\Artifacts\RelicForge]]
-		Portrait.vehicle:SetPoint('LEFT', self, -92, 0)
+		Portrait.vehicle:SetPoint('RIGHT', self, 82, 0)
 		Portrait.vehicle:SetTexCoord(.59, .66, .49, .56)
 
 		self.Border  = {}
@@ -54,16 +130,10 @@
 		self.Border.shadow:SetVertexColor(0, 0, 0, 1)
 		self.Border.shadow:SetTexCoord(0, .641, 0, .18)
 
-			-- TODO:	position and insert into oUF
-		local AltPowerBar = CreateFrame('StatusBar', nil, self)
-		AltPowerBar:SetHeight(9)
-		AltPowerBar:SetStatusBarTexture(TEXTURE)
-		AltPowerBar:SetStatusBarColor(1, 1, 1)
-
 		ns.BD(Castbar)
 		ns.CLASS_COLOUR(Castbar)
 		Castbar:ClearAllPoints()
-		Castbar:SetPoint('BOTTOM', UIParent, 0, 200)
+		Castbar:SetPoint('BOTTOM', UIParent, 0, 270)
 		Castbar:SetSize(136, 8)
 		Castbar.timeToHold = .4
 
@@ -116,13 +186,19 @@
 		Castbar.shadow:SetTexCoord(0, .641, 0, .18)
 
 		RaidIcon:ClearAllPoints()
-		RaidIcon:SetPoint('CENTER', Portrait, 'TOP')
 
 		-- TODO:  	insert BuilderSpender
 		--			add castbar parent to nameplate
 
 			-- register new elements
-		self.Portrait = Portrait
+		self.Portrait 	= Portrait
+
+		-- class specific powers
+		AddCombo(self)
+		AddPaladinPower(self)
+		AddMagePower(self)
+		AddMonkPower(self)
+		AddWarlockPower(self)
 	end
 
 

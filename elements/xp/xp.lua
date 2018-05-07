@@ -28,7 +28,7 @@
     local xp = CreateFrame('StatusBar', 'iipXP', UIParent, 'AnimatedStatusBarTemplate')
     ns.SB(xp)
     xp:SetSize(100, 5)
-    xp:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -105, -13)
+    xp:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -125, -13)
     xp:SetFrameLevel(0)
     xp:SetStatusBarColor(120/255, 88/255, 237/255)
     xp:SetAnimatedTextureColors(120/255, 88/255, 237/255)
@@ -82,7 +82,7 @@
     ns.SB(rest)
     ns.BD(rest)
     rest:SetSize(100, 5)
-    rest:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -105, -13)
+    rest:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -118, -13)
     rest:SetStatusBarColor(157/255, 187/255, 244/255)
     rest:SetFrameLevel(0)
     rest:EnableMouse(false)
@@ -161,7 +161,7 @@
     ns.SB(honour)
     ns.BD(honour)
     honour:SetSize(100, 5)
-    honour:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -105, -13)
+    honour:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -118, -13)
     honour:SetStatusBarColor(1, .24, 0)
     honour:SetAnimatedTextureColors(1, .24, 0)
     honour:SetFrameLevel(10)
@@ -230,7 +230,7 @@
             rep:SetStatusBarColor(colour.r, colour.g, colour.b)
             rep:SetAnimatedTextureColors(colour.r, colour.g, colour.b)
             rep:ClearAllPoints()
-            rep:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -105, artifact:IsShown() and -32 or xp:IsShown() and -32 or -13)
+            rep:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -118, artifact:IsShown() and -32 or xp:IsShown() and -32 or -13)
 
             rep.spark:SetPoint('CENTER', rep, 'LEFT', ((v - min)/(max - min))*rep:GetWidth(), -.5)
             rep.spark:SetVertexColor(colour.r, colour.g, colour.b)
@@ -251,8 +251,10 @@
 
     local HonourUpdate = function()
         local maxed = UnitLevel'player' >= MAX_PLAYER_LEVEL
-        if UnitInBattleground'player' then
+        if  UnitInBattleground'player' then
             xp:Hide() rest:Hide() artifact:Hide() honour:Show()
+        else
+            honour:Hide()
         end
         if  maxed then
             local v,   max    = UnitHonor'player',      UnitHonorMax'player'
@@ -276,7 +278,7 @@
             ArtifactUpdate()
             xp:Hide() rest:Hide() header:SetText'Artifact' artifact:SetAlpha(1)
             artifact:ClearAllPoints()
-            artifact:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -105, -13)
+            artifact:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -118, -13)
             if UnitInBattleground'player' then
                 header:SetText'Honour' artifact:SetAlpha(0) honour:SetAlpha(1)
             else
@@ -298,7 +300,7 @@
         ArtifactUpdate()
         RepUpdate()
         HonourUpdate()
-        onUpdateGrow(_G['iipbar_collapse'])
+        ns.grow()
         if UnitInBattleground'player' then honour.data:Show() end
         if GetWatchedFactionInfo() then rep.data:Show() rep:SetAlpha(1) end
         if UnitLevel'player' < MAX_PLAYER_LEVEL then
@@ -312,7 +314,7 @@
         rep:SetAlpha(0)
         rep.data:Hide()
         honour.data:Hide()
-        onUpdateShrink(_G['iipbar_collapse'])
+        ns.shrink()
         if  UnitLevel'player' < MAX_PLAYER_LEVEL then
             artifact:SetAlpha(0)
             xp.data:Hide()
@@ -357,8 +359,7 @@
         elseif
             event == 'HONOR_XP_UPDATE'
         or  event == 'HONOR_LEVEL_UPDATE'
-        or  event == 'HONOR_PRESTIGE_UPDATE'
-        then
+        or  event == 'HONOR_PRESTIGE_UPDATE' then
             HonourUpdate()
         elseif
             event == 'ARTIFACT_XP_UPDATE' then

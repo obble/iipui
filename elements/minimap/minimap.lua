@@ -9,7 +9,7 @@
 	-- Minimap:SetMaskTexture[[Interface\ChatFrame\ChatFrameBackground]]
 	MinimapCluster:ClearAllPoints()
 	Minimap:SetFrameLevel(15)
-	MinimapCluster:SetPoint('BOTTOMRIGHT', -5, 12)
+	MinimapCluster:SetPoint('BOTTOMRIGHT', -5, 16)
 
 	Minimap.ring = Minimap:CreateTexture(nil, 'BACKGROUND', nil, -1)
 	Minimap.ring:SetPoint('TOPLEFT', Minimap, -24, 24)
@@ -32,18 +32,23 @@
 	Minimap.prestige = Minimap:CreateTexture(nil, 'BACKGROUND', nil, -3)
 	Minimap.prestige:SetSize(140, 70)
 	Minimap.prestige:SetPoint('BOTTOM', Minimap, 0, -25)
-	Minimap.prestige:SetTexture[[Interface\PVPFrame\TitlePrestige]] 
+	Minimap.prestige:SetTexture[[Interface\PVPFrame\TitlePrestige]]
 	Minimap.prestige:SetTexCoord(.565, .82, .35, .465)
 	Minimap.prestige:SetVertexColor(.9, .9, .9)
 
 	Minimap.compass = Minimap:CreateTexture(nil, 'OVERLAY', nil, 1)
 	Minimap.compass:SetSize(220, 220)
 	Minimap.compass:SetPoint'CENTER'
-	Minimap.compass:SetTexture[[Interface\Minimap\CompassRing]] 
+	Minimap.compass:SetTexture[[Interface\Minimap\CompassRing]]
 
-	Minimap.banner = Minimap:CreateTexture(nil, 'OVERLAY', nil, 4)
-	Minimap.banner:SetSize(160, 30)
-	Minimap.banner:SetPoint('BOTTOM', -5, -3)
+	local f = CreateFrame('Frame', nil, UIParent)
+	f:SetFrameLevel(3)
+	f:SetFrameStrata'HIGH'
+	f:SetSize(160, 30)
+	f:SetPoint('BOTTOM', Minimap, -5, -7)
+
+	Minimap.banner = f:CreateTexture(nil, 'OVERLAY', nil, 4)
+	Minimap.banner:SetAllPoints(f)
 	Minimap.banner:SetTexture[[Interface\Store\Store-Main]]
 	Minimap.banner:SetTexCoord(.35, .725, .53, .46)
 
@@ -84,11 +89,12 @@
 
 	MinimapZoneTextButton:SetFrameLevel(16)
 	MinimapZoneTextButton:ClearAllPoints()
-	MinimapZoneTextButton:SetPoint('BOTTOM', Minimap, 0, 1)
+	MinimapZoneTextButton:SetPoint('BOTTOM', Minimap, 0, -3)
 	MinimapZoneTextButton:SetWidth(160)
 
+	MinimapZoneText:SetParent(f)
 	MinimapZoneText:SetFont(FONT_BOLD, 12)
-	MinimapZoneText:SetDrawLayer('BACKGROUND', -2)	
+	MinimapZoneText:SetDrawLayer('OVERLAY', 7)
 	MinimapZoneText:SetShadowOffset(0, 0)
 
 	Minimap:SetArchBlobRingScalar(0)

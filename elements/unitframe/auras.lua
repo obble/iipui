@@ -136,7 +136,7 @@
 
 		icon.duration = icon:CreateFontString(nil, 'OVERLAY', 'GameFontNormalSmall')
 		icon.duration:SetFont(STANDARD_TEXT_FONT, 8)
-		icon.duration:SetPoint('TOP', icon, 'BOTTOM', 1, -12)
+		icon.duration:SetPoint('TOP', icon, 'BOTTOM', 0, -14)
 		icon.duration:SetJustifyH'CENTER'
 
 		icon.count:ClearAllPoints()

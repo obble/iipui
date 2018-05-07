@@ -6,37 +6,71 @@
 	local tagevents = oUF.TagEvents or oUF.Tags.Events
 
 	tags['iip:hp'] = function(unit)
+		local cv = GetCVar'statusTextDisplay'
 		if not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then return end
 		local v, m = UnitHealth(unit), UnitHealthMax(unit)
-		if not UnitIsFriend('player', unit) then
-			return ns.siValue(v)
-		elseif v ~= 0 and v ~= m then
-			return '-'..ns.siValue(m - v)
-		else
-			return ns.siValue(m)
-		end
-	end
-
-	tags['iip:group'] = function(unit)
-		if not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then return end
-		local v, m = UnitHealth(unit), UnitHealthMax(unit)
-		local p = floor((m - v)/m * 100)
-		if v > 0 and p > 0 then
-			if p > 40 then
-				return '|cffff0000-'..p..'%|r'
+		if  cv and (cv == 'NUMERIC' or cv == 'BOTH') then
+			if  not UnitIsFriend('player', unit) then
+				return ns.siValue(v)
+			elseif v ~= 0 and v ~= m then
+				return '-'..ns.siValue(m - v)
 			else
-				return '|cffffffff-'..p..'%|r'
+				return ns.siValue(m)
+			end
+		elseif cv and cv == 'PERCENT' then
+			if  m == 0 then
+				return 0
+			else
+				return math.floor(v/m*100 + .5)
 			end
 		else
-			return ''  --  ns.siValue(m)
+			return
 		end
 	end
 
-
 	tags['iip:pp'] = function(unit)
-		local min, max = UnitPower(unit), UnitPowerMax(unit)
-		if(min == 0 or max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit)) then return end
-		return ns.siValue(min)
+		local cv = GetCVar'statusTextDisplay'
+		local v, m = UnitPower(unit), UnitPowerMax(unit)
+		if (v == 0 or m == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit)) then return end
+		if  cv and (cv == 'NUMERIC' or cv == 'BOTH') then
+			return ns.siValue(v)
+		elseif cv and cv == 'PERCENT' then
+			if  m == 0 then
+				return 0
+			else
+				return math.floor(v/m*100 + .5)
+			end
+		else
+			return
+		end
+	end
+
+	tags['iip:perhp'] = function(unit)
+		local cv = GetCVar'statusTextDisplay'
+		if  cv and cv == 'BOTH' then
+			local m = UnitHealthMax(unit)
+			if  m == 0 then
+				return 0
+			else
+				return math.floor(UnitHealth(unit)/m*100 + .5)
+			end
+		else
+			return
+		end
+	end
+
+	tags['iip:perpp'] = function(unit)
+		local cv = GetCVar'statusTextDisplay'
+		if  cv and cv == 'BOTH' then
+			local m = UnitPowerMax(unit)
+			if  m == 0 then
+				return 0
+			else
+				return math.floor(UnitPower(unit)/m*100 + .5)
+			end
+		else
+			return
+		end
 	end
 
 	tags['iip:level'] = function(unit)
@@ -45,13 +79,22 @@
 		if c == 'worldboss' or l == '??' then
 			return ' |TInterface\\TargetingFrame\\UI-TargetingFrame-Skull:16:16|t'
 		else
-			return l < 10 and l..'  ' or l < 100 and l..' ' or l
+			return l
 		end
 	end
 
-	tagevents['iip:hp']    = tagevents.missinghp
-	tagevents['iip:group'] = tagevents.missinghp
-	tagevents['iip:pp']    = tagevents.missingpp
+	tags['iip:name'] = function(unit)
+		local AFK = UnitIsAFK(unit) and ' |cff00ff00'..CHAT_FLAG_AFK..'|r' or ''
+		local DND = UnitIsDND(unit) and ' |cff00ff00'..CHAT_FLAG_DND..'|r' or ''
+		return AFK..DND..UnitName(unit)
+	end
+
+	tagevents['iip:hp']    = 'CVAR_UPDATE UNIT_HEALTH UNIT_MAXHEALTH'
+	tagevents['iip:pp']    = 'CVAR_UPDATE UNIT_MAXPOWER UNIT_POWER'
+	tagevents['iip:perhp'] = 'CVAR_UPDATE UNIT_HEALTH UNIT_MAXHEALTH'
+	tagevents['iip:perpp'] = 'CVAR_UPDATE UNIT_MAXPOWER UNIT_POWER'
+
 	tagevents['iip:level'] = tagevents.smartlevel
+	tagevents['iip:name']  = tagevents.name
 
 	--

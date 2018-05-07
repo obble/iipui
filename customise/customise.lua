@@ -8,7 +8,7 @@
 	--		frame names can be found in the framestack tooltip by typing '/fs'
 	--  	and mousing over the frame in question.
 	--		nb: no accounting for secure frame taint
-	ns.CUSTOM_BAR_ELEMENTS = {
+	ns.bar_elements_custom = {
 
 	}
 

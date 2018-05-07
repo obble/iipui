@@ -11,20 +11,17 @@
 		MainMenuBarBackpackButtonCount:SetText(string.format('%s', total))
 	end
 
-	ns.AddBackpack = function()
 		local bu = MainMenuBarBackpackButton
 		bu:SetParent(UIParent)
 		bu:ClearAllPoints()
-		bu:SetPoint('BOTTOMRIGHT', UIParent, -42, 16)
+		bu:SetPoint('BOTTOMRIGHT', UIParent, -30, 20)
 		bu:SetSize(21, 21)
 		bu:GetNormalTexture():SetTexture''
 		ns.BUElements(bu)
 
 		SetPortraitToTexture(MainMenuBarBackpackButtonIconTexture, [[Interface\Buttons\Button-Backpack-Up]])
 
-		MainMenuBarBackpackButtonCount:SetFont([[Fonts/ARIALN.ttf]], 11, 'OUTLINE')
-		MainMenuBarBackpackButtonCount:ClearAllPoints()
-		MainMenuBarBackpackButtonCount:SetPoint('LEFT', bu, 'RIGHT', 6, 0)
+		MainMenuBarBackpackButtonCount:SetAlpha(0)
 
 		if  not bu.bo then
 			bu.bo = bu:CreateTexture(nil, 'OVERLAY')
@@ -37,7 +34,5 @@
 
 		UpdateBackpackFreeSlots()
 		hooksecurefunc('MainMenuBarBackpackButton_UpdateFreeSlots', UpdateBackpackFreeSlots)
-	end
-
 
 	--

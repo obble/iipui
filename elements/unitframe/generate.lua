@@ -20,11 +20,11 @@
 	end
 
 	oUF:Factory(function(self)
-        spawnHelper(self, 'target', 'BOTTOMLEFT', 120, 120)
-		spawnHelper(self, 'player', 'BOTTOMLEFT', 120, 70)
+	    spawnHelper(self, 'player', 'BOTTOMRIGHT', -250, 105)
+        spawnHelper(self, 'target', 'BOTTOMRIGHT', -250, 155)
         spawnHelper(self, 'focus', 'LEFT', UIParent, 'CENTER', 120, -10)
-        spawnHelper(self, 'pet', 'TOPLEFT', oUF_iipPlayer, 'BOTTOMLEFT', -1, -8)
-        spawnHelper(self, 'targettarget', 'TOPRIGHT', oUF_iipTarget, 'BOTTOMRIGHT', 0, -8)
+        spawnHelper(self, 'pet', 'TOPRIGHT', oUF_iipPlayer, 'BOTTOMRIGHT', -30, -5)
+        spawnHelper(self, 'targettarget', 'TOPRIGHT', oUF_iipTarget, 'BOTTOMRIGHT', -30, -5)
 
         for _, v in pairs({'boss', 'arena'}) do
     		for i = 1, 5 do

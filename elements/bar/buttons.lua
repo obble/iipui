@@ -9,60 +9,62 @@
 	local BarPositions = {
 		['iipBar1'] = {
 			STACKED = {'BOTTOM', 		UIParent, 'BOTTOM',   0, 	70},
-			GRIDDED	= {'BOTTOMRIGHT', 	UIParent, 'BOTTOM', -16, 	54},
-			THREE	= {'BOTTOM', 		UIParent, 'BOTTOM',   0, 	93},
-			FIVE	= {'BOTTOM', 		UIParent, 'BOTTOM',   0, 	142},
+			GRIDDED	= {'BOTTOMRIGHT', 	UIParent, 'BOTTOM', -18, 	70},
+			FIVE	= {'BOTTOM', 		UIParent, 'BOTTOM',   0, 	173},
+			visibility = '[petbattle] hide; show'
 		},
 		['iipBar2'] = {
-			STACKED = {'BOTTOM', 		UIParent, 'BOTTOM',   0, 	120},
-			GRIDDED	= {'BOTTOMLEFT', 	UIParent, 'BOTTOM',  16, 	54},
-			THREE	= {'BOTTOMRIGHT', 	UIParent, 'BOTTOM', -16, 	43},
-			FIVE	= {'BOTTOMRIGHT', 	UIParent, 'BOTTOM', -16, 	43},
+			STACKED = {'BOTTOM', 		UIParent, 'BOTTOM',   0, 	125},
+			GRIDDED	= {'BOTTOMLEFT', 	UIParent, 'BOTTOM',  18, 	70},
+			FIVE	= {'BOTTOMRIGHT', 	UIParent, 'BOTTOM', -16, 	71},
+			visibility = '[petbattle][overridebar][vehicleui][possessbar][shapeshift][canexitvehicle] hide; show'
 		},
 		['iipBar3'] = {
-			STACKED = {'BOTTOM', 		UIParent, 'BOTTOM',   0, 	157},
-			GRIDDED	= {'BOTTOMRIGHT', 	UIParent, 'BOTTOM', -16, 	102},
-			THREE 	= {'BOTTOMLEFT', 	UIParent, 'BOTTOM',  16, 	43},
-			FIVE 	= {'BOTTOMLEFT', 	UIParent, 'BOTTOM',  16, 	43},
+			STACKED = {'BOTTOM', 		UIParent, 'BOTTOM',   0, 	180},
+			GRIDDED	= {'BOTTOMRIGHT', 	UIParent, 'BOTTOM', -18, 	123},
+			FIVE 	= {'BOTTOMLEFT', 	UIParent, 'BOTTOM',  16, 	71},
+			visibility = '[petbattle][overridebar][vehicleui][possessbar][shapeshift][canexitvehicle] hide; show'
 		},
 		['iipBar4'] = {
 			STACKED = {'BOTTOM', 		UIParent, 'BOTTOM',   0, 	200},
-			GRIDDED	= {'BOTTOMLEFT', 	UIParent, 'BOTTOM',  16, 	102},
-			THREE 	= {'BOTTOMRIGHT', 	UIParent, 'BOTTOM', -16, 	139},
-			FIVE 	= {'BOTTOMRIGHT', 	UIParent, 'BOTTOM', -16, 	93},
+			GRIDDED	= {'BOTTOMLEFT', 	UIParent, 'BOTTOM',  18, 	123},
+			FIVE 	= {'BOTTOMRIGHT', 	UIParent, 'BOTTOM', -16, 	121},
+			visibility = '[petbattle][overridebar][vehicleui][possessbar][shapeshift][canexitvehicle] hide; show'
 		},
 		['iipBar5'] = {
 			STACKED = {'BOTTOM', 		UIParent, 'BOTTOM',   0, 	240},
-			GRIDDED	= {'BOTTOMLEFT', 	UIParent, 'BOTTOM',  16, 	144},
-			THREE 	= {'BOTTOMLEFT', 	UIParent, 'BOTTOM',  16, 	139},
-			FIVE 	= {'BOTTOMLEFT', 	UIParent, 'BOTTOM',  16, 	93},
+			GRIDDED	= {'BOTTOMLEFT', 	UIParent, 'BOTTOM',  18, 	159},
+			FIVE 	= {'BOTTOMLEFT', 	UIParent, 'BOTTOM',  16, 	121},
+			visibility = '[petbattle][overridebar][vehicleui][possessbar][shapeshift][canexitvehicle] hide; show'
 		},
 		['iipBar6'] = {	-- stance
 			STACKED = {'BOTTOM', 		UIParent, 'BOTTOM', 0, 166},
-			GRIDDED	= {'BOTTOM', 		UIParent, 'BOTTOM', 0, 157},
-			THREE	= {'BOTTOM', 		UIParent, 'BOTTOM', 0, 142},
-			FIVE	= {'BOTTOM', 		UIParent, 'BOTTOM', 0, 187},
-			BASIC   = {'BOTTOM', 		UIParent, 'BOTTOM', 0, 120},
+			GRIDDED	= {'BOTTOM', 		UIParent, 'BOTTOM', 0, 172},
+			FIVE	= {'BOTTOM', 		UIParent, 'BOTTOM', 0, 215},
+			BASIC   = {'BOTTOM', 		UIParent, 'BOTTOM', 0, 140},
+			TWO		= {'BOTTOM', 		UIParent, 'BOTTOM', 0, 200},
+			visibility = '[petbattle][overridebar][vehicleui][possessbar][shapeshift][canexitvehicle] hide; show'
 		},
 		['iipBar7'] = {	-- pet
-			STACKED = {'BOTTOM', 		UIParent, 'BOTTOM', -14, 166},
-			GRIDDED	= {'BOTTOM', 		UIParent, 'BOTTOM', -14, 157},
-			THREE 	= {'BOTTOM', 		UIParent, 'BOTTOM', -14, 142},
-			FIVE 	= {'BOTTOM', 		UIParent, 'BOTTOM', -14, 187},
-			BASIC 	= {'BOTTOM', 		UIParent, 'BOTTOM', -14, 120},
+			STACKED = {'BOTTOM', 		UIParent, 'BOTTOM', -32, 240},
+			GRIDDED	= {'BOTTOM', 		UIParent, 'BOTTOM', -32, 180},
+			FIVE 	= {'BOTTOM', 		UIParent, 'BOTTOM', -32, 230},
+			BASIC 	= {'BOTTOM', 		UIParent, 'BOTTOM', -32, 140},
+			TWO		= {'BOTTOM', 		UIParent, 'BOTTOM', -32, 190},
+			visibility = '[petbattle][overridebar][vehicleui][possessbar][shapeshift][canexitvehicle] hide; [pet] show; hide'
 		},
 	}
 
 	local add = function(bu)
-		if not ns.BAR_ELEMENTS[bu] then
-			tinsert(ns.BAR_ELEMENTS, bu)
+		if not ns.bar_elements[bu] then
+			tinsert(ns.bar_elements, bu)
 		end
 	end
 
 	local remove = function(bu)
-		for i, v in pairs(ns.BAR_ELEMENTS) do
+		for i, v in pairs(ns.bar_elements) do
 			if  bu:GetName() == v:GetName() then
-				tremove(ns.BAR_ELEMENTS, i)
+				tremove(ns.bar_elements, i)
 			end
 		end
 	end
@@ -73,8 +75,8 @@
 		ExtraActionBarFrame.ignoreFramePositionManager = true
 		ExtraActionBarFrame:SetPoint('BOTTOM', UIParent, 0, 12)
 		ExtraActionBarFrame:SetFrameLevel(4)
-		tinsert(ns.BAR_ELEMENTS, ExtraActionBarFrame)
-		tinsert(ns.BAR_ELEMENTS, ExtraActionButton1)
+		tinsert(ns.bar_elements, ExtraActionBarFrame)
+		tinsert(ns.bar_elements, ExtraActionButton1)
 	end
 
 	local SetPagingPosition = function()
@@ -90,9 +92,16 @@
 				ns.BDStone(v, -4)
 			end
 		end
-		ActionBarUpButton:SetPoint('TOPLEFT', _G['iipBar1'], 'TOPRIGHT', 30, 5)
-		ActionBarDownButton:SetPoint('TOP', ActionBarUpButton, 'BOTTOM', 0, 14)
-		MainMenuBarPageNumber:SetPoint('TOPRIGHT', ActionBarUpButton, 'BOTTOMLEFT', -2, 9)
+
+		if ns.DELEGATE_ACTUAL_BARS_SHOWN and ns.DELEGATE_ACTUAL_BARS_SHOWN == 4 then
+			ActionBarUpButton:SetPoint('TOPRIGHT', _G['iipBar1'], 'TOPLEFT', -20, 5)
+			ActionBarDownButton:SetPoint('TOP', ActionBarUpButton, 'BOTTOM', 0, 14)
+			MainMenuBarPageNumber:SetPoint('TOPRIGHT', ActionBarUpButton, 'BOTTOMLEFT', -2, 9)
+		else
+			ActionBarUpButton:SetPoint('TOPLEFT', _G['iipBar1'], 'TOPRIGHT', 30, 5)
+			ActionBarDownButton:SetPoint('TOP', ActionBarUpButton, 'BOTTOM', 0, 14)
+			MainMenuBarPageNumber:SetPoint('TOPRIGHT', ActionBarUpButton, 'BOTTOMLEFT', -2, 9)
+		end
 
 		if  not ActionBarUpButton.bg then
 			ActionBarUpButton.bg = ActionBarUpButton:CreateTexture(nil, 'BACKGROUND', nil, -7)
@@ -115,11 +124,6 @@
 		return point[1], point[2], point[3], point[4], point[5]
 	end
 
-	local GetPositionsThree = function(name)
-		local  point = BarPositions[name].THREE
-		return point[1], point[2], point[3], point[4], point[5]
-	end
-
 	local GetPositionsGridded = function(name)
 		local  point = BarPositions[name].GRIDDED
 		return point[1], point[2], point[3], point[4], point[5]
@@ -135,13 +139,13 @@
 		return point[1], point[2], point[3], point[4], point[5]
 	end
 
+	local GetPetPositionsTwo = function(name)
+		local  point = BarPositions[name].TWO
+		return point[1], point[2], point[3], point[4], point[5]
+	end
+
 	local SetPositions = function()
 		local GridSplit = ns.DELEGATE_ACTUAL_BARS_SHOWN and math.ceil(ns.DELEGATE_ACTUAL_BARS_SHOWN/2) + 1 or 1
-
-		--  this has to be reparented to our new bar
-		--  in order for its child elements to show in their updated positions
-		MainMenuBarArtFrame:SetParent(_G['iipBar1'])
-		MainMenuBarArtFrame:EnableMouse(false)
 
 		--  unpack bar positions
 		for i = 1, 7 do
@@ -150,12 +154,12 @@
 			local bar  = _G[name]
 			if ns.DELEGATE_ACTUAL_BARS_SHOWN and ns.DELEGATE_ACTUAL_BARS_SHOWN == 5 then
 				point, parent, relpoint, x, y = GetPositionsFive(name)
-			elseif ns.DELEGATE_ACTUAL_BARS_SHOWN and ns.DELEGATE_ACTUAL_BARS_SHOWN == 3 then
-				point, parent, relpoint, x, y = GetPositionsThree(name)
 			elseif ns.DELEGATE_ACTUAL_BARS_SHOWN and ns.DELEGATE_ACTUAL_BARS_SHOWN == 4 then
 				point, parent, relpoint, x, y = GetPositionsGridded(name)
 			elseif ns.DELEGATE_ACTUAL_BARS_SHOWN and ns.DELEGATE_ACTUAL_BARS_SHOWN == 1 and (i == 6 or i == 7) then
 				point, parent, relpoint, x, y = GetPetPositionsBasic(name)
+			elseif ns.DELEGATE_ACTUAL_BARS_SHOWN and ns.DELEGATE_ACTUAL_BARS_SHOWN == 2 and (i == 6 or i == 7) then
+				point, parent, relpoint, x, y = GetPetPositionsTwo(name)
 			else
 				point, parent, relpoint, x, y = GetPositionsStacked(name)
 			end
@@ -170,20 +174,33 @@
 
 	local AddVehicleLeaveButton = function(self, event, ...)
 		local bu = CreateFrame('CheckButton', 'iipVehicleExitButton', UIParent, 'ActionButtonTemplate, SecureHandlerClickTemplate')
-		ns.BU(bu)
-		ns.BD(bu)
-		ns.BDStone(bu, 6)
-		bu:SetPoint('RIGHT', MainMenuBarBackpackButton, -50, 0)
+		bu:SetSize(21, 21)
+		bu:SetPoint('BOTTOM', UIParent, -200, 70)
   		bu:RegisterForClicks'AnyUp'
   		bu:SetFrameLevel(4)
+  		bu:GetNormalTexture():SetTexture''
 		add(bu)
 
-		bu.icon:SetDrawLayer'OVERLAY'
+		local mask = bu:CreateMaskTexture()
+		mask:SetTexture[[Interface\Minimap\UI-Minimap-Background]]
+		mask:SetPoint('TOPLEFT', -3, 3)
+		mask:SetPoint('BOTTOMRIGHT', 3, -3)
+
+		bu.icon:SetDrawLayer'ARTWORK'
 		bu.icon:SetTexture[[Interface\Vehicles\UI-Vehicles-Button-Exit-Up]]
 		bu.icon:ClearAllPoints()
 		bu.icon:SetPoint('CENTER', bu)
 		bu.icon:SetSize(21, 21)
-		bu.icon:SetTexCoord(.2, .8, .2, .8)
+		bu.icon:SetTexCoord(.15, .85, .15, .85)
+		bu.icon:AddMaskTexture(mask)
+
+		bu.bo = bu:CreateTexture(nil, 'OVERLAY')
+		bu.bo:SetSize(36, 36)
+		bu.bo:SetTexture[[Interface\Artifacts\Artifacts]]
+		bu.bo:SetPoint'CENTER'
+		bu.bo:SetTexCoord(.49, .58, .875, .9625)
+		bu.bo:SetVertexColor(.7, .7, .7)
+
 
   		bu:SetScript('OnClick', function() VehicleExit() bu:SetChecked(false) end)
 		RegisterStateDriver(bu, 'visibility', '[canexitvehicle] show; hide')
@@ -200,17 +217,17 @@
 	end
 
 	local AddFloatingGrid = function()
-		local list = GetButtonList('ActionButton', 12)
-	    if  InCombatLockdown() then
-	      	lip:RegisterEvent('PLAYER_REGEN_ENABLED', 	 AddFloatingGrid)
-	      	return
-	    end
-	    local var = tonumber(GetCVar'alwaysShowActionBars')
-		lip:UnregisterEvent('PLAYER_REGEN_ENABLED',		 AddFloatingGrid)
-	    for i, button in next, list do
-			button:SetAttribute('showgrid', var)
-			ActionButton_ShowGrid(button)
-		end
+			local list = GetButtonList('ActionButton', 12)
+		    if  InCombatLockdown() then
+		      	lip:RegisterEvent('PLAYER_REGEN_ENABLED', 	 AddFloatingGrid)
+		      	return
+		    end
+		    local var = tonumber(GetCVar'alwaysShowActionBars')
+			lip:UnregisterEvent('PLAYER_REGEN_ENABLED',		 AddFloatingGrid)
+		    for _, button in next, list do
+				button:SetAttribute('showgrid', var)
+				ActionButton_ShowGrid(button)
+			end
 	end
 
 	local AddPaging = function(bar)
@@ -223,7 +240,6 @@
 		for i, button in next, list do
 			bar:SetFrameRef('ActionButton'..i, button)
 		end
-		RegisterStateDriver(bar, 'visibility', '[petbattle] hide; show')
 		bar:Execute(([[
 			buttons = table.new()
 			for i = 1, %d do
@@ -236,7 +252,7 @@
 			  button:SetAttribute('actionpage', newstate)
 			end
 		]])
-		RegisterStateDriver(bar, 'page', '[overridebar]14;[shapeshift]13;[vehicleui]12;[possessbar]12;[bonusbar:5]11;[bonusbar:4]10;[bonusbar:3]9;[bonusbar:2]8;[bonusbar:1]7;[bar:6]6;[bar:5]5;[bar:4]4;[bar:3]3;[bar:2]2;1')
+		RegisterStateDriver(bar, 'page', '[vehicleui][possessbar] 12; [shapeshift] 13; [overridebar] 14; [bar:2] 2; [bar:3] 3; [bar:4] 4; [bar:5] 5; [bar:6] 6;')
 	end
 
 	local AddBars = function()					-- 1:  action 	2:  multileft 	3:  multiright
@@ -247,11 +263,15 @@
 
 			bar:SetSize((x*12) + 2.3*(i < 7 and 12 or 10), y)
 			add(bar)
+
+			local v = BarPositions['iipBar'..i].visibility
+			RegisterStateDriver(bar, 'visibility', v) -- see if this fixes vehicle bug eh?
+																			--  N O P E
+
+
 			if  i == 1 then
 				AddFloatingGrid()
 				AddPaging(bar)
-			else
-				-- RegisterStateDriver(bar, 'visibility', '[petbattle][overridebar][possessbar,@vehicle,exists] hide; show')
 			end
 		end
 		AddVehicleLeaveButton()
@@ -277,8 +297,8 @@
 				parent.bd.t:SetTexCoord(0, 1, .18, .3)
 
 				parent.bd.bo = parent.bd:CreateTexture(nil, 'BACKGROUND', nil, -7)
-				parent.bd.bo:SetPoint('TOPLEFT', -14, 12)
-				parent.bd.bo:SetPoint('BOTTOMRIGHT', 14, -12)
+				parent.bd.bo:SetPoint('TOPLEFT', -15, 13)
+				parent.bd.bo:SetPoint('BOTTOMRIGHT', 15, -13)
 				parent.bd.bo:SetTexture[[Interface/ACHIEVEMENTFRAME/UI-Achievement-Alert-Background-Mini]]
 				parent.bd.bo:SetVertexColor(225/255, 225/255, 225/255)
 			end
@@ -337,7 +357,11 @@
 		end
 	end
 
-	local AddButtonsToBar = function(num, name, parent)
+	local AddButtonsToBar = function(num, name, parent, old, page)
+		if  old then
+			old:SetParent(parent)
+			old:EnableMouse(false)
+		end
 		for i = 1, num do
 			local bu = _G[name..i]
 			add(bu)
@@ -360,7 +384,7 @@
 					bu.stanceUsed = nil
 				end
 				if  StanceBarFrame:IsShown() then
-					_G['iipBar6']:Show() bu:Show() bu:SetParent(parent)
+					_G['iipBar6']:Show() bu:Show()
 				else
 					_G['iipBar6']:Hide() bu:Hide()
 				end
@@ -389,18 +413,16 @@
 	end
 
 	local SetUpButtons = function()
-			-- create single backpack button
-		ns.AddBackpack()
 			-- create bars to parent buttons to
 		AddBars()
 			--  begin button reparenting
-		AddButtonsToBar(12, 'ActionButton',             	_G['iipBar1'])
-		AddButtonsToBar(12, 'MultiBarBottomLeftButton', 	_G['iipBar2'])
-		AddButtonsToBar(12, 'MultiBarBottomRightButton', 	_G['iipBar3'])
-		AddButtonsToBar(12, 'MultiBarRightButton',	  	_G['iipBar4'])
-		AddButtonsToBar(12, 'MultiBarLeftButton',		_G['iipBar5'])
-		AddButtonsToBar(10, 'StanceButton',			_G['iipBar6'])
-		AddButtonsToBar(10, 'PetActionButton',			_G['iipBar7'])
+		AddButtonsToBar(12,	'ActionButton',					_G['iipBar1'], MainMenuBarArtFrame)
+		AddButtonsToBar(12, 'MultiBarBottomLeftButton',		_G['iipBar2'], MultiBarBottomLeft, 6)
+		AddButtonsToBar(12, 'MultiBarBottomRightButton',	_G['iipBar3'], MultiBarBottomRight, 5)
+		AddButtonsToBar(12, 'MultiBarRightButton',			_G['iipBar4'], MultiBarRight, 4)
+		AddButtonsToBar(12, 'MultiBarLeftButton',			_G['iipBar5'], MultiBarLeft, 3)
+		AddButtonsToBar(10, 'StanceButton',					_G['iipBar6'], StanceBarFrame)
+		AddButtonsToBar(10, 'PetActionButton',				_G['iipBar7'], PetActionBarFrame)
 		AddStancePositions()
 			--  set new ExtraActionButton format
 		hooksecurefunc('ExtraActionBar_Update', AddEAB)
@@ -439,6 +461,8 @@
 			updated = true
 		end
 	end
+
+	ValidateActionBarTransition = function() return end
 
 
 	--

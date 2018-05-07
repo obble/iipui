@@ -4,6 +4,20 @@
 
 	ns.UnitSpecific = {}
 
+	local colours = setmetatable({
+		tapped = {.9, .9, .9},
+		reaction = setmetatable({
+			[1] = {1, 0, 0},
+			[2] = {1, 0, 0},
+			[3] = {1, 0, 0},
+			[4] = {1, 1, 0},
+			[5] = {0, 1, 0},
+			[6] = {0, 1, 0},
+			[7] = {0, 1, 0},
+			[8] = {0, 1, 0},
+		}, {__index = oUF.colors.reaction}),
+	}, {__index = oUF.colors})
+
 	local AddHealth = function(self)
 		local Health = CreateFrame('StatusBar', nil, self)
 		ns.BD(Health)
@@ -61,6 +75,20 @@
 		RaidIcon:SetPoint('CENTER', 0, -5)
 		RaidIcon:SetTexture[[Interface\AddOns\iipui\art\raidicons\raidicons]]
 		return RaidIcon
+	end
+
+	local AddReadyCheck = function(self)
+		local ReadyCheck = self.Health:CreateTexture(nil, 'OVERLAY', nil, 7)
+		ReadyCheck:SetSize(16, 16)
+		ReadyCheck:SetPoint('CENTER', 0, -5)
+		return ReadyCheck
+	end
+
+	local AddQuestIndicator = function(self)
+		local QuestIndicator = self.Health:CreateTexture(nil, 'OVERLAY')
+		QuestIndicator:SetSize(16, 16)
+		QuestIndicator:SetPoint('LEFT', -15, 0)
+		return QuestIndicator
 	end
 
 	local AddPrediction = function(self)
@@ -139,6 +167,11 @@
 		self.Power 					= AddPower(self)
 		self.Castbar 				= AddCastbar(self)
 		self.RaidTargetIndicator 	= AddRaidIcon(self)
+		self.ReadyCheckIndicator 	= AddReadyCheck(self)
+		self.QuestIndicator 		= AddQuestIndicator(self)
+
+		--	insert nameplate-matching reaction colours
+		self.colors 				= colours
 
 		-- TODO:  insert BuilderSpender
 

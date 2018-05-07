@@ -5,7 +5,7 @@
 	local tags      = oUF.Tags.Methods or oUF.Tags
 	local tagevents = oUF.TagEvents or oUF.Tags.Events
 
-	tags['iip:group'] = function(unit)
+	tags['iip:grouphp'] = function(unit)
 		if not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then return end
 		local v, m = UnitHealth(unit), UnitHealthMax(unit)
 		local p = floor((m - v)/m * 100)
@@ -20,6 +20,11 @@
 		end
 	end
 
-	tagevents['iip:group'] = tagevents.missinghp
+	tags['iip:groupname'] = function(unit, realm)
+		return UnitName(realm or unit):sub(1, 6)
+	end
+
+	tagevents['iip:grouphp'] 	= tagevents.missinghp
+	tagevents['iip:groupname'] 	= tagevents.name
 
 	--

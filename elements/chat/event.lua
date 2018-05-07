@@ -2,9 +2,11 @@
 
     local _, ns = ...
 
-    CHAT_FLAG_AFK = 'AFK. '
-    CHAT_FLAG_DND = 'DND. '
-    CHAT_FLAG_GM  = 'GM. '
+    -- lordy i shouldnt be fucking w these
+    CHAT_FLAG_AFK           = 'AFK  '
+    CHAT_FLAG_DND           = 'DND  '
+    CHAT_FLAG_GM            = 'GM  '
+    FOREIGN_SERVER_LABEL    = '—'
 
     CHAT_GUILD_GET                = '|Hchannel:Guild|hG|h. %s:\32'
     CHAT_OFFICER_GET              = '|Hchannel:o|hO|h. %s:\32'
@@ -125,18 +127,19 @@
         t = gsub(t, '|TInterface\\Icons\\(.+):(.+)|t', '|TInterface\\Icons\\%1:'..size..':'..size..':0:0:64:64:8:56:8:56|t')
         t = gsub(t, '(|HBNplayer.-|h)%[(.-)%]|h', '%1%2|h')	--   battlenet player name
         t = gsub(t, '(|Hplayer.-|h)%[(.-)%]|h', '%1%2|h')	--   player name
-        t = gsub(t, '%[(%d0?)%. (.-)%]', '%1.')				--   globals channels: [1. trade] > /1./
-        t = gsub(t, 'Guild Message of the Day:', 'GMOTD.')	--   message of the day
-        t = gsub(t, 'To (|HBNplayer.+|h):', '%1 >')    		--   whisper to bnet
-        t = gsub(t, 'To (|Hplayer.+|h):', '%1 >')			--   whisper to
-        t = gsub(t, ' whispers:', ' <')						--   whisper from
+        t = gsub(t, '%[(%d0?)%. (.-)%]', '|cffffffff%1|r   ')				--   globals channels: [2. trade] > 2
+        t = gsub(t, 'Guild Message of the Day:', 'GMOTD   ')	--   message of the day
+        t = gsub(t, 'To (|HBNplayer.+|h):', '%1 >   ')    		--   whisper to bnet
+        t = gsub(t, 'To (|Hplayer.+|h):', '%1 >   ')			--   whisper to
+        t = gsub(t, ' whispers:', ' <   ')						--   whisper from
         t = gsub(t, 'Joined Channel:', '>')					--   channel join
-        t = gsub(t, 'Left Channel:', '- ')					--   channel left
-        t = gsub(t, 'Changed Channel:', '>')				--   channel change
+        t = gsub(t, 'Left Channel:', 'Left ')					--   channel left
         t = gsub(t, '|H(.-)|h%[(.-)%]|h', '|H%1|h%2|h')		--   strip brackets off've items iilinks style
-        
+
         d = gsub(d, '0*(%d+)', '%1', 1)
-        t = string.format('|cffffc800%s|r  %s', d, t)
+        t = string.format('|cffffc800%s|r    %s', d, t)
+
+        if string.find(t, 'Changed Channel') then return end
 
         return hooks[self](self, t, ...)
     end

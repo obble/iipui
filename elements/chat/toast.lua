@@ -32,7 +32,7 @@
 
         self:SetBackdrop(nil)
         self:ClearAllPoints()
-        self:SetPoint('TOP', ChatFrame1, 'BOTTOM', 0, -20)
+        self:SetPoint('TOPLEFT', ChatFrame1, 'TOPRIGHT', 20, -6)
         self:SetSize(bot > top and bot + 55 or top + 55, 60)
     end)
 

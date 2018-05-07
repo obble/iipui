@@ -135,14 +135,16 @@
 
 	ns.UnitSpecific.support = function(self, ...)
 		--
-		self:SetSize(60, 15)
+		self:SetSize(60, 22)
 		-- self:SetResizable(true)
+		ns.BD(self)
+		ns.BDStone(self, 6, [[Interface\QuestionFrame\question-background]])
 		self:SetScript('OnEnter', UnitFrame_OnEnter)
 		self:SetScript('OnLeave', UnitFrame_OnLeave)
 		self:RegisterForClicks'AnyUp'
 
 		self.Health 				= AddHealth(self)
-		self.BD, self.Border 		= AddBorder(self)
+		-- self.BD, self.Border 		= AddBorder(self)
 		self.Modifier				= AddModifier(self)
 		self.ResurrectIcon 			= AddResurrectIcon(self)
 		self.RaidTargetIndicator	= AddRaidIcon(self)

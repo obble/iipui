@@ -85,15 +85,16 @@
 	end
 
 	local AddPortrait = function(self)
-		local Portrait = self.Health:CreateTexture(nil, 'ARTWORK')
-		Portrait:SetSize(32, 32)
-		Portrait:SetPoint('RIGHT', self.Health, 'LEFT', -5, 1)
+		local Portrait = self.Health:CreateTexture(nil, 'OVERLAY')
+		Portrait:SetSize(38, 38)
+		Portrait:SetPoint('RIGHT', self.Health, 'LEFT', 0, 1)
 
-		--[[Portrait.border = self.Health:CreateTexture(nil, 'OVERLAY')
-		Portrait.border:SetSize(53, 30)
-		Portrait.border:SetTextureInterface/GUILDFRAME/GuildExtra
-		Portrait.border:SetPoint('CENTER', Portrait)
-		Portrait.border:SetTexCoord(.565, .8, 0, .59)]]
+		Portrait.BG = self.Health:CreateTexture(nil, 'OVERLAY', nil, 7)
+		Portrait.BG:SetSize(54, 54)
+		Portrait.BG:SetTexture[[Interface\Artifacts\Artifacts]]
+		Portrait.BG:SetPoint('CENTER', Portrait)
+		Portrait.BG:SetTexCoord(.25, .3385, .9075, .995)
+		-- Portrait.BG:SetVertexColor(.666, .666, .666)
 
 		return Portrait
 	end
@@ -149,7 +150,7 @@
 
 	ns.UnitSpecific.tank = function(self, ...)
 		--
-		self:SetSize(95, 17)
+		self:SetSize(75, 17)
 		-- self:SetResizable(true)
 		self:SetScript('OnEnter', UnitFrame_OnEnter)
 		self:SetScript('OnLeave', UnitFrame_OnLeave)

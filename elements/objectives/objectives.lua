@@ -12,7 +12,7 @@
     otf.HeaderMenu.Title:SetText''
 
     otf.HeaderMenu.MinimizeButton:ClearAllPoints()
-    otf.HeaderMenu.MinimizeButton:SetPoint('TOPRIGHT', otf, -15, -7) 
+    otf.HeaderMenu.MinimizeButton:SetPoint('TOPRIGHT', otf, -15, -7)
 
     local OnClick = function()
         if  not otf.collapsed then
@@ -47,7 +47,7 @@
             end
         end
     end
-   
+
     local AddHeader = function()
         if  otf.MODULES then
             for i = 1, #otf.MODULES do
@@ -104,7 +104,7 @@
         self:SetMovable(true)
         self:SetUserPlaced(true)
         self:ClearAllPoints()
-        self:SetPoint('TOPRIGHT', UIParent, -15, -15)
+        self:SetPoint('TOPRIGHT', UIParent, -15, -20)
         self:SetParent(Minimap)
         self:SetHeight(800)
         self:SetMovable(false)

@@ -58,9 +58,9 @@
                 bgFile     = [[Interface\ChatFrame\ChatFrameBackground]],
                 tiled      = false,
                 insets     = {
-                    left    = ix or -3, 
-                    right   = ix or -3, 
-                    top     = ix or -3, 
+                    left    = ix or -3,
+                    right   = ix or -3,
+                    top     = ix or -3,
                     bottom  = ix or -3
                 }
             }
@@ -68,12 +68,12 @@
         f:SetBackdropColor(0, 0, 0, a or 1)
     end
 
-    ns.BU = function(bu, a, hover)
+    ns.BU = function(bu, a, hover, x, y)
         ns.BD(bu, a)
         bu:SetNormalTexture''
         bu:SetHighlightTexture''
         bu:SetPushedTexture''
-        if not InCombatLockdown() then bu:SetSize(21, 21) end
+        if not InCombatLockdown() then bu:SetSize(x or 21, x or y or 21) end
         bu:HookScript('OnEnter', function() if hover then ToggleHighlight(bu, true) end end)
         bu:HookScript('OnLeave', function() if hover then ToggleHighlight(bu, false) end end)
     end

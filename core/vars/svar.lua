@@ -1,6 +1,17 @@
 
 	local _, ns = ...
 
+	IIP_VAR = {
+		['raid']  = {
+			pets			= true, -- undecided
+			name  			= true,
+			maintankassist 	= true,
+			power 			= true,
+			role  			= true,
+			value 			= true,
+		},
+	}
+
 	local ADDON_LOADED = function(self, event, addon)
 		if  iidCombatActionBar == nil then
 			iidCombatActionBar = 1

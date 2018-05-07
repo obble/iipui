@@ -22,7 +22,7 @@
 
 			ZoneAbilityFrame.SpellButton.Icon:SetDrawLayer'ARTWORK'
 			ZoneAbilityFrame.SpellButton.Icon:SetTexCoord(.1, .9, .1, .9)
-			
+
 			ZoneAbilityFrame.SpellButton:GetNormalTexture():SetTexture''
 			ns.DELEGATE_FRAMES_TO_POSITION[ZoneAbilityFrame] = {'BOTTOM', 0, 20}
 		end
@@ -46,7 +46,7 @@
 						ns.BUElements(bu)
 						--ns.BDStone(bu, 5)
 						if name ~= 'StanceButton' then
-							bu:SetSize(25, 25)
+							bu:SetSize(30, 30)
 						else
 							bu:SetSize(32, 32)
 						end
@@ -109,7 +109,7 @@
 	                    end
 
 	                    if  auto then
-	                        auto:SetSize(44, 33)
+	                        auto:SetSize(46, 54)
 	                        auto:SetDrawLayer('OVERLAY', 7)
 	                    end
 	                end
@@ -127,7 +127,7 @@
 		local flys = _G[name..'FlyoutBorderShadow']
 
 		if not bu.bo then
-			ns.BU(bu, .75, true)
+			ns.BU(bu, .75, true, 22)
 			ns.BUElements(bu)
 			ns.BUBorder(bu)
 		end
