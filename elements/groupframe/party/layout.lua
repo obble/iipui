@@ -155,6 +155,13 @@
 		return RaidIcon
 	end
 
+	local AddPhaseIcon = function(self)
+   		local PhaseIcon = self:CreateTexture(nil, 'OVERLAY')
+   		PhaseIcon:SetSize(16, 16)
+   		PhaseIcon:SetPoint('LEFT', self, 'RIGHT', 20, 0)
+   		return PhaseIcon
+	end
+
 	local AddPortrait = function(self)
 		local Portrait = self.Health:CreateTexture(nil, 'OVERLAY')
 		Portrait:SetSize(38, 38)
@@ -234,6 +241,7 @@
 		self.Modifier				= AddModifier(self)
 		self.ResurrectIcon 			= AddResurrectIcon(self)
 		self.RaidTargetIndicator	= AddRaidIcon(self)
+		self.PhaseIndicator 		= AddPhaseIcon(self)
 		self.Portrait 				= AddPortrait(self)
 		self.LFDRole 				= AddLFDRole(self)
 		self.Range					= range

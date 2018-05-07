@@ -81,6 +81,10 @@
 		self:Tag(PowerPercent, '[iip:perpp]')
 		Power.percent = PowerPercent
 
+		Power.pulse = CreateFrame('Frame', nil, Power, 'FullResourcePulseFrame')
+		Power.pulse:SetAllPoints(self.Power)
+		Power.pulse:SetPoint'TOPRIGHT'
+
 		local Portrait = self.Health:CreateTexture(nil, 'ARTWORK')
 		Portrait:SetSize(46, 46)
 		Portrait:SetPoint('RIGHT', self, 70, 0)
@@ -129,6 +133,11 @@
 		self.Border.shadow:SetTexture[[Interface\Scenarios\ScenarioParts]]
 		self.Border.shadow:SetVertexColor(0, 0, 0, 1)
 		self.Border.shadow:SetTexCoord(0, .641, 0, .18)
+
+		local RestingIndicator = self.Health:CreateTexture(nil, 'OVERLAY')
+    	RestingIndicator:SetSize(24, 24)
+    	RestingIndicator:SetPoint('BOTTOMRIGHT', Portrait, 9, -9)
+		self.RestingIndicator = RestingIndicator
 
 		ns.BD(Castbar)
 		ns.CLASS_COLOUR(Castbar)

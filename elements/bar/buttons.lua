@@ -38,9 +38,9 @@
 			visibility = '[petbattle][overridebar][vehicleui][possessbar][shapeshift][canexitvehicle] hide; show'
 		},
 		['iipBar6'] = {	-- stance
-			STACKED = {'BOTTOM', 		UIParent, 'BOTTOM', 0, 166},
-			GRIDDED	= {'BOTTOM', 		UIParent, 'BOTTOM', 0, 172},
-			FIVE	= {'BOTTOM', 		UIParent, 'BOTTOM', 0, 215},
+			STACKED = {'BOTTOM', 		UIParent, 'BOTTOM', 0, 240},
+			GRIDDED	= {'BOTTOM', 		UIParent, 'BOTTOM', 0, 200},
+			FIVE	= {'BOTTOM', 		UIParent, 'BOTTOM', 0, 240},
 			BASIC   = {'BOTTOM', 		UIParent, 'BOTTOM', 0, 140},
 			TWO		= {'BOTTOM', 		UIParent, 'BOTTOM', 0, 200},
 			visibility = '[petbattle][overridebar][vehicleui][possessbar][shapeshift][canexitvehicle] hide; show'

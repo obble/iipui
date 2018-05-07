@@ -74,26 +74,80 @@
 		end
 	end
 
-    local PostUpdateHealth = function(Health, unit, min, max)
-        local parent    = Health:GetParent()
+    local PostUpdateHealth = function(Health, unit, v, max)
+        local parent = Health:GetParent()
 
         if  UnitIsDead(unit) or UnitIsGhost(unit) then
 			Health:SetValue(0)
 		end
 
         if  unit == 'player' or unit == 'vehicle' then
-            if UnitInVehicle'player' or UnitControllingVehicle'player' then
+            if  UnitInVehicle'player' or UnitControllingVehicle'player' then
                 if parent.Portrait.vehicle then parent.Portrait.vehicle:Show() end
             else
                 if parent.Portrait.vehicle then parent.Portrait.vehicle:Hide() end
             end
         end
 
+        -- lightspark feedback solution
+        local showBuilderFeedback = GetCVarBool'showBuilderFeedback'
+	    local showSpenderFeedback = GetCVarBool'showSpenderFeedback'
+	    if  max == 0 or v == 0 or v == max then
+            --
+        else
+            local prev = Health.prev or 0
+            local diff = v - prev
+
+            if  diff > 0 then
+                if  Health.Gain:GetAlpha() == 0 then
+                    local offset = Health:GetWidth()*(1 - prev/max)
+                    Health.Gain:SetAlpha(1)
+                    Health.Gain:SetPoint('TOPLEFT', Health, 'TOPRIGHT', -offset, 0)
+                    Health.Gain:SetPoint('BOTTOMLEFT', Health, 'BOTTOMRIGHT', -offset, 0)
+                    Health.Gain.FadeOut:Play()
+                end
+            elseif diff < 0 then
+                Health.Gain.FadeOut:Stop()
+                Health.Gain:SetAlpha(0)
+
+                if  Health.Loss:GetAlpha() == 0 then
+                    local offset = Health:GetWidth()*(1 - prev/max)
+                    Health.Loss:SetAlpha(1)
+                    Health.Loss:SetPoint('TOPRIGHT', Health, 'TOPRIGHT', -offset, 0)
+                    Health.Loss:SetPoint('BOTTOMRIGHT', Health, 'BOTTOMRIGHT', -offset, 0)
+                    Health.Loss.FadeOut:Play()
+                end
+            end
+        end
+
+        if  Health.prev ~= v then
+            Health.prev = UnitHealth(unit)
+        end
+
 		return PostUpdateName(parent, 'PostUpdateHealth', unit)
     end
 
-    local PostUpdatePower = function(Power, unit, min, max)
+    local PostUpdatePower = function(Power, unit, v, max)
         local parent = Power:GetParent()
+        local powerType, powerToken = UnitPowerType(unit)
+
+        if  Power.pulse then
+            Power.pulse:Initialize(PowerBarColor[powerToken].fullPowerAnim)
+    		Power.pulse:SetMaxValue(UnitPowerMax(unit, powerType))
+
+            if  max == 0 or v == 0 or v == max then
+                --
+            else
+                if  Power.pulse and Power.pulse.active then
+        			Power.pulse:StartAnimIfFull(Power.prev or 0, v)
+        		end
+            end
+
+            if  Power.prev ~= v then
+                Power.prev = UnitPower(unit)
+            end
+        end
+
         PostUpdateName(parent, 'PostUpdateHealth', unit)
     end
 

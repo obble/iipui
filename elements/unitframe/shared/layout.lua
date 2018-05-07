@@ -27,7 +27,7 @@
 		Health:SetPoint'LEFT'
 		Health:SetPoint'RIGHT'
 
-		Health.Smooth 			= true
+		-- Health.Smooth 			= true
 		Health.frequentUpdates	= true
 		Health.colorTapping 	= true
 		Health.colorClass 		= true
@@ -37,6 +37,42 @@
 		ns.SB(Health.BD)
 		Health.BD:SetAllPoints()
 		Health.BD:SetVertexColor(.2, .2, .2)
+		Health.BD.multiplier = 0.2
+
+		local gainTexture = Health:CreateTexture(nil, "OVERLAY")
+		gainTexture:SetPoint("TOPRIGHT", Health:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+		gainTexture:SetPoint("BOTTOMRIGHT", Health:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
+		gainTexture:SetColorTexture(0, 1, 0)
+		gainTexture:SetAlpha(0)
+		Health.Gain = gainTexture
+
+		local lossTexture = Health:CreateTexture(nil, "OVERLAY")
+		lossTexture:SetPoint("TOPLEFT", Health:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+		lossTexture:SetPoint("BOTTOMLEFT", Health:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
+		lossTexture:SetColorTexture(1, 0, 0)
+		lossTexture:SetAlpha(0)
+		Health.Loss = lossTexture
+
+		local ag = gainTexture:CreateAnimationGroup()
+		ag:SetToFinalAlpha(true)
+		gainTexture.FadeOut = ag
+
+		local anim1 = ag:CreateAnimation("Alpha")
+		anim1:SetFromAlpha(1)
+		anim1:SetToAlpha(0)
+		anim1:SetStartDelay(0.6)
+		anim1:SetDuration(0.2)
+
+		ag = lossTexture:CreateAnimationGroup()
+		ag:SetToFinalAlpha(true)
+		lossTexture.FadeOut = ag
+
+		anim1 = ag:CreateAnimation("Alpha")
+		anim1:SetFromAlpha(1)
+		anim1:SetToAlpha(0)
+		anim1:SetStartDelay(0.6)
+		anim1:SetDuration(0.2)
+
 		return Health
 	end
 
