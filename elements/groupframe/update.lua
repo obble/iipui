@@ -230,6 +230,17 @@
         if  event == 'PLAYER_REGEN_ENABLED' then
             e:UnregisterEvent'PLAYER_REGEN_ENABLED'
         end
+
+        if  IsInGroup() and not IsInRaid() then
+            local f = _G['oUF_party']
+            f.header:Show()
+            f.header.t:Show()
+        else
+            local f = _G['oUF_party']
+            f.header:Hide()
+            f.header.t:Hide()
+        end
+
         for  i, v in pairs(frames) do
             local f = _G['oUF_'..i]
             if f and f.header then

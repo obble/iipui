@@ -16,6 +16,24 @@
 	end
 
 	oUF:Factory(function(self)
+        self:SetActiveStyle'iip - Party'
+        local party = self:SpawnHeader(
+            'oUF_party', nil, 'party',
+            'showParty', 		true,
+            'showPlayer', 		true,
+            'xOffset',          55,
+            'yOffset',			36,
+            'maxColumns',       5,
+            'unitsPerColumn',	1,
+            'columnSpacing',    32,
+            'point',           	'LEFT',
+            'columnAnchorPoint', 'TOP',
+            'oUF-initialConfigFunction', [[
+				self:SetWidth(100)
+				self:SetHeight(40)
+			]]
+        )
+
 		self:SetActiveStyle'iip - Tank'
         local tanks = self:SpawnHeader(
             'oUF_tank', nil, 'raid',
@@ -62,7 +80,6 @@
             'showRaid',         true,
             'showParty', 		true,
             'showPlayer', 		true,
-            'showSolo',         true,
             'xOffset',          8,
             'yOffset',			3,
             'maxColumns',        6,
@@ -72,10 +89,26 @@
             'point',             'LEFT',
             'columnAnchorPoint', 'TOP',
             'oUF-initialConfigFunction', [[
-				self:SetWidth(47)
-				self:SetHeight(30)
+				self:SetWidth(137)
+				self:SetHeight(20)
 			]]
         )
+
+        party:SetPoint('TOPLEFT', 	UIParent, 110, -87)
+
+        party.header = party:CreateTexture(nil, 'OVERLAY')
+        party.header:SetPoint('TOPLEFT', party, -90, 80)
+        party.header:SetTexture[[Interface\QuestFrame\AutoQuest-Parts]]
+        party.header:SetTexCoord(.42, .96, 1, 0)
+        party.header:SetSize(300, 42)
+        party.header:SetAlpha(.9)
+        party.header:Hide()
+
+        party.header.t = party:CreateFontString(nil, 'OVERLAY', 'ObjectiveFont')
+		party.header.t:SetFont(STANDARD_TEXT_FONT, 14)
+        party.header.t:SetTextColor(.75, .61, 0)
+		party.header.t:SetPoint('TOPLEFT', party.header, 30, -18)
+        party.header.t:SetText'Party'
 
         tanks:SetPoint('TOPLEFT', 	UIParent, 60, -67)
 

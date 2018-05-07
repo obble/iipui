@@ -2,6 +2,8 @@
 
 	local _, ns = ...
 
+	-- todo: reorient flyover buttons
+
 	ns.bar_elements = {} --  inserted in buttons.lua
 	wipe(ns.bar_elements)
 
@@ -162,8 +164,8 @@
 		OnLock()
 	end
 
-	local AddMouseover = function()				-- assert "sticky" behaviour for bar pseudo-children
-		ns.AddBarLocks()								-- preventing the bar collapsing when we mouseover elements within
+	ns.AddBarMouseoverElements = function()				-- assert "sticky" behaviour for bar pseudo-children
+		ns.AddBarLocks()						-- preventing the bar collapsing when we mouseover elements within
 		for i, v in pairs(ns.bar_elements) do	-- this is run on the initial login OnUpdate collapse
 												-- in order to collect elements added after this file is run
 			if not v.RegisteredForBar then		-- kill overhead
@@ -172,7 +174,7 @@
 				v.RegisteredForBar = true
 			end
 		end
-						  -- defined in customise/customise.lua
+						  						-- defined in customise/customise.lua
 		for  _, v in pairs(ns.bar_elements_custom) do
 			if 	v and not ns.bar_elements[v] then
 				tinsert(ns.bar_elements, v)
@@ -192,7 +194,7 @@
 
 	local OnEvent = function(self, event)		--  fire on load, and then AGAIN when variables load in
 		C_Timer.After(2, function()				-- build in a delay
-			AddMouseover() 						--  hijack to scoop up bar_elements
+			ns.AddBarMouseoverElements() 					--  hijack to scoop up bar_elements
 			if  ns.bar_always then
 				OnEnter()
 			else

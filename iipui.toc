@@ -89,6 +89,7 @@ elements\groupframe\tags.lua
 elements\groupframe\update.lua
 elements\groupframe\sizing.lua
 elements\groupframe\shared\layout.lua
+elements\groupframe\party\layout.lua
 elements\groupframe\tanks\layout.lua
 elements\groupframe\healers\layout.lua
 elements\groupframe\dps\layout.lua

@@ -76,7 +76,7 @@
 		Portrait.BG:SetTexture[[Interface\COMMON\portrait-ring-withbg]]
 		Portrait.BG:SetPoint('RIGHT', self, 110, 0)
 
-		Portrait.Elite = self.Health:CreateTexture(nil, 'OVERLAY')
+		Portrait.Elite = self.Health:CreateTexture(nil, 'ARTWORK')
 		Portrait.Elite:SetSize(100, 100)
 		Portrait.Elite:SetPoint('RIGHT', self, 104, -11)
 		Portrait.Elite:Hide()
@@ -176,11 +176,11 @@
 		Level.BD:SetPoint('CENTER', Portrait, 'BOTTOMLEFT', 4, 5)
 		Level.BD:SetTexture[[Interface\MINIMAP\UI-Minimap-Background]]
 
-		local PvPIndicator = self:CreateTexture(nil, 'ARTWORK', nil, 1)
+		local PvPIndicator = self.Health:CreateTexture(nil, 'OVERLAY', nil, 1)
 	    PvPIndicator:SetSize(32, 32)
 	    PvPIndicator:SetPoint('CENTER', Portrait, 'LEFT', 4, 20)
 
-	    local Prestige = self:CreateTexture(nil, 'ARTWORK')
+	    local Prestige = self.Health:CreateTexture(nil, 'OVERLAY')
 	    Prestige:SetSize(38, 40)
 	    Prestige:SetPoint('CENTER', PvPIndicator)
 

@@ -21,7 +21,8 @@
 	end
 
 	tags['iip:groupname'] = function(unit, realm)
-		return UnitName(realm or unit):sub(1, 6)
+		local n = UnitName(realm or unit)
+		return unit:sub(1, 5) == 'party' and n:gsub('(%u)%S*', '%1 ') or n:sub(1, 6)
 	end
 
 	tagevents['iip:grouphp'] 	= tagevents.missinghp

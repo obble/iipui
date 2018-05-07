@@ -158,7 +158,7 @@
 		Castbar.text = Castbar:CreateFontString(nil, 'ARTWORK')
 		Castbar.text:SetPoint('LEFT', Castbar.Icon, 'RIGHT', 12, 0)
 		Castbar.text:SetFont([[Fonts\ARIALN.ttf]], 11)
-		Castbar.text:SetWidth(80)
+		Castbar.text:SetWidth(100)
 		Castbar.text:SetJustifyH'LEFT'
 		Castbar.text:SetWordWrap(true)
 		Castbar.text:SetShadowOffset(1, -1)

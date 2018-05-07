@@ -352,7 +352,7 @@
 				add(_G['SpellFlyoutButton'..i])
 				add(SpellFlyout)
 			end
-			ns.STICKY_BAR_MOUSEOVER()
+			ns.AddBarMouseoverElements()
 			i = i + 1
 		end
 	end
