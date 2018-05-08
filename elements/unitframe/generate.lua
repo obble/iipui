@@ -28,8 +28,24 @@
 
         for _, v in pairs({'boss', 'arena'}) do
     		for i = 1, 5 do
-    			spawnHelper(self, v..i, 'TOPRIGHT', -85, -10 - 60*i)
+    			spawnHelper(self, v..i, 'TOPRIGHT', -140, -35 - 60*i)
     		end
+        end
+
+        for _, v in pairs({'Boss', 'Arena'}) do
+            local f = _G['oUF_iip'..v..'1']
+            f.header = f:CreateTexture(nil, 'OVERLAY')
+            f.header:SetPoint('BOTTOMRIGHT', f, 'TOPRIGHT', 150, 42)
+            f.header:SetTexture[[Interface\QuestFrame\AutoQuest-Parts]]
+            f.header:SetTexCoord(.42, .96, 1, 0)
+            f.header:SetSize(300, 42)
+            f.header:SetAlpha(.9)
+
+            f.header.t = f:CreateFontString(nil, 'OVERLAY', 'ObjectiveFont')
+            f.header.t:SetFont(STANDARD_TEXT_FONT, 14)
+            f.header.t:SetTextColor(.75, .61, 0)
+            f.header.t:SetPoint('TOPLEFT', f.header, 30, -18)
+            f.header.t:SetText(v)
         end
 	end)
 
