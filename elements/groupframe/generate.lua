@@ -89,8 +89,8 @@
             'point',             'LEFT',
             'columnAnchorPoint', 'TOP',
             'oUF-initialConfigFunction', [[
-				self:SetWidth(137)
-				self:SetHeight(20)
+				self:SetWidth(47)
+				self:SetHeight(30)
 			]]
         )
 
@@ -108,7 +108,7 @@
 		party.header.t:SetFont(STANDARD_TEXT_FONT, 14)
         party.header.t:SetTextColor(.75, .61, 0)
 		party.header.t:SetPoint('TOPLEFT', party.header, 30, -18)
-        party.header.t:SetText'Party'
+        party.header.t:SetText(PARTY)
 
         tanks:SetPoint('TOPLEFT', 	UIParent, 60, -67)
 
@@ -124,7 +124,7 @@
 		tanks.header.t:SetFont(STANDARD_TEXT_FONT, 14)
         tanks.header.t:SetTextColor(.75, .61, 0)
 		tanks.header.t:SetPoint('TOPLEFT', tanks.header, 30, -18)
-        tanks.header.t:SetText'Tanks'
+        tanks.header.t:SetText(TANK)
 
 		support:SetPoint('TOPLEFT', tanks, 'BOTTOMLEFT', -10, -60)
 
@@ -140,7 +140,7 @@
 		support.header.t:SetFont(STANDARD_TEXT_FONT, 14)
         support.header.t:SetTextColor(.75, .61, 0)
 		support.header.t:SetPoint('TOPLEFT', support.header, 30, -18)
-        support.header.t:SetText'Support'
+        support.header.t:SetText(HEALER)
 
 		dps:SetPoint('TOPLEFT', 	support, 'BOTTOMLEFT', 0, -60)
 
@@ -156,7 +156,7 @@
 		dps.header.t:SetFont(STANDARD_TEXT_FONT, 14)
         dps.header.t:SetTextColor(.75, .61, 0)
 		dps.header.t:SetPoint('TOPLEFT', dps.header, 30, -18)
-        dps.header.t:SetText'DPS'
+        dps.header.t:SetText(DAMAGER)
 	end)
 
 

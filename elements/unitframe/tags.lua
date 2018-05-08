@@ -18,10 +18,10 @@
 				return ns.siValue(m)
 			end
 		elseif cv and cv == 'PERCENT' then
-			if  m == 0 then
-				return 0
-			else
+			if  m > 0 then
 				return math.floor(v/m*100 + .5)
+			else
+				return
 			end
 		else
 			return

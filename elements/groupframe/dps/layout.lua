@@ -54,15 +54,35 @@
 		Health.back:SetAllPoints(Health)
 		ns.SB(Health.back)
 		Health.back:SetVertexColor(.2, .2, .2)
+
+		local HealthPoints = Health:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+		HealthPoints:SetPoint('CENTER', 0, 2)
+		HealthPoints:SetJustifyH'CENTER'
+		HealthPoints:SetFont(GameFontNormal:GetFont(), 10)
+		HealthPoints:SetTextColor(1, 1, 1)
+
+		self:Tag(HealthPoints, '[iip:grouphp]')
+		Health.value = HealthPoints
+
+		local HealthPercent = Health:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+		HealthPercent:SetPoint('BOTTOM', 0, 4)
+		HealthPercent:SetJustifyH'CENTER'
+		HealthPercent:SetFont(GameFontNormal:GetFont(), 10)
+		HealthPercent:SetTextColor(1, 1, 1)
+
+		self:Tag(HealthPercent, '[iip:groupperhp]')
+		Health.percent = HealthPercent
+
 		return Health
 	end
 
 	local AddName = function(self)
 		local Name = self.Health:CreateFontString(nil, 'OVERLAY', 'iipNameFont')
 		Name:SetFont(STANDARD_TEXT_FONT, 11)
+		Name:SetTextColor(1, .8, 0)
 		Name:SetJustifyH'CENTER'
 		Name:SetWidth(40)
-		Name:SetPoint('TOP', 0, -2)
+		Name:SetPoint('CENTER', 0, 2)
 		self:Tag(Name, '[iip:groupname]')
 		return Name
 	end
@@ -142,7 +162,6 @@
 
 	ns.UnitSpecific.dps = function(self, ...)
 		--
-		self:SetSize(47, 30)
 		ns.BD(self)
 		ns.BDStone(self)
 		-- self:SetResizable(true)
@@ -157,7 +176,7 @@
 		self.RaidTargetIndicator	= AddRaidIcon(self)
 		self.Range					= range
 
-		--  TODO:  insert BuilderSpender
+		ns.AddGroupAuraElement(self, unit, true)
 
 		--[[local Predict, OtherPredict, Absorb, HealAbsorb = AddPrediction(self)
 		self.HealPrediction = {

@@ -21,14 +21,14 @@
 
         local bu = CreateFrame('Frame', nil, bar)
         ns.BD(bu)
-        bu:SetPoint('TOPRIGHT', bar, 'TOPLEFT', -30, -20)
-        bu:SetSize(70, 70)
+        bu:SetPoint('RIGHT', bar, 'LEFT', -30, 0)
+        bu:SetSize(36, 36)
         bu:SetFrameLevel(0)
         LoC.bu = bu
 
-        bu.t = bu:CreateTexture(nil, 'BACKGROUND', nil, 7)
-        bu.t:SetPoint('TOPLEFT', -8, 8)
-        bu.t:SetPoint('BOTTOMRIGHT', 8, -8)
+        bu.t = bu:CreateTexture(nil, 'OVERLAY', nil, 7)
+        bu.t:SetPoint('TOPLEFT', -16, 16)
+        bu.t:SetPoint('BOTTOMRIGHT', 16, -16)
         bu.t:SetTexture[[Interface\PVPFrame\SilverIconBorder]]
         bu.t:SetVertexColor(.5, .5, .5)
 

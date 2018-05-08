@@ -49,12 +49,31 @@
 		Health.back:SetAllPoints(Health)
 		ns.SB(Health.back)
 		Health.back:SetVertexColor(.2, .2, .2)
+
+		local HealthPoints = Health:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+		HealthPoints:SetPoint'CENTER'
+		HealthPoints:SetJustifyH'RIGHT'
+		HealthPoints:SetFont(GameFontNormal:GetFont(), 10)
+		HealthPoints:SetTextColor(1, 1, 1)
+
+		self:Tag(HealthPoints, '[iip:grouphp]')
+		Health.value = HealthPoints
+
+		local HealthPercent = Health:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+		HealthPercent:SetPoint('RIGHT', -2, 0)
+		HealthPercent:SetJustifyH'RIGHT'
+		HealthPercent:SetFont(GameFontNormal:GetFont(), 10)
+		HealthPercent:SetTextColor(1, 1, 1)
+
+		self:Tag(HealthPercent, '[iip:groupperhp]')
+		Health.percent = HealthPercent
+
 		return Health
 	end
 
 	local AddModifier = function(self)
 		local Modifier = self.Health:CreateTexture(nil, 'OVERLAY')
-		Modifier:SetSize(26, 26)
+		Modifier:SetSize(22, 22)
 		Modifier:SetPoint'CENTER'
 		Modifier:Hide()
 		return Modifier
@@ -150,7 +169,6 @@
 
 	ns.UnitSpecific.tank = function(self, ...)
 		--
-		self:SetSize(75, 17)
 		-- self:SetResizable(true)
 		self:SetScript('OnEnter', UnitFrame_OnEnter)
 		self:SetScript('OnLeave', UnitFrame_OnLeave)

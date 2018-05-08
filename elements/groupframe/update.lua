@@ -1,12 +1,13 @@
 
 
     local _, ns = ...
+    local e = CreateFrame'Frame'
 
-    local OverrideLFD = function(self)
+    local OverrideLFD = function(self, override)
 		local LFDRole = self.LFDRole
-		if LFDRole then
-			local role    = UnitGroupRolesAssigned(self.unit)
-			if self.Modifier and self.Modifier:IsShown() or self.RaidTargetIndicator:IsShown() then
+		if  LFDRole then
+			local role = UnitGroupRolesAssigned(self.unit)
+			if  (self.Modifier and self.Modifier:IsShown()) or self.RaidTargetIndicator:IsShown() or override then
 				LFDRole:SetTexture''
 				LFDRole:Hide()
 			elseif role == 'HEALER' then
@@ -27,15 +28,23 @@
 	local UpdateModifier = function(self, unit)
 		if  self.Modifier then
 			self.Modifier:Hide()
+            if self.Name then self.Name:Show() end
+            if self.Health.percent then self.Health.percent:Show() end
 			if  UnitIsDead(unit) then
 				self.Modifier:SetTexture[[Interface\AddOns\iipui\art\group\modifier\dead]]
 				self.Modifier:Show()
+                if self.Name then self.Name:Hide() end
+                if self.Health.percent then self.Health.percent:Hide() end
 			elseif UnitIsGhost(unit) then
 				self.Modifier:SetTexture[[Interface\AddOns\iipui\art\group\modifier\ghost]]
 				self.Modifier:Show()
+                if self.Name then self.Name:Hide() end
+                if self.Health.percent then self.Health.percent:Hide() end
 			elseif UnitIsAFK(unit) then
 				self.Modifier:SetTexture[[Interface\AddOns\iipui\art\group\modifier\afk]]
 				self.Modifier:Show()
+                if self.Name then self.Name:Hide() end
+                if self.Health.percent then self.Health.percent:Hide() end
 			end
 		end
 		OverrideLFD(self)
@@ -58,12 +67,38 @@
 	end
 
 	local PostUpdateHealth = function(Health, unit)
-		local _, class = UnitClass(unit)
-		local colour   = RAID_CLASS_COLORS[class]
-		if  UnitIsPlayer(unit) and colour then
-			UpdateModifier(Health:GetParent(), unit)
-			Health.back:SetVertexColor(colour.r*.2, colour.g*.2, colour.b*.2)
-		end
+		local _, class  = UnitClass(unit)
+		local colour    = RAID_CLASS_COLORS[class]
+        local parent    = Health:GetParent()
+        local v, max    = UnitHealth(unit), UnitHealthMax(unit)
+        local cv = GetCVar'statusTextDisplay'
+        if cv and cv == 'BOTH' then
+            if  string.find(parent:GetName(), 'tank') then
+                Health.value:ClearAllPoints()
+                Health.value:SetPoint('LEFT', 7, 0)
+            elseif string.find(parent:GetName(), 'dps') then
+                Health.value:ClearAllPoints()
+                Health.value:SetPoint('TOP', 0, -4)
+            end
+        else
+            if  string.find(parent:GetName(), 'tank') then
+                Health.value:ClearAllPoints()
+                Health.value:SetPoint'CENTER'
+            elseif string.find(parent:GetName(), 'dps') then
+                Health.value:ClearAllPoints()
+                Health.value:SetPoint('TOP', 0, -4)
+            end
+        end
+        if  UnitIsPlayer(unit) and colour then
+            UpdateModifier(parent, unit)
+            Health.back:SetVertexColor(colour.r*.2, colour.g*.2, colour.b*.2)
+        end
+        if  v ~= max then
+            OverrideLFD(parent, true)
+            if parent.Name then parent.Name:Hide() end
+        else
+            if parent.Name then parent.Name:Show() end
+        end
 	end
 
 	local PostUpdateReadyCheckFade = function(self)
@@ -258,7 +293,6 @@
         end
     end
 
-    local e = CreateFrame'Frame'
     e:RegisterEvent'PLAYER_ENTERING_WORLD'
     e:RegisterEvent'GROUP_ROSTER_UPDATE'
     e:SetScript('OnEvent', OnEvent)

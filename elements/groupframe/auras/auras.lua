@@ -112,8 +112,8 @@
 		icon:EnableMouse(false)
 		if duration > 0 then
 			icon.cd:SetCooldown(expiration - duration, duration)
-			icon.cd:SetSwipeTexture('Interface\\AddOns\\iidui\\art\\group\\cd\\'..i)
-			icon.cd.bd:SetTexture('Interface\\AddOns\\iidui\\art\\group\\cd\\'..i)
+			icon.cd:SetSwipeTexture('Interface\\AddOns\\iipui\\art\\group\\cd\\'..i)
+			icon.cd.bd:SetTexture('Interface\\AddOns\\iipui\\art\\group\\cd\\'..i)
 			icon.cd:SetSwipeColor(list[id].r or 1, list[id].g or .7, list[id].b or 0)
 			icon.cd:Show()
 		else

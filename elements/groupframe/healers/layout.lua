@@ -49,12 +49,22 @@
 		Health.back:SetAllPoints(Health)
 		ns.SB(Health.back)
 		Health.back:SetVertexColor(.2, .2, .2)
+
+		local HealthPoints = Health:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+		HealthPoints:SetPoint'CENTER'
+		HealthPoints:SetJustifyH'RIGHT'
+		HealthPoints:SetFont(GameFontNormal:GetFont(), 10)
+		HealthPoints:SetTextColor(1, 1, 1)
+
+		self:Tag(HealthPoints, '[iip:grouphp]')
+		Health.value = HealthPoints
+
 		return Health
 	end
 
 	local AddModifier = function(self)
 		local Modifier = self.Health:CreateTexture(nil, 'OVERLAY')
-		Modifier:SetSize(26, 26)
+		Modifier:SetSize(23, 23)
 		Modifier:SetPoint'CENTER'
 		Modifier:Hide()
 		return Modifier
@@ -135,7 +145,6 @@
 
 	ns.UnitSpecific.support = function(self, ...)
 		--
-		self:SetSize(60, 22)
 		-- self:SetResizable(true)
 		ns.BD(self)
 		ns.BDStone(self, 6, [[Interface\QuestionFrame\question-background]])
