@@ -11,12 +11,12 @@
 		KEY_MOUSEWHEELUP	= 'MU',
 		KEY_MOUSEWHEELDOWN 	= 'MD',
 		KEY_NUMLOCK 		= 'NuL',
-		KEY_PAGEUP 			= 'PU',
+		KEY_PAGEUP			= 'PU',
 		KEY_PAGEDOWN 		= 'PD',
-		KEY_SPACE 			= '_',
-		KEY_INSERT 			= 'Ins',
-		KEY_HOME 			= 'Hm',
-		KEY_DELETE 			= 'Del',
+		KEY_SPACE			= '_',
+		KEY_INSERT			= 'Ins',
+		KEY_HOME			= 'Hm',
+		KEY_DELETE			= 'Del',
 	}
 
 	local function IsButton(self, name)
@@ -191,8 +191,8 @@
 	end
 
 	local AddHotkey = function(self)
-		local hotkey 	= _G[self:GetName()..'HotKey']
-	    local t 		= hotkey:GetText()
+		local hotkey 	= self.HotKey
+		local t 		= hotkey:GetText()
 
 	    t = gsub(t, '(s%-)', 	'S·')
 	    t = gsub(t, '(a%-)', 	'A·')
@@ -205,21 +205,22 @@
 
 	    for i = 1, 9 do
 			t = gsub(t, _G['KEY_NUMPAD'..i], 'Nu'..i)
-	    end
+		end
 
 		for i, v in pairs(keys) do
 			t = gsub(t, i, v)
 		end
 
-	    hotkey:SetText(t)
+		hotkey:SetText(t)
 	end
 
 	SpellFlyout:HookScript('OnShow', AddFlyoutSkin)
 
-	hooksecurefunc('PetActionBar_Update',	 pet)
-    hooksecurefunc('StanceBar_UpdateState',	 pet)
+	hooksecurefunc('PetActionBar_Update', pet)
+    hooksecurefunc('StanceBar_UpdateState', pet)
     securecall'PetActionBar_Update'
-	hooksecurefunc('ActionButton_Update', 	skin)
+	hooksecurefunc('ActionButton_Update', skin)
+	hooksecurefunc('ActionButton_UpdateHotkeys', AddHotkey)
 
 
 	--
