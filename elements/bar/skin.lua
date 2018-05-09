@@ -2,6 +2,23 @@
 
 	local _, ns = ...
 
+	local keys = {
+		KEY_NUMPADDECIMAL	= 'Nu.',
+		KEY_NUMPADDIVIDE	= 'Nu/',
+		KEY_NUMPADMINUS		= 'Nu-',
+		KEY_NUMPADMULTIPLY 	= 'Nu*',
+		KEY_NUMPADPLUS 		= 'Nu+',
+		KEY_MOUSEWHEELUP	= 'MU',
+		KEY_MOUSEWHEELDOWN 	= 'MD',
+		KEY_NUMLOCK 		= 'NuL',
+		KEY_PAGEUP 			= 'PU',
+		KEY_PAGEDOWN 		= 'PD',
+		KEY_SPACE 			= '_',
+		KEY_INSERT 			= 'Ins',
+		KEY_HOME 			= 'Hm',
+		KEY_DELETE 			= 'Del',
+	}
+
 	local function IsButton(self, name)
         if self:GetName():match(name) then return true else return false end
     end
@@ -119,12 +136,13 @@
 	end
 
 	local skin = function(self)
-		local name = self:GetName()
-		local bu   = _G[name]
-		local bg   = _G[name..'FloatingBG']
-		local bo   = _G[name..'Border']
-		local fly  = _G[name..'FlyoutBorder']
-		local flys = _G[name..'FlyoutBorderShadow']
+		local name	= self:GetName()
+		local bu	= _G[name]
+		local bg	= _G[name..'FloatingBG']
+		local bo	= _G[name..'Border']
+		local n		= _G[name..'Name']
+		local fly	= _G[name..'FlyoutBorder']
+		local flys	= _G[name..'FlyoutBorderShadow']
 
 		if not bu.bo then
 			ns.BU(bu, .75, true, 22)
@@ -142,6 +160,11 @@
 		end
 		for _, v in pairs({bg, bo}) do
 			if v then v:SetAlpha(0) end
+		end
+
+		if  n then
+			n:SetFont(STANDARD_TEXT_FONT, 8)
+			n:SetText(n:GetText() and n:GetText():sub(1, 3))
 		end
 
 		if IsButton(self, 'ExtraActionButton') or IsButton(self, 'ZoneActionBarFrameButton') then
@@ -165,6 +188,30 @@
 			end
 			i = i + 1
 		end
+	end
+
+	local AddHotkey = function(self)
+		local hotkey 	= _G[self:GetName()..'HotKey']
+	    local t 		= hotkey:GetText()
+
+	    t = gsub(t, '(s%-)', 	'S·')
+	    t = gsub(t, '(a%-)', 	'A·')
+	    t = gsub(t, '(c%-)', 	'C·')
+	    t = gsub(t, '(st%-)', 	'C·')
+
+	    for i = 1, 30 do
+	        t = gsub(t, _G['KEY_BUTTON'..i], 'M'..i)
+	    end
+
+	    for i = 1, 9 do
+			t = gsub(t, _G['KEY_NUMPAD'..i], 'Nu'..i)
+	    end
+
+		for i, v in pairs(keys) do
+			t = gsub(t, i, v)
+		end
+
+	    hotkey:SetText(t)
 	end
 
 	SpellFlyout:HookScript('OnShow', AddFlyoutSkin)

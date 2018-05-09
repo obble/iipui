@@ -1,6 +1,6 @@
 iipui
 ======
-![Demo](https://i.pi.gy/E1b9x.gif)
+![UI](http://cdn-wow.mmoui.com/preview/pvw69742.png)
 ======
 #### Fonts ####
 insert 'Fonts' directory into Interface folder
