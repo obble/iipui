@@ -28,7 +28,7 @@
     local xp = CreateFrame('StatusBar', 'iipXP', UIParent, 'AnimatedStatusBarTemplate')
     ns.SB(xp)
     xp:SetSize(100, 5)
-    xp:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -125, -13)
+    xp:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -118, -13)
     xp:SetFrameLevel(0)
     xp:SetStatusBarColor(120/255, 88/255, 237/255)
     xp:SetAnimatedTextureColors(120/255, 88/255, 237/255)
