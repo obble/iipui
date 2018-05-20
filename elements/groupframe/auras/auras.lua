@@ -31,7 +31,7 @@
 	ns.auraGroupDecurseElement = {party  = 'Debuffs', raid = 'Debuffs'}
 
 	ns.CustomGroupAuraFilter = function(element, unit, icon, name, rank, texture, count, dType, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossCast,_, nameplateShowAll)
-		if  list[spellID] and playerUnits[icon.owner] then
+		if  list[spellID] and icon.isPlayer then
 			return true
 		else
 			return false
@@ -67,7 +67,7 @@
 		for i = 1, 3 do
 			local  bu = icons[i]
 			if not bu then break end
-			local x   = 31 - (4*(i - 1))
+			local x   = 35 - (4*(i - 1))
 			bu:ClearAllPoints()
 			bu:SetPoint('CENTER', bu:GetParent(), 0, 1)
 			bu:SetSize(x, x)
@@ -78,15 +78,15 @@
 		icon.icon:ClearAllPoints()
 
 		icon.cd = CreateFrame('Cooldown', '$parentCooldown', icon, 'CooldownFrameTemplate')
-		icon.cd:SetSwipeTexture[[Interface\AddOns\iipui\art\group\cd]]
+		icon.cd:SetSwipeTexture[[Interface\AddOns\iipui\art\group\cd\1.tga]]
 		icon.cd:SetAlpha(.8)
 		icon.cd:SetAllPoints(icon)
 		icon.cd:SetHideCountdownNumbers(true)
 		icon.cd:SetDrawEdge(false)
 
 		icon.cd.bg = icon.cd:CreateTexture(nil, 'BACKGROUND')
-		icon.cd.bg:SetPoint('TOPLEFT', -2, 2)
-		icon.cd.bg:SetPoint('BOTTOMRIGHT', 2, -2)
+		icon.cd.bg:SetPoint('TOPLEFT', -8, 8)
+		icon.cd.bg:SetPoint('BOTTOMRIGHT', 8, -8)
 		icon.cd.bg:SetAtlas'orderhalltalents-timer-bg'
 
 		icon.count:ClearAllPoints()
@@ -103,22 +103,55 @@
 
 	ns.PostUpdateGroupIcon = function(icons, unit, icon, index, offset, filter, isDebuff)
 		local name, _, _, count, dtype, duration, expiration, _, _, _, id = UnitAura(unit, index, icon.filter)
-		local i = icon:GetName():gsub('oUF_partyUnitButton(%d+).BuffsButton(%d+)', '%2')
+		local parent = icons:GetParent()
+		local t = icon:GetName()
+		local header
+
+		for  _, v in next, {'dps', 'healer', 'tank'} do
+			if strmatch(t, v) then header = v end
+		end
 
 		ns.SetGroupPosition(icons)
+
+		icon:EnableMouse(false)
 		icon.icon:SetAlpha(0)
 		icon.count:Hide()
 		icon.stone:Hide()
-		icon:EnableMouse(false)
-		if duration > 0 then
+
+		if  duration > 0 then
+			local i = icon:GetName():gsub('oUF_'..header..'UnitButton(%d+).AurasButton(%d+)', '%2')
 			icon.cd:SetCooldown(expiration - duration, duration)
-			icon.cd:SetSwipeTexture('Interface\\AddOns\\iipui\\art\\group\\cd\\'..i)
-			icon.cd.bd:SetTexture('Interface\\AddOns\\iipui\\art\\group\\cd\\'..i)
+			icon.cd:SetSwipeTexture('Interface\\AddOns\\iipui\\art\\group\\cd\\'..i..'.tga')
+			if tonumber(i) > 1 then
+				icon.cd.bg:SetPoint('TOPLEFT', 4, -4)
+				icon.cd.bg:SetPoint('BOTTOMRIGHT', -4, 4)
+			elseif tonumber(i) > 2 then
+				icon.cd.bg:SetPoint('TOPLEFT', 25, -25)
+				icon.cd.bg:SetPoint('BOTTOMRIGHT', -25, 25)
+			end
 			icon.cd:SetSwipeColor(list[id].r or 1, list[id].g or .7, list[id].b or 0)
 			icon.cd:Show()
 		else
 			icon.cd:Hide()
 		end
+	end
+
+	ns.PostUpdateGroupAuras = function(self, unit)
+		local parent = self:GetParent()
+		local v, max = UnitHealth(unit), UnitHealthMax(unit)
+		if  parent.Auras then
+            if  parent.Auras.visibleBuffs > 0 then
+                if  parent.Name then
+					parent.Name:Hide()
+					parent.Name.locked = true
+				end
+			else
+				if  parent.Name and (v == max or v == 0) then
+					parent.Name:Show()
+					parent.Name.locked = false
+				end
+            end
+        end
 	end
 
 

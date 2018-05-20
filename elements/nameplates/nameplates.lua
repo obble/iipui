@@ -103,12 +103,14 @@
         self:SetHeight(10)                      --  1 more px to match, no idea why
         ns.SB(self)
         ns.BD(self, 1, -2)
+
         if  not self.background then
-            self.background = self:CreateTexture(nil, 'BORDER', nil, 7)
-            ns.SB(self.background)
-            self.background:SetAllPoints()
-            self.background:SetVertexColor(.35, .35, .35)
+            self.background = self:CreateTexture(nil, 'OVERLAY', nil, 7)
         end
+        ns.SB(self.background)
+        self.background:SetAllPoints(self)
+        self.background:SetVertexColor(.35, .35, .35)
+
         ns.PLAYER_RESOURCE = self:GetParent()   --  cache our player nameplate key
     end
 
@@ -228,7 +230,7 @@
 		frame.castBar.bd.t:SetTexCoord(0, 1, .18, .3)
 
         frame.castBar.Text:ClearAllPoints()
-        frame.castBar.Text:SetPoint('TOP', frame.castBar, 'BOTTOM')
+        frame.castBar.Text:SetPoint('TOP', frame.castBar, 'BOTTOM', 0, -3)
         frame.castBar.Text:SetFont(STANDARD_TEXT_FONT, 9)
         frame.castBar.Text:SetShadowOffset(1, -1)
 	    frame.castBar.Text:SetShadowColor(0, 0, 0, 1)

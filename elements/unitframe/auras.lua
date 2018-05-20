@@ -27,8 +27,6 @@
 	}
 
 	ns.auraElement             = {target = 'Debuffs'}
-	ns.auraGroupElement        = {party  = 'Buffs', raid = 'Buffs'}
-	ns.auraGroupDecurseElement = {party  = 'Debuffs', raid = 'Debuffs'}
 
 	ns.CustomAuraFilter = function(element, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossCast,_, nameplateShowAll)
 		local filter  = icon.filter
@@ -98,17 +96,6 @@
 			return true
 		else
 			return false
-		end
-	end
-
-	ns.SetGroupPosition = function(icons)
-		for i = 1, 3 do
-			local  bu = icons[i]
-			if not bu then break end
-			local x   = 31 - (3*(i - 1))
-			bu:ClearAllPoints()
-			bu:SetPoint('CENTER', bu:GetParent(), 0, 1)
-			bu:SetSize(x, x)
 		end
 	end
 

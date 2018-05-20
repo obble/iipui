@@ -407,6 +407,27 @@
 		bu:SetPoint('BOTTOM', _G['iipBar6'], i > 1 and -(20*i) + 16 or 0, 0)
 	end
 
+	local AddTotems = function()
+		-- pinch the stance position set and reposition totems
+		local name = 'iipBar6'
+		local point, parent, relpoint, x, y
+		-- TODO: turn this into an external function
+		if  ns.DELEGATE_ACTUAL_BARS_SHOWN and ns.DELEGATE_ACTUAL_BARS_SHOWN == 5 then
+			point, parent, relpoint, x, y = GetPositionsFive(name)
+		elseif ns.DELEGATE_ACTUAL_BARS_SHOWN and ns.DELEGATE_ACTUAL_BARS_SHOWN == 4 then
+			point, parent, relpoint, x, y = GetPositionsGridded(name)
+		elseif ns.DELEGATE_ACTUAL_BARS_SHOWN and ns.DELEGATE_ACTUAL_BARS_SHOWN == 1 then
+			point, parent, relpoint, x, y = GetPetPositionsBasic(name)
+		elseif ns.DELEGATE_ACTUAL_BARS_SHOWN and ns.DELEGATE_ACTUAL_BARS_SHOWN == 2 then
+			point, parent, relpoint, x, y = GetPetPositionsTwo(name)
+		else
+			point, parent, relpoint, x, y = GetPositionsStacked(name)
+		end
+		TotemFrame:SetParent(f)
+		TotemFrame:ClearAllPoints()
+		TotemFrame:SetPoint(point, parent, relpoint, x, y)
+	end
+
 	local PositionBarsAfterCombat = function()
 		lip:UnregisterEvent('PLAYER_REGEN_ENABLED', PositionBarsAfterCombat)
 		C_Timer.After(1.5, SetPositions)
@@ -441,6 +462,7 @@
 	SpellFlyout:HookScript('OnShow', AddFlyout)
 
 	hooksecurefunc('MultiActionBar_UpdateGridVisibility', AddFloatingGrid)
+	hooksecurefunc('TotemFrame_Update', AddTotems)
 	hooksecurefunc('HidePetActionBar', function()
 		HideBar(_G['iipBar7'])
 	end)

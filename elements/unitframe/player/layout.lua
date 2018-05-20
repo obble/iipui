@@ -33,7 +33,14 @@
 		WarlockPowerFrame:SetPoint('TOPLEFT', self, 'BOTTOM', -55, -4)
 	end
 
+	local AddRunePower = function(self)
+		RuneFrame:SetParent(self)
+		RuneFrame:ClearAllPoints()
+		RuneFrame:SetPoint('TOPLEFT', self, 'BOTTOM', -59, -6)
+	end
+
 	ns.UnitSpecific.player = function(self, ...)
+		local _, class = UnitClass'player'
 		ns.SharedLayout(self, ...)
 
 		self:SetFrameLevel(2)	-- for layering
@@ -84,6 +91,120 @@
 		Power.pulse = CreateFrame('Frame', nil, Power, 'FullResourcePulseFrame')
 		Power.pulse:SetAllPoints(self.Power)
 		Power.pulse:SetPoint'TOPRIGHT'
+
+		local AdditionalPower = CreateFrame('StatusBar', nil, self)
+		ns.SB(AdditionalPower)
+		ns.BD(AdditionalPower)
+		AdditionalPower:SetFrameLevel(1)
+		AdditionalPower:SetHeight(9)
+		AdditionalPower:SetPoint('TOPLEFT', Power, 'BOTTOMLEFT', 10, -10)
+		AdditionalPower:SetPoint('TOPRIGHT', Power, 'BOTTOMRIGHT', -10, -10)
+		AdditionalPower.colorPower = true
+
+		AdditionalPower.BD = AdditionalPower:CreateTexture(nil, 'BORDER')
+		AdditionalPower.BD:SetAllPoints()
+		ns.SB(AdditionalPower.BD)
+		AdditionalPower.BD:SetVertexColor(.35, .35, .35)
+
+		AdditionalPower.border = AdditionalPower:CreateTexture(nil, 'BORDER')
+		AdditionalPower.border:SetSize(0, 16)
+		AdditionalPower.border:SetPoint('TOPLEFT', 2, 0)
+		AdditionalPower.border:SetPoint('TOPRIGHT', -2, 0)
+		AdditionalPower.border:SetTexture[[Interface\CharacterFrame\UI-CharacterFrame-GroupIndicator]]
+		AdditionalPower.border:SetTexCoord(.125, .25, 1, 0)
+		AdditionalPower.border:SetVertexColor(.7, .7, .7)
+
+		AdditionalPower.leftborder = AdditionalPower:CreateTexture(nil, 'BORDER')
+		AdditionalPower.leftborder:SetSize(16, 16)
+		AdditionalPower.leftborder:SetPoint('RIGHT', AdditionalPower.border, 'LEFT')
+		AdditionalPower.leftborder:SetTexture[[Interface\CharacterFrame\UI-CharacterFrame-GroupIndicator]]
+		AdditionalPower.leftborder:SetTexCoord(0, .125, 1, 0)
+		AdditionalPower.leftborder:SetVertexColor(.7, .7, .7)
+
+		AdditionalPower.rightborder = AdditionalPower:CreateTexture(nil, 'BORDER')
+		AdditionalPower.rightborder:SetSize(16, 16)
+		AdditionalPower.rightborder:SetPoint('LEFT', AdditionalPower.border, 'RIGHT')
+		AdditionalPower.rightborder:SetTexture[[Interface\CharacterFrame\UI-CharacterFrame-GroupIndicator]]
+		AdditionalPower.rightborder:SetTexCoord(.125, 0, 1, 0)
+		AdditionalPower.rightborder:SetVertexColor(.7, .7, .7)
+
+	    self.AdditionalPower = AdditionalPower
+
+		local AdditionalPowerPoints = AdditionalPower:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+		AdditionalPowerPoints:SetPoint('LEFT', AdditionalPower, 2, 0)
+		AdditionalPowerPoints:SetJustifyH'LEFT'
+		AdditionalPowerPoints:SetFont(GameFontNormal:GetFont(), 10)
+		AdditionalPowerPoints:SetTextColor(1, 1, 1)
+
+		self:Tag(AdditionalPowerPoints, '[iip:_a_pp]')
+		AdditionalPower.value = AdditionalPowerPoints
+
+		local AdditionalPowerPercent = AdditionalPower:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+		AdditionalPowerPercent:SetPoint('RIGHT', AdditionalPower, -2, 0)
+		AdditionalPowerPercent:SetJustifyH'RIGHT'
+		AdditionalPowerPercent:SetFont(GameFontNormal:GetFont(), 10)
+		AdditionalPowerPercent:SetTextColor(1, 1, 1)
+
+		self:Tag(AdditionalPowerPercent, '[iip:per_a_pp]')
+		AdditionalPower.percent = AdditionalPowerPercent
+
+		if  class == 'MONK' then
+			local Stagger = CreateFrame('StatusBar', nil, self)
+			ns.SB(Stagger)
+			ns.BD(Stagger)
+			Stagger:SetFrameLevel(1)
+			Stagger:SetHeight(9)
+	   		Stagger:SetPoint('TOPLEFT', Power, 'BOTTOMLEFT', 10, -10)
+			Stagger:SetPoint('TOPRIGHT', Power, 'BOTTOMRIGHT', -10, -10)
+
+
+			Stagger.BD = Stagger:CreateTexture(nil, 'BORDER')
+			Stagger.BD:SetAllPoints()
+			ns.SB(Stagger.BD)
+			Stagger.BD:SetVertexColor(.35, .35, .35)
+
+			Stagger.border = Stagger:CreateTexture(nil, 'BORDER')
+			Stagger.border:SetSize(0, 16)
+			Stagger.border:SetPoint('TOPLEFT', 2, 0)
+			Stagger.border:SetPoint('TOPRIGHT', -2, 0)
+			Stagger.border:SetTexture[[Interface\CharacterFrame\UI-CharacterFrame-GroupIndicator]]
+			Stagger.border:SetTexCoord(.125, .25, 1, 0)
+			Stagger.border:SetVertexColor(.7, .7, .7)
+
+			Stagger.leftborder = Stagger:CreateTexture(nil, 'BORDER')
+			Stagger.leftborder:SetSize(16, 16)
+			Stagger.leftborder:SetPoint('RIGHT', Stagger.border, 'LEFT')
+			Stagger.leftborder:SetTexture[[Interface\CharacterFrame\UI-CharacterFrame-GroupIndicator]]
+			Stagger.leftborder:SetTexCoord(0, .125, 1, 0)
+			Stagger.leftborder:SetVertexColor(.7, .7, .7)
+
+			Stagger.rightborder = Stagger:CreateTexture(nil, 'BORDER')
+			Stagger.rightborder:SetSize(16, 16)
+			Stagger.rightborder:SetPoint('LEFT', Stagger.border, 'RIGHT')
+			Stagger.rightborder:SetTexture[[Interface\CharacterFrame\UI-CharacterFrame-GroupIndicator]]
+			Stagger.rightborder:SetTexCoord(.125, 0, 1, 0)
+			Stagger.rightborder:SetVertexColor(.7, .7, .7)
+
+			self.Stagger = Stagger
+
+			local StaggerPoints = Stagger:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+			StaggerPoints:SetPoint('LEFT', Stagger, 2, 0)
+			StaggerPoints:SetJustifyH'LEFT'
+			StaggerPoints:SetFont(GameFontNormal:GetFont(), 10)
+			StaggerPoints:SetTextColor(1, 1, 1)
+
+			self:Tag(StaggerPoints, '[iip:stagger]')
+			Stagger.value = StaggerPoints
+
+			local StaggerPercent = Stagger:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+			StaggerPercent:SetPoint('RIGHT', Stagger, -2, 0)
+			StaggerPercent:SetJustifyH'RIGHT'
+			StaggerPercent:SetFont(GameFontNormal:GetFont(), 10)
+			StaggerPercent:SetTextColor(1, 1, 1)
+
+			self:Tag(StaggerPercent, '[iip:perstagger]')
+			Stagger.percent = StaggerPercent
+		end
 
 		local Portrait = self.Health:CreateTexture(nil, 'ARTWORK')
 		Portrait:SetSize(46, 46)
@@ -208,6 +329,7 @@
 		AddMagePower(self)
 		AddMonkPower(self)
 		AddWarlockPower(self)
+		AddRunePower(self)
 	end
 
 

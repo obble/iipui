@@ -8,11 +8,17 @@
         local bu = CreateFrame('Frame', 'iipbossemoteicon'..i, RaidBossEmoteFrame)
 		ns.BD(bu)
 		bu:SetSize(20, 20)
-        bu:SetPoint('RIGHT', 'RaidBossEmoteFrameSlot'..i, 'LEFT', -20, i > 1 and 2 or 0)
+        bu:SetPoint('RIGHT', 'RaidBossEmoteFrameSlot'..i, 'LEFT', 100, i > 1 and 2 or 0)
 
 		bu.icon = bu:CreateTexture(nil, 'ARTWORK')
 		bu.icon:SetTexCoord(.1, .9, .1, .9)
         bu.icon:SetAllPoints()
+
+		bu.bg = bu:CreateTexture(nil, 'BACKGROUND')
+	    bu.bg:SetPoint('TOPLEFT', -10, 10)
+	    bu.bg:SetPoint('BOTTOMRIGHT', 10, -10)
+	    bu.bg:SetTexture[[Interface\PVPFrame\SilverIconBorder]]
+	    bu.bg:SetVertexColor(.5, .5, .5)
 
         FadingFrame_OnLoad(bu)
     	FadingFrame_SetFadeInTime(bu, RAID_NOTICE_FADE_IN_TIME)
@@ -28,7 +34,12 @@
 		end
     end
 
-	local strings = {ZoneTextFrame, PVPInfoTextString, PVPArenaTextString, PVPInfoTextString}
+	local strings = {
+		ZoneTextFrame,
+		PVPInfoTextString,
+		PVPArenaTextString,
+		PVPInfoTextString
+	}
 
 	local ic = function(bu, icon, hasIcon, time)
 		if  icon ~= nil then	-- convert icon string to texture

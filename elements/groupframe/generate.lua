@@ -82,7 +82,7 @@
             'showPlayer', 		true,
             'xOffset',          8,
             'yOffset',			3,
-            'maxColumns',        6,
+            'maxColumns',        10,
             'unitsPerColumn',    4,
             'columnSpacing',     8,
 			'roleFilter', 		'DAMAGER,NONE',

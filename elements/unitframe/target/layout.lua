@@ -115,8 +115,8 @@
 		Castbar.timeToHold = .4
 
 		Castbar.IconBD = CreateFrame('Frame', nil, Castbar)
-		Castbar.IconBD:SetSize(18, 18)
-		Castbar.IconBD:SetPoint('BOTTOMRIGHT', Castbar, 'BOTTOMLEFT', 18, 26)
+		Castbar.IconBD:SetSize(22, 22)
+		Castbar.IconBD:SetPoint('BOTTOMRIGHT', Castbar, 'BOTTOMLEFT', -18, 0)
 		Castbar.IconBD:SetFrameLevel(2)
 		ns.BD(Castbar.IconBD)
 
@@ -131,11 +131,11 @@
 		Castbar.Icon.Border:SetTexCoord(.5, 1, .12, .25)
 
 		Castbar.text = Castbar:CreateFontString(nil, 'ARTWORK')
-		Castbar.text:SetPoint('BOTTOMLEFT', Castbar.IconBD, 'BOTTOMRIGHT', 12, 0)
+		Castbar.text:SetPoint('BOTTOM', Castbar, 'TOP', 0, 12)
 		Castbar.text:SetFont([[Fonts\ARIALN.ttf]], 11)
 		Castbar.text:SetWidth(80)
-		Castbar.text:SetJustifyH'LEFT'
-		Castbar.text:SetWordWrap(true)
+		Castbar.text:SetJustifyH'CENTER'
+		--Castbar.text:SetWordWrap(true)
 		Castbar.text:SetShadowOffset(1, -1)
 		Castbar.text:SetShadowColor(0, 0, 0, 1)
 
@@ -186,10 +186,16 @@
 
 		PvPIndicator.Prestige = Prestige
 
+		local QuestIndicator = self:CreateTexture(nil, 'OVERLAY')
+	    QuestIndicator:SetSize(36, 36)
+	    QuestIndicator:SetPoint('CENTER', Portrait, 'RIGHT')
+
+	    self.QuestIndicator = QuestIndicator
+
 		RaidIcon:ClearAllPoints()
 		RaidIcon:SetPoint('RIGHT', Name, 'LEFT')
 
-		ns.AddAuraElement(self, unit, isSingle)
+		ns.AddAuraElement(self, unit, {'BOTTOMRIGHT', self, 'TOPRIGHT', -44, 100}, 'RIGHT', 'LEFT', 'UP')
 
 		-- register new elements
 		self.Name 			= Name

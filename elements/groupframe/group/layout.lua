@@ -198,7 +198,7 @@
 			frequentUpdates = true,
 		}]]
 
-		ns.AddGroupAuraElement(self, unit, true)
+		-- ns.AddGroupAuraElement(self, unit, true)
 
 		--  pull pre- & post- updates
 		ns.PreAndPostUpdatesForGroupElements(self, unit)

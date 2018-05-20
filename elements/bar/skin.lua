@@ -54,6 +54,7 @@
             for i = 1, 12 do
                 local bu = _G[name..i]
 				local ic = _G[name..i..'Icon']
+				local fl = _G[name..i..'Flash']
 				local bg = _G[name..i..'FloatingBG']
 				local bo = _G[name..i..'Border']
 				local no = _G[name..i..'NormalTexture'] or _G[name..i..'NormalTexture2']
@@ -85,6 +86,8 @@
 						bu:GetPushedTexture():AddMaskTexture(mask)
 						bu:GetHighlightTexture():AddMaskTexture(mask)
 
+						fl:AddMaskTexture(mask)
+
 						if  not bu.bg then
 							bu.bg = bu:CreateTexture(nil, 'BACKGROUND', nil, -4)
 							bu.bg:SetPoint('TOPLEFT', -3, 3)
@@ -104,7 +107,6 @@
 							bu.stone:SetPoint('BOTTOMRIGHT', 12, -12)
 							bu.stone:SetTexture[[Interface\ARCHEOLOGY\ArchaeologyParts]]
 							bu.stone:SetTexCoord(.115, .205, .5775, .765)
-
 						end
 
 						bu.style = true
@@ -212,6 +214,65 @@
 		end
 
 		hotkey:SetText(t)
+	end
+
+	for i = 1, 4 do
+		local bu = _G['TotemFrameTotem'..i]
+		local ic = _G['TotemFrameTotem'..i..'Icon']
+		local tx = _G['TotemFrameTotem'..i..'IconTexture']
+		local cd = _G['TotemFrameTotem'..i..'IconCooldown']
+		local du = _G['TotemFrameTotem'..i..'Duration']
+
+		local mask = ic:CreateMaskTexture()
+		mask:SetTexture[[Interface\ARCHEOLOGY\Arch-Keystone-Mask]]
+		mask:SetAllPoints()
+
+		local mask2 = ic:CreateMaskTexture()
+		mask2:SetTexture[[Interface\ARCHEOLOGY\Arch-Keystone-Mask]]
+		mask2:SetPoint('TOPLEFT', ic, -5, 5)
+		mask2:SetPoint('BOTTOMRIGHT', ic, 5, -5)
+
+		bu:SetSize(55, 55)
+
+		ic.bg = ic:CreateTexture(nil, 'BACKGROUND', nil, -4)
+		ic.bg:SetPoint('TOPLEFT', ic, -3, 3)
+		ic.bg:SetPoint('BOTTOMRIGHT', ic, 3, -3)
+		ic.bg:SetTexture[[Interface\ARCHEOLOGY\Arch-Keystone-Mask]]
+		ic.bg:SetVertexColor(0, 0, 0)
+
+		ic.bo = ic:CreateTexture(nil, 'BACKGROUND', nil, -5)
+		ic.bo:SetPoint('TOPLEFT', ic, -5, 5)
+		ic.bo:SetPoint('BOTTOMRIGHT', ic, 5, -5)
+		ic.bo:SetTexture[[Interface\Stationery\StationeryTest1]]
+		ic.bo:AddMaskTexture(mask2)
+		ic.bo:SetVertexColor(.9, .9, .9)
+
+		ic.stone = ic:CreateTexture(nil, 'BACKGROUND', nil, -6)
+		ic.stone:SetPoint('TOPLEFT', ic, -12, 12)
+		ic.stone:SetPoint('BOTTOMRIGHT', ic, 12, -12)
+		ic.stone:SetTexture[[Interface\ARCHEOLOGY\ArchaeologyParts]]
+		ic.stone:SetTexCoord(.115, .205, .5775, .765)
+
+		ic:SetSize(43, 43)
+
+		tx:SetTexCoord(.1, .9, .1, .9)
+		tx:AddMaskTexture(mask)
+
+		cd:ClearAllPoints()
+
+		du:SetPoint('TOP', bu, 'BOTTOM', 0, -5)
+
+		bu:ClearAllPoints()
+		bu:SetPoint('TOPLEFT', TotemFrame, -110 + (55*i), 0)
+
+		-- 	sigh
+		for  k, v in pairs({bu:GetChildren()}) do
+			for _, j in pairs({v:GetRegions()}) do
+				if  j:GetObjectType() == 'Texture' and j:GetTexture() == [[Interface\CharacterFrame\TotemBorder]] then
+					j:SetTexture''
+				end
+			end
+		end
 	end
 
 	SpellFlyout:HookScript('OnShow', AddFlyoutSkin)

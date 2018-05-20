@@ -157,8 +157,8 @@
 
 	local AddPhaseIcon = function(self)
    		local PhaseIcon = self:CreateTexture(nil, 'OVERLAY')
-   		PhaseIcon:SetSize(16, 16)
-   		PhaseIcon:SetPoint('LEFT', self, 'RIGHT', 20, 0)
+   		PhaseIcon:SetSize(28, 28)
+   		PhaseIcon:SetPoint('LEFT', self, 'RIGHT', 47, 0)
    		return PhaseIcon
 	end
 
@@ -246,17 +246,19 @@
 		self.LFDRole 				= AddLFDRole(self)
 		self.Range					= range
 
-		--  TODO:  insert BuilderSpender
-
-		--[[local Predict, OtherPredict, Absorb, HealAbsorb = AddPrediction(self)
-		self.HealPrediction = {
+		local Predict, OtherPredict, Absorb, HealAbsorb, OverAbsorb, OverHealAbsorb = AddPrediction(self)
+		--[[self.HealthPrediction = {
 			myBar           = Predict,
 			otherBar        = OtherPredict,
 			absorbBar       = Absorb,
 			healAbsorbBar   = HealAbsorb,
-			maxOverflow     = 1.05,
+			overAbsorb		= OverAbsorb,
+			overHealAbsorb  = OverHealAbsorb,
+			maxOverflow     = 1,
 			frequentUpdates = true,
 		}]]
+
+		ns.AddAuraElement(self, unit, {'LEFT', self, 'RIGHT', 80, 0}, 'LEFT', 'RIGHT', 'UP')
 
 		--  pull pre- & post- updates
 		ns.PreAndPostUpdatesForGroupElements(self)

@@ -100,7 +100,8 @@
 
             if  diff > 0 then
                 if  Health.Gain:GetAlpha() == 0 then
-                    local offset = Health:GetWidth()*(1 - prev/max)
+                    local width     = Health:GetWidth()
+                    local offset    = width*(1 - prev/max)
                     Health.Gain:SetAlpha(1)
                     Health.Gain:SetPoint('TOPLEFT', Health, 'TOPRIGHT', -offset, 0)
                     Health.Gain:SetPoint('BOTTOMLEFT', Health, 'BOTTOMRIGHT', -offset, 0)
@@ -111,7 +112,8 @@
                 Health.Gain:SetAlpha(0)
 
                 if  Health.Loss:GetAlpha() == 0 then
-                    local offset = Health:GetWidth()*(1 - prev/max)
+                    local width     = Health:GetWidth()
+                    local offset    = width*(1 - prev/max)
                     Health.Loss:SetAlpha(1)
                     Health.Loss:SetPoint('TOPRIGHT', Health, 'TOPRIGHT', -offset, 0)
                     Health.Loss:SetPoint('BOTTOMRIGHT', Health, 'BOTTOMRIGHT', -offset, 0)
@@ -121,31 +123,62 @@
         end
 
         if  Health.prev ~= v then
-            Health.prev = UnitHealth(unit)
+            Health.prev     = UnitHealth(unit)
         end
 
 		return PostUpdateName(parent, 'PostUpdateHealth', unit)
     end
 
-    local PostUpdatePower = function(Power, unit, v, max)
+    local PostUpdatePower = function(Power, unit, v, min, max)
         local parent = Power:GetParent()
         local powerType, powerToken = UnitPowerType(unit)
 
-        if  Power.pulse then
-            Power.pulse:Initialize(PowerBarColor[powerToken].fullPowerAnim)
-    		Power.pulse:SetMaxValue(UnitPowerMax(unit, powerType))
+        -- lightspark feedback solution
+        local showBuilderFeedback = GetCVarBool'showBuilderFeedback'
+	    local showSpenderFeedback = GetCVarBool'showSpenderFeedback'
+	    if  max == 0 or v == 0 then
+            --
+        else
+            local prev      = Power.prev or 0
+            local diff      = v - prev
 
-            if  max == 0 or v == 0 or v == max then
-                --
-            else
+            if  Power.pulse then
+                Power.pulse:Initialize(PowerBarColor[powerToken].fullPowerAnim)
+        		Power.pulse:SetMaxValue(UnitPowerMax(unit, powerType))
                 if  Power.pulse and Power.pulse.active then
-        			Power.pulse:StartAnimIfFull(Power.prev or 0, v)
-        		end
+            		Power.pulse:StartAnimIfFull(prev, v)
+                end
             end
 
-            if  Power.prev ~= v then
-                Power.prev = UnitPower(unit)
+            -- throttle small ticks
+            if math.abs(diff) / max < .1 or v == max then
+                diff = 0
             end
+
+            if  diff > 0 then
+                if  Power.Gain:GetAlpha() == 0 then
+                    local width     = Power:GetWidth()
+                    local offset    = width*(1 - prev/max)
+                    Power.Gain:SetPoint('TOPLEFT', Power, 'TOPRIGHT', -offset, 0)
+                    Power.Gain:SetPoint('BOTTOMLEFT', Power, 'BOTTOMRIGHT', -offset, 0)
+                    Power.Gain.FadeInOut:Play()
+                end
+            elseif diff < 0 then
+                Power.Gain.FadeInOut:Stop()
+                Power.Gain:SetAlpha(0)
+
+                if  Power.Loss:GetAlpha() == 0 then
+                    local width     = Power:GetWidth()
+                    local offset    = width*(1 - prev/max)
+                    Power.Loss:SetPoint('TOPRIGHT', Power, 'TOPRIGHT', -offset, 0)
+                    Power.Loss:SetPoint('BOTTOMRIGHT', Power, 'BOTTOMRIGHT', -offset, 0)
+                    Power.Loss.FadeInOut:Play()
+                end
+            end
+        end
+
+        if  Power.prev ~= v then
+            Power.prev = UnitPower(unit)
         end
 
         PostUpdateName(parent, 'PostUpdateHealth', unit)
@@ -155,9 +188,11 @@
         if  Castbar.timeToHold then
             UIFrameFadeOut(Castbar, Castbar.timeToHold, 1, 0)
         end
-        if not successful then
-            Castbar:SetStatusBarColor(235/255, 120/255, 120/255)
+        if  not successful then
+            Castbar:SetStatusBarColor(1, 0, 0)
             Castbar.text:SetText('|cffec7878'..flag..'|r')
+        else
+            Castbar:SetStatusBarColor(0, 1, 0)
         end
     end
 
@@ -184,9 +219,13 @@
 
         if  unit == 'target' then
             if  Castbar.notInterruptible then
-                Castbar:SetStatusBarColor(.3, .3, .3)
+                Castbar:SetStatusBarColor(.7, .7, .7)
             else
-                Castbar:SetStatusBarColor(1, .5, 0)
+                if  Castbar.channeling then
+                    Castbar:SetStatusBarColor(0,  1, 0)
+                else
+                    Castbar:SetStatusBarColor(1, .7, 0)
+                end
             end
         end
 
@@ -243,29 +282,6 @@
 		return PostCastStop(self.Castbar, unit)
     end
 
-    --[[local HealPredictionPostUpdate = function(self, _, unit)
-        if self.unit ~= unit then return end
-        local myIncomingHeal    = UnitGetIncomingHeals(unit, 'player') or 0
-        local IncomingHeal      = UnitGetIncomingHeals(unit) or 0
-        local totalAbsorb       = UnitGetTotalAbsorbs(unit) or 0
-        local CurrentHealAbsorb = UnitGetTotalHealAbsorbs(unit) or 0
-        local v, max            = UnitHealth(unit), UnitHealthMax(unit)
-        local Glow				= self.HealPrediction.absorbBar.overGlow
-        local showGlow = false
-
-        if (v - CurrentHealAbsorb + IncomingHeal + totalAbsorb >= max or v + totalAbsorb >= max) then
-            if totalAbsorb > 0 then
-                showGlow = true
-            else
-                showGlow = false
-            end
-        end
-
-        if  Glow then
-            if showGlow then Glow:Show() else Glow:Hide() end
-        end
-    end]]
-
     local PostUpdatePortraitRing = function(self)
     	local classification  = UnitClassification(self.unit)
         if  self.unit == 'target' then
@@ -290,7 +306,7 @@
 		end
 	end
 
-    ns.AddAuraElement = function(frame, unit)
+    ns.AddAuraElement = function(frame, unit, position, anchor, x, y)
         -- TODO:  consider writing these as single buff/debuff elements?
 		local BUFF_HEIGHT = 24
 		local BUFF_SPACING = 1
@@ -298,13 +314,13 @@
 
 		local Auras = CreateFrame('Frame', nil, frame)
 		Auras:ClearAllPoints()
-		Auras:SetPoint('BOTTOMRIGHT', frame, 'TOPRIGHT', -44, 100)
+		Auras:SetPoint(position[1], position[2], position[3], position[4], position[5])
 		Auras:SetWidth(BUFF_HEIGHT*6 + BUFF_SPACING)
 		Auras:SetHeight(10)
 
-		Auras['initialAnchor'] = 'RIGHT'
-		Auras['growth-x']	   = 'LEFT'
-		Auras['growth-y']	   = 'UP'
+		Auras['initialAnchor'] = anchor
+		Auras['growth-x']	   = x
+		Auras['growth-y']	   = y
 		Auras['spacing-y']     = 30
 		Auras['spacing-x']     = 3
 		Auras['num']           = MAX_NUM_BUFFS
@@ -334,9 +350,6 @@
         -- register update events
         self:RegisterEvent('UNIT_NAME_UPDATE', PostCastStopUpdate)
         table.insert(self.__elements, PostCastStopUpdate)
-        --
-        --[[self:RegisterEvent('UNIT_ABSORB_AMOUNT_CHANGED', HealPredictionPostUpdate)
-        table.insert(self.__elements, HealPredictionPostUpdate)]]
         --
         self:RegisterEvent('PLAYER_TARGET_CHANGED', PostUpdatePortraitRing)
         table.insert(self.__elements, PostUpdatePortraitRing)

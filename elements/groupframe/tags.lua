@@ -32,7 +32,7 @@
 		if  cv and cv == 'BOTH' then
 			local v, m = UnitHealth(unit), UnitHealthMax(unit)
 			local p = floor((m - v)/m * 100)
-			if  v > 0 and p > 0 and v ~= m then
+			if  v > 0 and p > 0 and v ~= m and not UnitIsDead(unit) and not UnitIsGhost(unit) then
 				return '-'..p..'%'
 			else
 				return

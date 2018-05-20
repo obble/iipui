@@ -11,8 +11,8 @@
 
 	local bar = CreateFrame('Frame', 'iipbar', UIParent)
 	bar:SetHeight(150)
-	bar:SetPoint('LEFT', -250)
-	bar:SetPoint('RIGHT', 250)
+	bar:SetPoint('LEFT', 350, 0)
+	bar:SetPoint('RIGHT', -350, 0)
 	bar:SetPoint'BOTTOM'
 	bar:SetFrameLevel(0)
 	bar:SetFrameStrata'LOW'

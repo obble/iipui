@@ -35,6 +35,8 @@ core\var\svar.lua
 customise\customise.lua
 
 #  ~modular elements
+elements\artifact\poweritems.lua
+#
 elements\aura\aura.lua
 #
 elements\backpack\backpack.lua
