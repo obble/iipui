@@ -104,7 +104,7 @@
 		if  cv and cv == 'BOTH' then
 			local m = UnitPowerMax(unit)
 			if  m == 0 then
-				return 0
+				return
 			else
 				return math.floor(UnitPower(unit)/m*100 + .5)
 			end

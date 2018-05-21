@@ -308,7 +308,7 @@
 
     ns.AddAuraElement = function(frame, unit, position, anchor, x, y)
         -- TODO:  consider writing these as single buff/debuff elements?
-		local BUFF_HEIGHT = 24
+		local BUFF_HEIGHT = 18
 		local BUFF_SPACING = 1
 		local MAX_NUM_BUFFS = 10
 
@@ -324,7 +324,7 @@
 		Auras['spacing-y']     = 30
 		Auras['spacing-x']     = 3
 		Auras['num']           = MAX_NUM_BUFFS
-		Auras['size']          = 26
+		Auras['size']          = 20
 
 		Auras.disableCooldown  = true
 

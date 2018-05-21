@@ -246,7 +246,7 @@
 		self.LFDRole 				= AddLFDRole(self)
 		self.Range					= range
 
-		local Predict, OtherPredict, Absorb, HealAbsorb, OverAbsorb, OverHealAbsorb = AddPrediction(self)
+		--local Predict, OtherPredict, Absorb, HealAbsorb, OverAbsorb, OverHealAbsorb = AddPrediction(self)
 		--[[self.HealthPrediction = {
 			myBar           = Predict,
 			otherBar        = OtherPredict,

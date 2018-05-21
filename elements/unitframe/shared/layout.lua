@@ -257,7 +257,7 @@
 		--	insert nameplate-matching reaction colours
 		self.colors 				= colours
 
-		local Predict, OtherPredict, Absorb, HealAbsorb, OverAbsorb, OverHealAbsorb = AddPrediction(self)
+		-- local Predict, OtherPredict, Absorb, HealAbsorb, OverAbsorb, OverHealAbsorb = AddPrediction(self)
 		--[[self.HealthPrediction = {
 			myBar           = Predict,
 			otherBar        = OtherPredict,

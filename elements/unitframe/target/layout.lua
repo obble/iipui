@@ -195,7 +195,7 @@
 		RaidIcon:ClearAllPoints()
 		RaidIcon:SetPoint('RIGHT', Name, 'LEFT')
 
-		ns.AddAuraElement(self, unit, {'BOTTOMRIGHT', self, 'TOPRIGHT', -44, 100}, 'RIGHT', 'LEFT', 'UP')
+		ns.AddAuraElement(self, unit, {'BOTTOMRIGHT', self, 'TOPRIGHT', -4, 80}, 'RIGHT', 'LEFT', 'UP')
 
 		-- register new elements
 		self.Name 			= Name

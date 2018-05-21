@@ -205,7 +205,7 @@
 
 		ns.AddGroupAuraElement(self, unit, true)
 
-		local Predict, OtherPredict, Absorb, HealAbsorb, OverAbsorb, OverHealAbsorb = AddPrediction(self)
+		-- local Predict, OtherPredict, Absorb, HealAbsorb, OverAbsorb, OverHealAbsorb = AddPrediction(self)
 		--[[self.HealthPrediction = {
 			myBar           = Predict,
 			otherBar        = OtherPredict,
@@ -216,7 +216,7 @@
 			maxOverflow     = 1,
 			frequentUpdates = true,
 		}]]
-		
+
 		--  pull pre- & post- updates
 		ns.PreAndPostUpdatesForGroupElements(self)
 		--  introduce resizing function
