@@ -58,7 +58,7 @@
             for j = 1, GetContainerNumSlots(i) do
                 local item = GetContainerItemLink(i, j)
                 local id   = GetContainerItemID(i, j)
-                if id then
+                if  id and item then
                     tooltip:ClearLines()
                     tooltip:SetHyperlink(item)
                     local two = _G[tooltip:GetName()..'TextLeft2']
