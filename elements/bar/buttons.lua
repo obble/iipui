@@ -1,5 +1,4 @@
 
-
 	-- thanks Zork
 
 	local _, ns = ...
@@ -93,7 +92,7 @@
 			end
 		end
 
-		if ns.DELEGATE_ACTUAL_BARS_SHOWN and ns.DELEGATE_ACTUAL_BARS_SHOWN == 4 then
+		if  ns.DELEGATE_ACTUAL_BARS_SHOWN and ns.DELEGATE_ACTUAL_BARS_SHOWN == 4 then
 			ActionBarUpButton:SetPoint('TOPRIGHT', _G['iipBar1'], 'TOPLEFT', -20, 5)
 			ActionBarDownButton:SetPoint('TOP', ActionBarUpButton, 'BOTTOM', 0, 14)
 			MainMenuBarPageNumber:SetPoint('TOPRIGHT', ActionBarUpButton, 'BOTTOMLEFT', -2, 9)
@@ -147,7 +146,26 @@
 	local SetPositions = function()
 		local GridSplit = ns.DELEGATE_ACTUAL_BARS_SHOWN and math.ceil(ns.DELEGATE_ACTUAL_BARS_SHOWN/2) + 1 or 1
 
-		--  unpack bar positions
+		--  this has to be reparented to our new bar
+		--  in order for its child elements to show in their updated positions
+		MainMenuBarArtFrame:SetParent(_G['iipBar1'])
+		MainMenuBarArtFrame:EnableMouse(false)
+
+		MultiBarBottomLeft:SetParent(_G['iipBar2'])
+		MultiBarBottomLeft:EnableMouse(false)
+
+		MultiBarBottomRight:SetParent(_G['iipBar3'])
+		MultiBarBottomRight:EnableMouse(false)
+
+		MultiBarRight:SetParent(_G['iipBar4'])
+		MultiBarRight:EnableMouse(false)
+
+		MultiBarLeft:SetParent(_G['iipBar5'])
+		MultiBarLeft:EnableMouse(false)
+
+		StanceBarFrame:SetParent(_G['iipBar6'])
+		StanceBarFrame:EnableMouse(false)
+
 		for i = 1, 7 do
 			local point, parent, relpoint, x, y
 			local name = 'iipBar'..i
@@ -217,17 +235,17 @@
 	end
 
 	local AddFloatingGrid = function()
-			local list = GetButtonList('ActionButton', 12)
-		    if  InCombatLockdown() then
-		      	lip:RegisterEvent('PLAYER_REGEN_ENABLED', 	 AddFloatingGrid)
-		      	return
-		    end
-		    local var = tonumber(GetCVar'alwaysShowActionBars')
-			lip:UnregisterEvent('PLAYER_REGEN_ENABLED',		 AddFloatingGrid)
-		    for _, button in next, list do
-				button:SetAttribute('showgrid', var)
-				ActionButton_ShowGrid(button)
-			end
+		local list = GetButtonList('ActionButton', 12)
+	    if  InCombatLockdown() then
+	      	lip:RegisterEvent('PLAYER_REGEN_ENABLED', 	 AddFloatingGrid)
+	      	return
+	    end
+	    local var = tonumber(GetCVar'alwaysShowActionBars')
+		lip:UnregisterEvent('PLAYER_REGEN_ENABLED',		 AddFloatingGrid)
+	    for i, button in next, list do
+			button:SetAttribute('showgrid', var)
+			ActionButton_ShowGrid(button)
+		end
 	end
 
 	local AddPaging = function(bar)
@@ -240,6 +258,7 @@
 		for i, button in next, list do
 			bar:SetFrameRef('ActionButton'..i, button)
 		end
+		RegisterStateDriver(bar, 'visibility', '[petbattle] hide; show')
 		bar:Execute(([[
 			buttons = table.new()
 			for i = 1, %d do
@@ -252,7 +271,7 @@
 			  button:SetAttribute('actionpage', newstate)
 			end
 		]])
-		RegisterStateDriver(bar, 'page', '[vehicleui][possessbar] 12; [shapeshift] 13; [overridebar] 14; [bar:2] 2; [bar:3] 3; [bar:4] 4; [bar:5] 5; [bar:6] 6;')
+		RegisterStateDriver(bar, 'page', '[overridebar]14;[shapeshift]13;[vehicleui]12;[possessbar]12;[bonusbar:5]11;[bonusbar:4]10;[bonusbar:3]9;[bonusbar:2]8;[bonusbar:1]7;[bar:6]6;[bar:5]5;[bar:4]4;[bar:3]3;[bar:2]2;1')
 	end
 
 	local AddBars = function()					-- 1:  action 	2:  multileft 	3:  multiright
@@ -263,15 +282,12 @@
 
 			bar:SetSize((x*12) + 2.3*(i < 7 and 12 or 10), y)
 			add(bar)
-
-			local v = BarPositions['iipBar'..i].visibility
-			RegisterStateDriver(bar, 'visibility', v) -- see if this fixes vehicle bug eh?
-																			--  N O P E
-
-
 			if  i == 1 then
 				AddFloatingGrid()
 				AddPaging(bar)
+			else
+				local v = BarPositions['iipBar'..i].visibility
+				RegisterStateDriver(bar, 'visibility', v) -- see if this fixes vehicle bug eh?
 			end
 		end
 		AddVehicleLeaveButton()
@@ -357,11 +373,7 @@
 		end
 	end
 
-	local AddButtonsToBar = function(num, name, parent, old, page)
-		if  old then
-			old:SetParent(parent)
-			old:EnableMouse(false)
-		end
+	local AddButtonsToBar = function(num, name, parent)
 		for i = 1, num do
 			local bu = _G[name..i]
 			add(bu)
@@ -384,7 +396,7 @@
 					bu.stanceUsed = nil
 				end
 				if  StanceBarFrame:IsShown() then
-					_G['iipBar6']:Show() bu:Show()
+					_G['iipBar6']:Show() bu:Show() bu:SetParent(parent)
 				else
 					_G['iipBar6']:Hide() bu:Hide()
 				end
@@ -405,6 +417,11 @@
 		local bu = _G['StanceButton1']
 		bu:ClearAllPoints()
 		bu:SetPoint('BOTTOM', _G['iipBar6'], i > 1 and -(20*i) + 16 or 0, 0)
+	end
+
+	local PositionBarsAfterCombat = function()
+		lip:UnregisterEvent('PLAYER_REGEN_ENABLED', PositionBarsAfterCombat)
+		C_Timer.After(1.5, SetPositions)
 	end
 
 	local AddTotems = function()
@@ -428,22 +445,19 @@
 		TotemFrame:SetPoint(point, parent, relpoint, x, y)
 	end
 
-	local PositionBarsAfterCombat = function()
-		lip:UnregisterEvent('PLAYER_REGEN_ENABLED', PositionBarsAfterCombat)
-		C_Timer.After(1.5, SetPositions)
-	end
-
 	local SetUpButtons = function()
+			-- create single backpack button
+		--ns.AddBackpack()
 			-- create bars to parent buttons to
 		AddBars()
 			--  begin button reparenting
-		AddButtonsToBar(12,	'ActionButton',					_G['iipBar1'], MainMenuBarArtFrame)
-		AddButtonsToBar(12, 'MultiBarBottomLeftButton',		_G['iipBar2'], MultiBarBottomLeft, 6)
-		AddButtonsToBar(12, 'MultiBarBottomRightButton',	_G['iipBar3'], MultiBarBottomRight, 5)
-		AddButtonsToBar(12, 'MultiBarRightButton',			_G['iipBar4'], MultiBarRight, 4)
-		AddButtonsToBar(12, 'MultiBarLeftButton',			_G['iipBar5'], MultiBarLeft, 3)
-		AddButtonsToBar(10, 'StanceButton',					_G['iipBar6'], StanceBarFrame)
-		AddButtonsToBar(10, 'PetActionButton',				_G['iipBar7'], PetActionBarFrame)
+		AddButtonsToBar(12, 'ActionButton',             	_G['iipBar1'])
+		AddButtonsToBar(12, 'MultiBarBottomLeftButton', 	_G['iipBar2'])
+		AddButtonsToBar(12, 'MultiBarBottomRightButton', 	_G['iipBar3'])
+		AddButtonsToBar(12, 'MultiBarRightButton',	  	_G['iipBar4'])
+		AddButtonsToBar(12, 'MultiBarLeftButton',		_G['iipBar5'])
+		AddButtonsToBar(10, 'StanceButton',			_G['iipBar6'])
+		AddButtonsToBar(10, 'PetActionButton',			_G['iipBar7'])
 		AddStancePositions()
 			--  set new ExtraActionButton format
 		hooksecurefunc('ExtraActionBar_Update', AddEAB)
@@ -485,6 +499,3 @@
 	end
 
 	ValidateActionBarTransition = function() return end
-
-
-	--

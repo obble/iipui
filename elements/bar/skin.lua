@@ -62,6 +62,9 @@
 				if bu then
 					if not bu.style then
 						ns.BUElements(bu)
+
+						bu:SetFrameLevel(bu:GetParent():GetFrameLevel() + 1)
+
 						--ns.BDStone(bu, 5)
 						if name ~= 'StanceButton' then
 							bu:SetSize(30, 30)
@@ -87,6 +90,8 @@
 						bu:GetHighlightTexture():AddMaskTexture(mask)
 
 						fl:AddMaskTexture(mask)
+
+						bu.cooldown:SetSwipeTexture[[Interface\ARCHEOLOGY\Arch-Keystone-Mask]]
 
 						if  not bu.bg then
 							bu.bg = bu:CreateTexture(nil, 'BACKGROUND', nil, -4)
@@ -232,7 +237,7 @@
 		mask2:SetPoint('TOPLEFT', ic, -5, 5)
 		mask2:SetPoint('BOTTOMRIGHT', ic, 5, -5)
 
-		bu:SetSize(55, 55)
+		bu:SetSize(45, 45)
 
 		ic.bg = ic:CreateTexture(nil, 'BACKGROUND', nil, -4)
 		ic.bg:SetPoint('TOPLEFT', ic, -3, 3)
@@ -253,7 +258,7 @@
 		ic.stone:SetTexture[[Interface\ARCHEOLOGY\ArchaeologyParts]]
 		ic.stone:SetTexCoord(.115, .205, .5775, .765)
 
-		ic:SetSize(43, 43)
+		ic:SetSize(33, 33)
 
 		tx:SetTexCoord(.1, .9, .1, .9)
 		tx:AddMaskTexture(mask)
@@ -263,7 +268,7 @@
 		du:SetPoint('TOP', bu, 'BOTTOM', 0, -5)
 
 		bu:ClearAllPoints()
-		bu:SetPoint('TOPLEFT', TotemFrame, -110 + (55*i), 0)
+		bu:SetPoint('TOPLEFT', TotemFrame, -90 + (45*i), 0)
 
 		-- 	sigh
 		for  k, v in pairs({bu:GetChildren()}) do
