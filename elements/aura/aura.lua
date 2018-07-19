@@ -129,6 +129,9 @@
     	icon:SetTexCoord(.1, .9, .1, .9)
 
         local name = bu:CreateFontString('$parentName', nil, 'iipAuraFont')
+        name:SetFont([[Fonts\skurri.ttf]], 14)
+        name:SetShadowOffset(1, -1)
+    	name:SetShadowColor(0, 0, 0)
         name:SetJustifyH'RIGHT'
         name:SetPoint('RIGHT', bu, 'LEFT', -15, 2)
 
