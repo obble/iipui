@@ -21,14 +21,14 @@
 
         local bu = CreateFrame('Frame', nil, bar)
         ns.BD(bu)
-        bu:SetPoint('TOPRIGHT', bar, 'TOPLEFT', -18, 0)
-        bu:SetSize(20, 20)
+        bu:SetPoint('RIGHT', bar, 'LEFT', -30, 0)
+        bu:SetSize(36, 36)
         bu:SetFrameLevel(0)
         LoC.bu = bu
 
-        bu.t = bu:CreateTexture(nil, 'BACKGROUND', nil, 7)
-        bu.t:SetPoint('TOPLEFT', -8, 8)
-        bu.t:SetPoint('BOTTOMRIGHT', 8, -8)
+        bu.t = bu:CreateTexture(nil, 'OVERLAY', nil, 7)
+        bu.t:SetPoint('TOPLEFT', -16, 16)
+        bu.t:SetPoint('BOTTOMRIGHT', 16, -16)
         bu.t:SetTexture[[Interface\PVPFrame\SilverIconBorder]]
         bu.t:SetVertexColor(.5, .5, .5)
 
@@ -61,8 +61,8 @@
             --  ns.PLAYER_RESOURCE is the player "personal resource" nameplate
             --  cached in nameplates/nameplates.lua on show
         if  ns.PLAYER_RESOURCE and ns.PLAYER_RESOURCE:IsShown() then
-            bar:SetPoint('BOTTOMLEFT',  ns.PLAYER_RESOURCE, 'TOPLEFT', 0, 20)
-            bar:SetPoint('BOTTOMRIGHT', ns.PLAYER_RESOURCE, 'TOPRIGHT', 0, 20)
+            bar:SetPoint('BOTTOMLEFT',  ns.PLAYER_RESOURCE, 'TOPLEFT', 0, 50)
+            bar:SetPoint('BOTTOMRIGHT', ns.PLAYER_RESOURCE, 'TOPRIGHT', 0, 50)
         else
             bar:SetPoint('BOTTOMLEFT',  UIParent, 'CENTER', -48, -60)
             bar:SetPoint('BOTTOMRIGHT', UIParent, 'CENTER', 48, -60)

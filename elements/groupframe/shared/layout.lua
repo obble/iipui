@@ -28,6 +28,16 @@
 		Health.back:SetAllPoints(Health)
 		ns.SB(Health.back)
 		Health.back:SetVertexColor(.2, .2, .2)
+
+		local HealthPoints = Health:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+		HealthPoints:SetPoint('BOTTOM', 0, 2)
+		HealthPoints:SetJustifyH'CENTER'
+		HealthPoints:SetFont(GameFontNormal:GetFont(), 10)
+		HealthPoints:SetTextColor(1, 1, 1)
+
+		self:Tag(HealthPoints, '[iip:grouphp]')
+		Health.value = HealthPoints
+
 		return Health
 	end
 

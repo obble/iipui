@@ -2,7 +2,7 @@
 
     local _, ns = ...
 
-    --  TODO:  cleanup rewrite redo fixit repeat
+    --  TODO:  DESPERATELY NEEDS A REWRITE
 
     local reputation
 
@@ -28,7 +28,7 @@
     local xp = CreateFrame('StatusBar', 'iipXP', UIParent, 'AnimatedStatusBarTemplate')
     ns.SB(xp)
     xp:SetSize(100, 5)
-    xp:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -105, -13)
+    xp:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -118, -13)
     xp:SetFrameLevel(0)
     xp:SetStatusBarColor(120/255, 88/255, 237/255)
     xp:SetAnimatedTextureColors(120/255, 88/255, 237/255)
@@ -82,7 +82,7 @@
     ns.SB(rest)
     ns.BD(rest)
     rest:SetSize(100, 5)
-    rest:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -105, -13)
+    rest:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -118, -13)
     rest:SetStatusBarColor(157/255, 187/255, 244/255)
     rest:SetFrameLevel(0)
     rest:EnableMouse(false)
@@ -161,7 +161,7 @@
     ns.SB(honour)
     ns.BD(honour)
     honour:SetSize(100, 5)
-    honour:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -105, -13)
+    honour:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -118, -13)
     honour:SetStatusBarColor(1, .24, 0)
     honour:SetAnimatedTextureColors(1, .24, 0)
     honour:SetFrameLevel(10)
@@ -187,7 +187,8 @@
     honour.data:Hide()
 
     local ArtifactUpdate = function(self, event)
-        if  HasArtifactEquipped() then
+        local azerite = C_AzeriteItem.FindActiveAzeriteItem()
+        if  HasArtifactEquipped() and not C_ArtifactUI.IsEquippedArtifactMaxed() and not C_ArtifactUI.IsEquippedArtifactDisabled() then
             local id, altid, name, icon, total, spent, _, _, _, _, _, _, tier = C_ArtifactUI.GetEquippedArtifactInfo()
             local num, XP, next = _G.MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(spent, total, tier)
             local percent       = math.ceil(XP/next*100)
@@ -196,10 +197,19 @@
             artifact.data:SetFormattedText(percent..'%% ap — points to spend: '..num)
             artifact.spark:SetPoint('CENTER', artifact, 'LEFT', XP/next*artifact:GetWidth(), -.5)
             artifact:Show()
+        elseif azerite then
+            local v, max    = C_AzeriteItem.GetAzeriteItemXPInfo(azerite)
+            local level     = C_AzeriteItem.GetPowerLevel(azerite)
+            local percent   = math.ceil(v/max*100)
+
+            artifact:SetAnimatedValues(v, 0, max, lvl)
+            artifact.data:SetFormattedText(percent..'%% ap')
+            artifact.spark:SetPoint('CENTER', artifact, 'LEFT', v/max*artifact:GetWidth(), -.5)
+            artifact:Show()
         else
             artifact:Hide()
         end
-        if event == 'ARTIFACT_XP_UPDATE' and UnitLevel'player' < MAX_PLAYER_LEVEL then
+        if  event == 'ARTIFACT_XP_UPDATE' and UnitLevel'player' < MAX_PLAYER_LEVEL then
             if  artifact:GetAlpha() < 1 then
                 artifact:SetAlpha(1)
                 C_Timer.After(7, function() UIFrameFadeOut(artifact, .5, 1, 0) end)
@@ -230,7 +240,7 @@
             rep:SetStatusBarColor(colour.r, colour.g, colour.b)
             rep:SetAnimatedTextureColors(colour.r, colour.g, colour.b)
             rep:ClearAllPoints()
-            rep:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -105, artifact:IsShown() and -32 or xp:IsShown() and -32 or -13)
+            rep:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -118, artifact:IsShown() and -32 or xp:IsShown() and -32 or -13)
 
             rep.spark:SetPoint('CENTER', rep, 'LEFT', ((v - min)/(max - min))*rep:GetWidth(), -.5)
             rep.spark:SetVertexColor(colour.r, colour.g, colour.b)
@@ -250,20 +260,16 @@
     end
 
     local HonourUpdate = function()
-        local maxed = UnitLevel'player' >= MAX_PLAYER_LEVEL
-        if UnitInBattleground'player' then
-            xp:Hide() rest:Hide() artifact:Hide() honour:Show()
-        end
-        if  maxed then
-            local v,   max    = UnitHonor'player',      UnitHonorMax'player'
-            local lvl, lvlmax = UnitHonorLevel'player', GetMaxPlayerHonorLevel()
-            if  lvl == lvlmax then
-                honour:SetAnimatedValues(1, 0, 1, lvl)
-                honour.data:SetText('PvP Level: '..lvl)
-            else
-                honour:SetAnimatedValues(v, 0, max, lvl)
-                honour.data:SetText(v..'/'..max..' — '..'to PvP Level: '..lvl + 1)
+        if  IsWatchingHonorAsXP() or InActiveBattlefield() or IsInActiveWorldPVP() then
+            for _, v in pairs({artifact, rest, xp}) do
+                v:Hide()
             end
+            local v,   max    = UnitHonor'player',      UnitHonorMax'player'
+            honour:SetAnimatedValues(v, 0, max, lvl)
+            honour.data:SetText(v..'/'..max)
+            honour:Show()
+        else
+            honour:Hide()
         end
     end
 
@@ -274,9 +280,13 @@
         local REST    = GetXPExhaustion()
         if  UnitLevel'player' == MAX_PLAYER_LEVEL then
             ArtifactUpdate()
-            xp:Hide() rest:Hide() header:SetText'Artifact' artifact:SetAlpha(1)
+            xp:Hide()
+            rest:Hide()
+            header:SetText'Artifact'
+
+            artifact:SetAlpha(1)
             artifact:ClearAllPoints()
-            artifact:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -105, -13)
+            artifact:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -118, -13)
             if UnitInBattleground'player' then
                 header:SetText'Honour' artifact:SetAlpha(0) honour:SetAlpha(1)
             else
@@ -298,7 +308,7 @@
         ArtifactUpdate()
         RepUpdate()
         HonourUpdate()
-        onUpdateGrow(_G['iipbar_collapse'])
+        ns.grow()
         if UnitInBattleground'player' then honour.data:Show() end
         if GetWatchedFactionInfo() then rep.data:Show() rep:SetAlpha(1) end
         if UnitLevel'player' < MAX_PLAYER_LEVEL then
@@ -312,7 +322,7 @@
         rep:SetAlpha(0)
         rep.data:Hide()
         honour.data:Hide()
-        onUpdateShrink(_G['iipbar_collapse'])
+        ns.shrink()
         if  UnitLevel'player' < MAX_PLAYER_LEVEL then
             artifact:SetAlpha(0)
             xp.data:Hide()
@@ -336,7 +346,7 @@
         'ZONE_CHANGED_NEW_AREA',
         'HONOR_XP_UPDATE',
         'HONOR_LEVEL_UPDATE',
-        'HONOR_PRESTIGE_UPDATE',
+        --c'HONOR_PRESTIGE_UPDATE',
         'ARTIFACT_XP_UPDATE',
     }
 
@@ -356,9 +366,7 @@
             ZoneChangeXP()
         elseif
             event == 'HONOR_XP_UPDATE'
-        or  event == 'HONOR_LEVEL_UPDATE'
-        or  event == 'HONOR_PRESTIGE_UPDATE'
-        then
+        or  event == 'HONOR_LEVEL_UPDATE'then
             HonourUpdate()
         elseif
             event == 'ARTIFACT_XP_UPDATE' then

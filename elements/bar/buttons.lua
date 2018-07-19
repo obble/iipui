@@ -1,444 +1,578 @@
 
-
-	-- thanks Zork
+	-- based on lightspark's actionbars now
 
 	local _, ns = ...
 
-	local f = _G['iipbar']
+	local ABARS 	= {}
+	local e, re		= CreateFrame'Frame', CreateFrame'Frame'
+	local created 	= false
 
-	local BarPositions = {
-		['iipBar1'] = {
-			STACKED = {'BOTTOM', 		UIParent, 'BOTTOM',   0, 	70},
-			GRIDDED	= {'BOTTOMRIGHT', 	UIParent, 'BOTTOM', -16, 	54},
-			THREE	= {'BOTTOM', 		UIParent, 'BOTTOM',   0, 	93},
-			FIVE	= {'BOTTOM', 		UIParent, 'BOTTOM',   0, 	142},
+	local controller
+	local anim_controller
+
+	local LibActionButton = LibStub'LibActionButton-1.0-ls'
+
+	local hide = CreateFrame'Frame'
+	hide:Hide()
+
+	local bars = {
+		['bar1'] = {
+			buttons				= 'Action',
+			flyout				= 'UP',
+			grid				= true,
+			name				= 'iipActionBar1',
+			num 				= 12,
+			padding 			= 9,
+			positions			= {'BOTTOM', UIParent, 'BOTTOM', 0, 	80},
+			wrappositions		= {'BOTTOM', UIParent, 'BOTTOM', -120, 	80},
+			row					= 12,
+			size 				= 30,
+			type				= 'ACTIONBUTTON',
+			visibility 			= '[vehicleui][petbattle][possessbar] hide; show',
+			textureL			= {.02, .5, 0, 1},
+			textureR			= {.5, .98, 0, 1},
+			textureLpositionsT	= {'TOPLEFT', nil, 'TOPLEFT', -11, 14},	-- parent (textureLpositions[2]) defined in call
+			textureLpositionsB	= {'BOTTOMRIGHT', nil, 'BOTTOM', 0, -16},
+			textureRpositionsT	= {'TOPRIGHT', nil, 'TOPRIGHT', 11, 14},
+			textureRpositionsB	= {'BOTTOMLEFT', nil, 'BOTTOM', 0, -16},
+			textureShadowT		= {'TOPLEFT', nil, 'TOPLEFT', -32, 14},
+			textureShadowB		= {'BOTTOMRIGHT', nil, 'BOTTOMRIGHT', 6, -14},
 		},
-		['iipBar2'] = {
-			STACKED = {'BOTTOM', 		UIParent, 'BOTTOM',   0, 	120},
-			GRIDDED	= {'BOTTOMLEFT', 	UIParent, 'BOTTOM',  16, 	54},
-			THREE	= {'BOTTOMRIGHT', 	UIParent, 'BOTTOM', -16, 	43},
-			FIVE	= {'BOTTOMRIGHT', 	UIParent, 'BOTTOM', -16, 	43},
+		['bar2'] = {
+			buttons				= 'MultiBarBottomLeft',
+			flyout				= 'UP',
+			grid				= true,
+			name				= 'iipActionBar2',
+			num 				= 12,
+			padding 			= 9,
+			page				= 6,
+			positions			= {'BOTTOM', UIParent, 'BOTTOM', 0, 119},
+			wrappositions		= {'BOTTOM', UIParent, 'BOTTOM', -120, 	119},
+			row					= 12,
+			size 				= 30,
+			type				= 'MULTIACTIONBAR1BUTTON',
+			visibility 			= '[vehicleui][petbattle][overridebar][possessbar] hide; show',
+			textureL			= {.018, .5, 0, .8},
+			textureR			= {.5, .982, 0, .8},
+			textureLpositionsT	= {'TOPLEFT', nil, 'TOPLEFT', -12, 14},
+			textureLpositionsB	= {'BOTTOMRIGHT', nil, 'BOTTOM', 0, -2},
+			textureRpositionsT	= {'TOPRIGHT', nil, 'TOPRIGHT', 12, 14},
+			textureRpositionsB	= {'BOTTOMLEFT', nil, 'BOTTOM', 0, -2},
+			textureShadowT		= {'TOPLEFT', nil, 'TOPLEFT', -28, 14},
+			textureShadowB		= {'BOTTOMRIGHT', nil, 'BOTTOMRIGHT', 6, -14},
 		},
-		['iipBar3'] = {
-			STACKED = {'BOTTOM', 		UIParent, 'BOTTOM',   0, 	157},
-			GRIDDED	= {'BOTTOMRIGHT', 	UIParent, 'BOTTOM', -16, 	102},
-			THREE 	= {'BOTTOMLEFT', 	UIParent, 'BOTTOM',  16, 	43},
-			FIVE 	= {'BOTTOMLEFT', 	UIParent, 'BOTTOM',  16, 	43},
+		['bar3'] = {
+			buttons				= 'MultiBarBottomRight',
+			flyout				= 'UP',
+			grid				= true,
+			name				= 'iipActionBar3',
+			num 				= 12,
+			padding 			= 9,
+			page				= 5,
+			positions			= {'BOTTOM', UIParent, 'BOTTOM', 231, 80},
+			row					= 6,
+			size 				= 30,
+			type				= 'MULTIACTIONBAR2BUTTON',
+			visibility 			= '[vehicleui][petbattle][overridebar][possessbar] hide; show',
+			textureL			= {.2, 1, 0, 1},
+			textureR			= {.2, 1, 0, 1},
+			textureLpositionsT	= {'TOPLEFT', nil, 'TOPLEFT', -2, 14},
+			textureLpositionsB	= {'BOTTOMRIGHT', nil, 'RIGHT', 15, -10},
+			textureRpositionsT	= {'TOPRIGHT', nil, 'LEFT', -2, 12},
+			textureRpositionsB	= {'BOTTOMLEFT', nil, 'BOTTOMRIGHT', 15, -15},
+			textureShadowT		= {'TOPLEFT', nil, 'TOPLEFT', -28, 14},
+			textureShadowB		= {'BOTTOMRIGHT', nil, 'BOTTOMRIGHT', 20, -14},
 		},
-		['iipBar4'] = {
-			STACKED = {'BOTTOM', 		UIParent, 'BOTTOM',   0, 	200},
-			GRIDDED	= {'BOTTOMLEFT', 	UIParent, 'BOTTOM',  16, 	102},
-			THREE 	= {'BOTTOMRIGHT', 	UIParent, 'BOTTOM', -16, 	139},
-			FIVE 	= {'BOTTOMRIGHT', 	UIParent, 'BOTTOM', -16, 	93},
+		['bar4'] = {
+			buttons				= 'MultiBarLeft',
+			flyout				= 'LEFT',
+			grid				= true,
+			name				= 'iipActionBar4',
+			num 				= 12,
+			padding 			= 9,
+			page				= 4,
+			positions			= {'BOTTOMLEFT', UIParent, 'BOTTOMRIGHT', -130, 232},
+			row					= 1,
+			size 				= 30,
+			type				= 'MULTIACTIONBAR4BUTTON',
+			visibility 			= '[vehicleui][petbattle][overridebar][possessbar] hide; show',
 		},
-		['iipBar5'] = {
-			STACKED = {'BOTTOM', 		UIParent, 'BOTTOM',   0, 	240},
-			GRIDDED	= {'BOTTOMLEFT', 	UIParent, 'BOTTOM',  16, 	144},
-			THREE 	= {'BOTTOMLEFT', 	UIParent, 'BOTTOM',  16, 	139},
-			FIVE 	= {'BOTTOMLEFT', 	UIParent, 'BOTTOM',  16, 	93},
-		},
-		['iipBar6'] = {	-- stance
-			STACKED = {'BOTTOM', 		UIParent, 'BOTTOM', 0, 166},
-			GRIDDED	= {'BOTTOM', 		UIParent, 'BOTTOM', 0, 157},
-			THREE	= {'BOTTOM', 		UIParent, 'BOTTOM', 0, 142},
-			FIVE	= {'BOTTOM', 		UIParent, 'BOTTOM', 0, 187},
-			BASIC   = {'BOTTOM', 		UIParent, 'BOTTOM', 0, 120},
-		},
-		['iipBar7'] = {	-- pet
-			STACKED = {'BOTTOM', 		UIParent, 'BOTTOM', -14, 166},
-			GRIDDED	= {'BOTTOM', 		UIParent, 'BOTTOM', -14, 157},
-			THREE 	= {'BOTTOM', 		UIParent, 'BOTTOM', -14, 142},
-			FIVE 	= {'BOTTOM', 		UIParent, 'BOTTOM', -14, 187},
-			BASIC 	= {'BOTTOM', 		UIParent, 'BOTTOM', -14, 120},
+		['bar5'] = {
+			buttons				= 'MultiBarRight',
+			flyout				= 'LEFT',
+			grid				= true,
+			name				= 'iipActionBar5',
+			num 				= 12,
+			padding 			= 9,
+			page				= 4,
+			positions			= {'BOTTOMLEFT', UIParent, 'BOTTOMRIGHT', -91, 232},
+			row					= 1,
+			size 				= 30,
+			type				= 'MULTIACTIONBAR3BUTTON',
+			visibility 			= '[vehicleui][petbattle][overridebar][possessbar] hide; show',
 		},
 	}
 
+	local PAGES = {
+		['DEFAULT'] = '[vehicleui][possessbar] 12; [shapeshift] 13; [overridebar] 14; [bar:2] 2; [bar:3] 3; [bar:4] 4; [bar:5] 5; [bar:6] 6;',
+		['DRUID'] 	= '[bonusbar:1,nostealth] 7; [bonusbar:1,stealth] 8; [bonusbar:3] 9; [bonusbar:4] 10;',
+		['ROGUE'] 	= '[bonusbar:1] 7;',
+	}
+
+	local rebindable = {
+		bar1 = true,
+		bar2 = true,
+		bar3 = true,
+		bar4 = true,
+		bar5 = true,
+	}
+
+	local keys = {
+		KEY_NUMPADDECIMAL	= 'Nu.',
+		KEY_NUMPADDIVIDE	= 'Nu/',
+		KEY_NUMPADMINUS		= 'Nu-',
+		KEY_NUMPADMULTIPLY 	= 'Nu*',
+		KEY_NUMPADPLUS 		= 'Nu+',
+		KEY_MOUSEWHEELUP	= '^U',
+		KEY_MOUSEWHEELDOWN 	= '⌄D',
+		KEY_NUMLOCK 		= 'NuLk',
+		KEY_PAGEUP			= 'PU',
+		KEY_PAGEDOWN 		= 'PD',
+		KEY_SPACE			= 'Space',
+		KEY_INSERT			= 'Ins',
+		KEY_HOME			= 'Hm',
+		KEY_DELETE			= 'Del',
+	}
+
 	local add = function(bu)
-		if not ns.BAR_ELEMENTS[bu] then
-			tinsert(ns.BAR_ELEMENTS, bu)
+		if not ns.bar_elements[bu] then
+			tinsert(ns.bar_elements, bu)
 		end
 	end
 
 	local remove = function(bu)
-		for i, v in pairs(ns.BAR_ELEMENTS) do
+		for i, v in pairs(ns.bar_elements) do
 			if  bu:GetName() == v:GetName() then
-				tremove(ns.BAR_ELEMENTS, i)
+				tremove(ns.bar_elements, i)
 			end
 		end
 	end
 
-	local SetEABPosition = function()
-		ExtraActionBarFrame:SetParent(UIParent)
-		ExtraActionBarFrame:ClearAllPoints()
-		ExtraActionBarFrame.ignoreFramePositionManager = true
-		ExtraActionBarFrame:SetPoint('BOTTOM', UIParent, 0, 12)
-		ExtraActionBarFrame:SetFrameLevel(4)
-		tinsert(ns.BAR_ELEMENTS, ExtraActionBarFrame)
-		tinsert(ns.BAR_ELEMENTS, ExtraActionButton1)
+	local AddBarPage = function()
+		local _, class 	= UnitClass'player'
+		local condition = PAGES['DEFAULT']
+		local page 		= PAGES[class]
+
+		if  page then
+			condition = condition..' '..page
+		end
+
+		return condition..' [form] 1; 1'
 	end
 
-	local SetPagingPosition = function()
-		for _, v in pairs({
-			MainMenuBarPageNumber,
-			ActionBarUpButton,
-			ActionBarDownButton
-		}) do
-			v:ClearAllPoints()
-			if v ~= MainMenuBarPageNumber then
-				v:SetSize(24, 24)
-				ns.BD(v, 1, 6)
-				ns.BDStone(v, -4)
+	local AddConfig = function(self)
+		if  not self.buttonConfig then
+			self.buttonConfig = {
+				tooltip 		= 'enabled',
+				colors 			= {},
+				hideElements 	= {
+					equipped = false,
+				},
+			}
+		end
+
+		self.buttonConfig.clickOnDown 			= false
+		self.buttonConfig.desaturateOnCooldown 	= true
+		self.buttonConfig.drawBling 			= true
+		self.buttonConfig.flyout 				= 'UP'
+		self.buttonConfig.outOfManaColoring 	= true
+		self.buttonConfig.outOfRangeColoring 	= true
+		self.buttonConfig.showGrid 				= tonumber(GetCVar'alwaysShowActionBars')
+
+		self.buttonConfig.colors.mana 			= {r = 38/255, 	g = 97/255,	b = 172/255}
+		self.buttonConfig.colors.normal 		= {r = 1,		g = 1,		b = 1}
+		self.buttonConfig.colors.range 			= {r = 141/255, g = 28/255, b = 33/255}
+
+
+		self.buttonConfig.hideElements.hotkey 	= false
+		self.buttonConfig.hideElements.macro 	= false
+
+		for i, bu in pairs(self._buttons) do
+			self.buttonConfig.keyBoundTarget = bu._command
+			bu.keyBoundTarget = self.buttonConfig.keyBoundTarget
+			bu:UpdateConfig(self.buttonConfig)
+			bu:SetAttribute('buttonlock', tonumber(GetCVar'lockActionBars') == 1 and true or false)
+			bu:SetAttribute('checkselfcast',  true)
+			bu:SetAttribute('checkfocuscast', true)
+			bu:SetAttribute('*unit2', 'player') -- 'player' or nil
+		end
+	end
+
+	local UpdateButtons = function(self, method, ...)
+		for _,  button in next, self._buttons do
+			if  button[method] then
+				button[method](button, ...)
 			end
 		end
-		ActionBarUpButton:SetPoint('TOPLEFT', _G['iipBar1'], 'TOPRIGHT', 30, 5)
-		ActionBarDownButton:SetPoint('TOP', ActionBarUpButton, 'BOTTOM', 0, 14)
-		MainMenuBarPageNumber:SetPoint('TOPRIGHT', ActionBarUpButton, 'BOTTOMLEFT', -2, 9)
+	end
 
-		if  not ActionBarUpButton.bg then
-			ActionBarUpButton.bg = ActionBarUpButton:CreateTexture(nil, 'BACKGROUND', nil, -7)
-			ActionBarUpButton.bg:SetPoint('TOP', ActionBarUpButton, -2, 5)
-			ActionBarUpButton.bg:SetSize(30, 26)
-			ActionBarUpButton.bg:SetTexture[[Interface\ACHIEVEMENTFRAME\UI-Achievement-Category-Background]]
-			ActionBarUpButton.bg:SetTexCoord(0, 1, .1, 1, 0, 0, .1, 0)
-
-			ActionBarUpButton.bgbottom = ActionBarUpButton:CreateTexture(nil, 'BACKGROUND', nil, -7)
-			ActionBarUpButton.bgbottom:SetPoint('BOTTOM', ActionBarDownButton, 2, -3)
-			ActionBarUpButton.bgbottom:SetSize(30, 26)
-			ActionBarUpButton.bgbottom:SetTexture[[Interface\ACHIEVEMENTFRAME\UI-Achievement-Category-Background]]
-			ActionBarUpButton.bgbottom:SetTexCoord(.1, 0, 0, 0, .1, 1, 0, 1)
-			-- 0, .1, 0, .9
+	local UpdateBars = function(_, method, ...)
+		for _,  bar in next, ABARS do
+			if  bar[method] then
+				bar[method](bar, ...)
+			end
 		end
 	end
 
-	local GetPositionsFive = function(name)
-		local  point = BarPositions[name].FIVE
-		return point[1], point[2], point[3], point[4], point[5]
+	local UpdateVisibility = function()
+		local states = {
+			['bar1'] = true,
+			['bar2'] = SHOW_MULTI_ACTIONBAR_1,
+			['bar3'] = SHOW_MULTI_ACTIONBAR_2,
+			['bar4'] = SHOW_MULTI_ACTIONBAR_3,
+			['bar5'] = SHOW_MULTI_ACTIONBAR_3 and SHOW_MULTI_ACTIONBAR_4,
+		}
+		for id,  bar in next, ABARS do
+			RegisterStateDriver(bar, 'visibility', states[id] and bars[id].visibility or 'hide')
+		end
 	end
 
-	local GetPositionsThree = function(name)
-		local  point = BarPositions[name].THREE
-		return point[1], point[2], point[3], point[4], point[5]
+	local ShortenBindings = function(self)
+		local t = self._command and GetBindingKey(self._command) or nil
+
+		if  t then
+			t = gsub(t, 'SHIFT%-', 'S·')
+			t = gsub(t, "CTRL%-",  'C·')
+			t = gsub(t, 'ALT%-',   'A·')
+			t = gsub(t, 'BUTTON',  'M·')
+			t = gsub(t, 'NUMPAD',  'Nu')
+			for i, v in pairs(keys) do
+				t = gsub(t, i, v)
+			end
+		end
+
+		return t or ''
 	end
 
-	local GetPositionsGridded = function(name)
-		local  point = BarPositions[name].GRIDDED
-		return point[1], point[2], point[3], point[4], point[5]
+	local UpdateHotkeyText = function(self)
+		self:SetFormattedText('%s', ShortenBindings(self:GetParent()))
 	end
 
-	local GetPositionsStacked = function(name)
-		local  point = BarPositions[name].STACKED
-		return point[1], point[2], point[3], point[4], point[5]
+	local UpdateMacroText = function(self, text)
+		text = text or self:GetText()
+		if  text then
+			self:SetFormattedText('%s', text:sub(1, 3))
+		end
 	end
 
-	local GetPetPositionsBasic = function(name)
-		local  point = BarPositions[name].BASIC
-		return point[1], point[2], point[3], point[4], point[5]
+	local UpdateHotkey = function(self)
+		self.HotKey:SetFont(STANDARD_TEXT_FONT, 11, 'OUTLINE')
+		self.HotKey:SetTextColor(1, 1, 1)
+		self.HotKey:ClearAllPoints()
+		self.HotKey:SetPoint'TOPLEFT'
+		self.HotKey:SetWidth(100)
+		self.HotKey:SetJustifyH'LEFT'
+
+		UpdateHotkeyText(self.HotKey)
+		hooksecurefunc(self.HotKey, 'SetText', UpdateHotkeyText)
+	end
+
+	local UpdateMacro = function(self)
+		self.Name:SetFont(STANDARD_TEXT_FONT, 9)
+
+		UpdateMacroText(self.Name)
+		hooksecurefunc(self.Name, 'SetText', UpdateMacroText)
+	end
+
+	local UpdateBorderColour = function(self)
+		local button = self:GetParent()
+		for _, v in pairs(button.bo) do
+			local equip = button:IsEquipped()
+			v:SetVertexColor(equip and 0 or 1, 1, equip and 0 or 1)
+		end
+	end
+
+	local ReassignBindings = function()
+		if  not InCombatLockdown() then
+			for id, bar in next, ABARS do
+				if  rebindable[id] then
+					ClearOverrideBindings(bar)
+					for _, button in next, bar._buttons do
+						for k = 1, select('#', GetBindingKey(button._command)) do
+	                        local key = select(k, GetBindingKey(button._command))
+	                        if  key and key ~= '' then
+	                            SetOverrideBindingClick(bar, false, key, button:GetName())
+	                        end
+	                    end
+					end
+				end
+			end
+		end
+	end
+
+	local ClearBindings = function()
+		if  not InCombatLockdown() then
+			for id, bar in next, ABARS do
+				if  rebindable[id] then
+					ClearOverrideBindings(bar)
+				end
+			end
+		end
+	end
+
+	local AddPositions = function(self)
+		local t 		= bars[self._id]
+		local width 	= t.size
+		local height 	= t.size
+		local num 		= min(t.num, #self._buttons)
+		local wMult 	= min(num, t.row)
+		local hMult 	= ceil(num/t.row)
+
+		local initialAnchor = 'BOTTOMLEFT'
+		local xDir, yDir 	= 1, 1
+
+		self:SetSize(
+			t.size*wMult + ((t.padding*wMult) - 5),
+			t.size*hMult + ((t.padding*hMult) - 4)
+		)
+
+		for i, button in next, self._buttons do
+			button:ClearAllPoints()
+
+			if  i <= num then
+				local col = (i - 1) % t.row
+				local row = floor((i - 1) / t.row)
+
+				button:SetParent(button._parent)
+				button:SetFrameLevel(self:GetFrameLevel() + 1)
+				button:SetSize(width, height)
+				button:SetPoint(initialAnchor, self, initialAnchor, xDir * (2 + col * (t.padding + width)), yDir * (2 + row * (t.padding + height)))
+			else
+				button:SetParent(hide)
+			end
+		end
+	end
+
+	local Update = function(self)
+		UpdateVisibility(self)
+		UpdateButtons(self, 'UpdateHotKey')
+		UpdateButtons(self, 'UpdateMacro')
+		AddConfig(self)
+	end
+
+	local AddBars = function()
+		for id, data in next, bars do
+			local bar = CreateFrame('Frame', data.name, UIParent, 'SecureHandlerStateTemplate')
+			bar._id 		= id
+			bar._buttons 	= {}
+
+			ns.BD(bar)
+			add(bar)
+
+			ABARS[id] = bar
+
+			bar.UpdateConfig 		= AddConfig
+			bar.UpdateVisibility	= UpdateVisibility
+			bar.Update 				= Update
+			bar.UpdateButtonConfig 	= AddConfig
+
+			if 	bar._buttons then
+				bar.UpdateButtons = UpdateButtons
+			end
+
+			if  data.textureL then
+				bar.t = bar:CreateTexture(nil, 'ARTWORK')
+				bar.t:SetAllPoints()
+				bar.t:SetTexture[[Interface/PLAYERACTIONBARALT/STONE]]
+				bar.t:SetTexCoord(0, 1, .18, .3)
+
+				bar.boL = bar:CreateTexture(nil, 'BACKGROUND', nil, -6)
+				bar.boL:SetPoint(data.textureLpositionsT[1], bar, data.textureLpositionsT[3], data.textureLpositionsT[4], data.textureLpositionsT[5])
+				bar.boL:SetPoint(data.textureLpositionsB[1], bar, data.textureLpositionsB[3], data.textureLpositionsB[4], data.textureLpositionsB[5])
+				bar.boL:SetTexture[[Interface/ACHIEVEMENTFRAME/UI-Achievement-Alert-Background-Mini]]
+				bar.boL:SetVertexColor(.9, .9, .9)
+				bar.boL:SetTexCoord(unpack(data.textureL))
+
+				bar.boR = bar:CreateTexture(nil, 'BACKGROUND', nil, -6)
+				bar.boR:SetPoint(data.textureRpositionsT[1], bar, data.textureRpositionsT[3], data.textureRpositionsT[4], data.textureRpositionsT[5])
+				bar.boR:SetPoint(data.textureRpositionsB[1], bar, data.textureRpositionsB[3], data.textureRpositionsB[4], data.textureRpositionsB[5])
+				bar.boR:SetTexture[[Interface/ACHIEVEMENTFRAME/UI-Achievement-Alert-Background-Mini]]
+				bar.boR:SetVertexColor(.9, .9, .9)
+				bar.boR:SetTexCoord(unpack(data.textureR))
+
+				bar.shadow = bar:CreateTexture(nil, 'BACKGROUND', nil, -7)
+				bar.shadow:SetPoint(data.textureShadowT[1], bar, data.textureShadowT[3], data.textureShadowT[4], data.textureShadowT[5])
+				bar.shadow:SetPoint(data.textureShadowB[1], bar, data.textureShadowB[3], data.textureShadowB[4], data.textureShadowB[5])
+				bar.shadow:SetTexture[[Interface\Scenarios\ScenarioParts]]
+				bar.shadow:SetVertexColor(0, 0, 0, 1)
+				bar.shadow:SetTexCoord(0, .641, 0, .18)
+			end
+
+			for  i = 1, data.num do
+				local button = LibActionButton:CreateButton(i, '$parentButton'..i, bar)
+				button:SetState(0, 'action', i)
+				for k = 1, 14 do
+					button:SetState(k, 'action', (k - 1) * 12 + i)
+				end
+
+				add(button)
+
+				button._parent 	= bar
+				button._command = data.type..i
+
+				button.UpdateFlyoutDirection 	= AddConfig
+				button.UpdateGrid 				= AddConfig
+				button.UpdateCountFont 			= UpdateFont
+				button.UpdateHotKey 			= UpdateHotkey
+				button.UpdateMacro 				= UpdateMacro
+
+				if  not button.bo then
+					ns.BU(button, .75, true, 30)
+					ns.BUElements(button)
+					ns.BUBorder(button)
+					hooksecurefunc(button.Border, 'Show', UpdateBorderColour)
+					hooksecurefunc(button.Border, 'Hide', UpdateBorderColour)
+				end
+
+				local bu = _G[data.buttons..'Button'..i]
+				bu:SetAllPoints(button)
+				bu:SetAttribute('statehidden', true)
+				bu:SetParent(hide)
+				bu:SetScript('OnEvent', nil)
+				bu:SetScript('OnUpdate', nil)
+				bu:UnregisterAllEvents()
+
+				bar._buttons[i] = button
+			end
+
+			bar:SetAttribute('_onstate-page', [[
+				if HasTempShapeshiftActionBar() then
+					newstate = GetTempShapeshiftBarIndex() or newstate
+				end
+				self:SetAttribute('state', newstate)
+				control:ChildUpdate('state', newstate)
+			]])
+
+			RegisterStateDriver(bar, 'page', id == 'bar1' and AddBarPage() or data.page)
+		end
+
+		for id, bar in next, ABARS do
+			if  id == 'bar1' then
+				for i = 1, 12 do
+					bar:SetFrameRef('button'..i, _G['iipActionBar1Button'..i])
+				end
+
+				controller:Execute([[
+					buttons = table.new()
+					for i = 1, 12 do
+						table.insert(buttons, self:GetFrameRef('button'..i))
+					end
+				]])
+
+				controller:SetAttribute('_onstate-page', [[
+					-- print('_onstate-page','index',newstate)
+					for i, button in next, buttons do
+					  button:SetAttribute('actionpage', newstate)
+					end
+				]])
+
+				RegisterStateDriver(controller, 'mode', '[vehicleui][petbattle][overridebar][possessbar] 6; 12')
+			end
+
+			AddPositions(bar)
+			Update(bar)
+		end
+	end
+
+	local AddWrapper = function()
+		controller = CreateFrame('Frame', 'iipActionBarWrapper', UIParent, 'SecureHandlerStateTemplate')
+		controller:SetSize(32, 32)
+		controller:SetPoint'BOTTOM'
+		controller:SetAttribute('numbuttons', 12)
 	end
 
 	local SetPositions = function()
-		local GridSplit = ns.DELEGATE_ACTUAL_BARS_SHOWN and math.ceil(ns.DELEGATE_ACTUAL_BARS_SHOWN/2) + 1 or 1
+		for id,  bar in next, ABARS do
+			local one, two, three, four	= GetActionBarToggles()
+			local t	= bars[id]
+			local point
 
-		--  this has to be reparented to our new bar
-		--  in order for its child elements to show in their updated positions
-		MainMenuBarArtFrame:SetParent(_G['iipBar1'])
-		MainMenuBarArtFrame:EnableMouse(false)
-
-		--  unpack bar positions
-		for i = 1, 7 do
-			local point, parent, relpoint, x, y
-			local name = 'iipBar'..i
-			local bar  = _G[name]
-			if ns.DELEGATE_ACTUAL_BARS_SHOWN and ns.DELEGATE_ACTUAL_BARS_SHOWN == 5 then
-				point, parent, relpoint, x, y = GetPositionsFive(name)
-			elseif ns.DELEGATE_ACTUAL_BARS_SHOWN and ns.DELEGATE_ACTUAL_BARS_SHOWN == 3 then
-				point, parent, relpoint, x, y = GetPositionsThree(name)
-			elseif ns.DELEGATE_ACTUAL_BARS_SHOWN and ns.DELEGATE_ACTUAL_BARS_SHOWN == 4 then
-				point, parent, relpoint, x, y = GetPositionsGridded(name)
-			elseif ns.DELEGATE_ACTUAL_BARS_SHOWN and ns.DELEGATE_ACTUAL_BARS_SHOWN == 1 and (i == 6 or i == 7) then
-				point, parent, relpoint, x, y = GetPetPositionsBasic(name)
+			if  two and t.wrappositions then
+				point = t.wrappositions
 			else
-				point, parent, relpoint, x, y = GetPositionsStacked(name)
+				point = t.positions
 			end
+
 			bar:ClearAllPoints()
-			bar:SetPoint(point, parent, relpoint, x, y)
+			bar:SetPoint(point[1], point[2], point[3], point[4], point[5])
+			UpdateVisibility(bar)
 		end
-
-		--	reposition other elements
-		SetEABPosition()
-		SetPagingPosition()
-	end
-
-	local AddVehicleLeaveButton = function(self, event, ...)
-		local bu = CreateFrame('CheckButton', 'iipVehicleExitButton', UIParent, 'ActionButtonTemplate, SecureHandlerClickTemplate')
-		ns.BU(bu)
-		ns.BD(bu)
-		ns.BDStone(bu, 6)
-		bu:SetPoint('RIGHT', MainMenuBarBackpackButton, -50, 0)
-  		bu:RegisterForClicks'AnyUp'
-  		bu:SetFrameLevel(4)
-		add(bu)
-
-		bu.icon:SetDrawLayer'OVERLAY'
-		bu.icon:SetTexture[[Interface\Vehicles\UI-Vehicles-Button-Exit-Up]]
-		bu.icon:ClearAllPoints()
-		bu.icon:SetPoint('CENTER', bu)
-		bu.icon:SetSize(21, 21)
-		bu.icon:SetTexCoord(.2, .8, .2, .8)
-
-  		bu:SetScript('OnClick', function() VehicleExit() bu:SetChecked(false) end)
-		RegisterStateDriver(bu, 'visibility', '[canexitvehicle] show; hide')
-	end
-
-	local GetButtonList = function(buttonName, numButtons)
-	  	local buttonList = {}
-	  	for i = 1, numButtons do
-	    	local  button = _G[buttonName..i]
-	    	if not button then break end
-	    	table.insert(buttonList, button)
-	  	end
-	  	return buttonList
-	end
-
-	local AddFloatingGrid = function()
-		local list = GetButtonList('ActionButton', 12)
-	    if  InCombatLockdown() then
-	      	lip:RegisterEvent('PLAYER_REGEN_ENABLED', 	 AddFloatingGrid)
-	      	return
-	    end
-	    local var = tonumber(GetCVar'alwaysShowActionBars')
-		lip:UnregisterEvent('PLAYER_REGEN_ENABLED',		 AddFloatingGrid)
-	    for i, button in next, list do
-			button:SetAttribute('showgrid', var)
-			ActionButton_ShowGrid(button)
-		end
-	end
-
-	local AddPaging = function(bar)
-		local list = GetButtonList('ActionButton', 12)
-		for _, v in pairs({
-			ActionBarUpButton, ActionBarDownButton
-		}) do
-			add(v)
-		end
-		for i, button in next, list do
-			bar:SetFrameRef('ActionButton'..i, button)
-		end
-		RegisterStateDriver(bar, 'visibility', '[petbattle] hide; show')
-		bar:Execute(([[
-			buttons = table.new()
-			for i = 1, %d do
-			  table.insert(buttons, self:GetFrameRef("%s"..i))
-			end
-		]]):format(NUM_ACTIONBAR_BUTTONS, 'ActionButton'))
-		bar:SetAttribute('_onstate-page', [[
-			-- print('_onstate-page','index',newstate)
-			for i, button in next, buttons do
-			  button:SetAttribute('actionpage', newstate)
-			end
-		]])
-		RegisterStateDriver(bar, 'page', '[overridebar]14;[shapeshift]13;[vehicleui]12;[possessbar]12;[bonusbar:5]11;[bonusbar:4]10;[bonusbar:3]9;[bonusbar:2]8;[bonusbar:1]7;[bar:6]6;[bar:5]5;[bar:4]4;[bar:3]3;[bar:2]2;1')
-	end
-
-	local AddBars = function()					-- 1:  action 	2:  multileft 	3:  multiright
-		for i = 1, 7 do							-- 4:  right	5:  left	6:  stance	7: pet
-			local x, y = _G['ActionButton1']:GetSize()
-			local bar  = CreateFrame('Button', 'iipBar'..i, f, 'SecureHandlerStateTemplate')
-			bar:SetFrameLevel(2)
-
-			bar:SetSize((x*12) + 2.3*(i < 7 and 12 or 10), y)
-			add(bar)
-			if  i == 1 then
-				AddFloatingGrid()
-				AddPaging(bar)
-			else
-				-- RegisterStateDriver(bar, 'visibility', '[petbattle][overridebar][possessbar,@vehicle,exists] hide; show')
-			end
-		end
-		AddVehicleLeaveButton()
-		SetPositions()
-	end
-
-	local AddBarBD = function(bu, parent)
-		if  bu:IsShown() then
-			if not parent.bd then
-				parent.bd = CreateFrame('Frame', nil, bu)
-				parent.bd:SetBackdrop({
-					bgFile = [[Interface\Buttons\WHITE8x8]],
-					insets = {left = -2, right = -2, top = -2, bottom = -2}
-				})
-				parent.bd:SetBackdropColor(.05, .05, .05)
-				parent.bd:SetPoint('TOPLEFT',  -5, 6)
-				parent.bd:SetPoint('BOTTOMRIGHT', parent, 10, -6)
-				parent.bd:SetFrameLevel(2)
-
-				parent.bd.t = parent.bd:CreateTexture(nil, 'ARTWORK')
-				parent.bd.t:SetAllPoints()
-				parent.bd.t:SetTexture[[Interface/PLAYERACTIONBARALT/STONE]]
-				parent.bd.t:SetTexCoord(0, 1, .18, .3)
-
-				parent.bd.bo = parent.bd:CreateTexture(nil, 'BACKGROUND', nil, -7)
-				parent.bd.bo:SetPoint('TOPLEFT', -14, 12)
-				parent.bd.bo:SetPoint('BOTTOMRIGHT', 14, -12)
-				parent.bd.bo:SetTexture[[Interface/ACHIEVEMENTFRAME/UI-Achievement-Alert-Background-Mini]]
-				parent.bd.bo:SetVertexColor(225/255, 225/255, 225/255)
-			end
-		end
-	end
-
-	local HideBar = function(parent)
-		if  parent then
-			if  InCombatLockdown() then
-				parent:RegisterEvent'PLAYER_REGEN_ENABLED'
-				parent:SetScript('OnEvent', function(self)
-					self:Hide()
-					self:UnregisterAllEvents()
-				end)
-			else
-				parent:Hide()
-			end
-		end
-	end
-
-	local ShowBar = function(parent)
-		if  parent then
-			if  InCombatLockdown() then
-				parent:RegisterEvent'PLAYER_REGEN_ENABLED'
-				parent:SetScript('OnEvent', function(self)
-					self:Show()
-					self:UnregisterAllEvents()
-				end)
-			else
-				parent:Show()
-			end
-		end
-	end
-
-	local AddEAB = function(self)
-		if  HasExtraActionBar() then
-			local bar = ExtraActionBarFrame
-			bar.button.style:SetSize(140, 70)
-			bar.button.style:SetDrawLayer('BACKGROUND', -7)
-			ns.BD(bar.button)
-		end
-	end
-
-	local AddFlyout = function(self)
-		local i  = 1
-	  	while   _G['SpellFlyoutButton'..i] and i <= 13 do
-			if self:GetParent():GetName():sub(1, 5) == 'Spell' then
-				remove(_G['SpellFlyoutButton'..i])
-				remove(SpellFlyout)
-			else
-				add(_G['SpellFlyoutButton'..i])
-				add(SpellFlyout)
-			end
-			ns.STICKY_BAR_MOUSEOVER()
-			i = i + 1
-		end
-	end
-
-	local AddButtonsToBar = function(num, name, parent)
-		for i = 1, num do
-			local bu = _G[name..i]
-			add(bu)
-			bu:ClearAllPoints()
-			if  i == 1 then
-				bu:SetPoint('BOTTOMLEFT', parent)
-				if  name ~= 'PetActionButton' and name ~= 'StanceButton' then
-					AddBarBD(bu, parent)
-				end
-			else
-				bu:SetPoint('LEFT', _G[name..i - 1], 'RIGHT', name == 'StanceButton' and 12 or name == 'PetActionButton' and 6 or 3, 0)
-			end
-			--  stance bar will show or hide whether the player uses it or not
-			--  so w have to override it in our factory
-			if  name == 'StanceButton' then
-				bu:SetFrameLevel(0)
-				if  bu:IsShown() then
-					bu.stanceUsed = true
-				else
-					bu.stanceUsed = nil
-				end
-				if  StanceBarFrame:IsShown() then
-					_G['iipBar6']:Show() bu:Show() bu:SetParent(parent)
-				else
-					_G['iipBar6']:Hide() bu:Hide()
-				end
-			end
-			--  pet bar is parented to blizzard frames that we hide, so parent it to bar
-			if  name == 'PetActionButton' then
-				bu:SetParent(parent)
-			end
-		end
-	end
-
-	local AddStancePositions = function()
-		local i = 0
-		for j = 1, 10 do
-			local bu = _G['StanceButton'..j]
-			if bu and bu.stanceUsed then i = i + 1 end
-		end
-		local bu = _G['StanceButton1']
-		bu:ClearAllPoints()
-		bu:SetPoint('BOTTOM', _G['iipBar6'], i > 1 and -(20*i) + 16 or 0, 0)
 	end
 
 	local PositionBarsAfterCombat = function()
-		lip:UnregisterEvent('PLAYER_REGEN_ENABLED', PositionBarsAfterCombat)
-		C_Timer.After(1.5, SetPositions)
+		e:UnregisterEvent'PLAYER_REGEN_ENABLED'
+		SetPositions()
 	end
 
-	local SetUpButtons = function()
-			-- create single backpack button
-		ns.AddBackpack()
-			-- create bars to parent buttons to
-		AddBars()
-			--  begin button reparenting
-		AddButtonsToBar(12, 'ActionButton',             	_G['iipBar1'])
-		AddButtonsToBar(12, 'MultiBarBottomLeftButton', 	_G['iipBar2'])
-		AddButtonsToBar(12, 'MultiBarBottomRightButton', 	_G['iipBar3'])
-		AddButtonsToBar(12, 'MultiBarRightButton',	  	_G['iipBar4'])
-		AddButtonsToBar(12, 'MultiBarLeftButton',		_G['iipBar5'])
-		AddButtonsToBar(10, 'StanceButton',			_G['iipBar6'])
-		AddButtonsToBar(10, 'PetActionButton',			_G['iipBar7'])
-		AddStancePositions()
-			--  set new ExtraActionButton format
-		hooksecurefunc('ExtraActionBar_Update', AddEAB)
-			-- 	position bars
-			--	TODO:	this event runs fairly infrequently but we should double check
-			--			that we're not overdoing it
-		hooksecurefunc('MultiActionBar_Update', function()
-			if InCombatLockdown() then
-				lip:RegisterEvent('PLAYER_REGEN_ENABLED', PositionBarsAfterCombat)
+	re:SetScript('OnEvent', PositionBarsAfterCombat)
+
+	local PLAYER_LOGIN = function()
+		if  not created then
+			AddWrapper()
+			AddBars()
+
+			-- MODULE:CreatePetActionBar()
+			-- MODULE:CreatePetBattleBar()
+			-- MODULE:CreateExtraButton()
+			-- MODULE:CreateZoneButton()
+			-- MODULE:CreateVehicleExitButton()
+			-- CreateMicroMenu()
+			-- CreateXPBar()
+
+			ReassignBindings()
+
+			--MODULE:UpdateBlizzVehicle()
+
+			e:RegisterEvent('PET_BATTLE_CLOSE',	ReassignBindings)
+			e:RegisterEvent('PET_BATTLE_OPENING_DONE', ClearBindings)
+			e:RegisterEvent('UPDATE_BINDINGS', ReassignBindings)
+
+			if  C_PetBattles.IsInBattle() then
+				ClearBindings()
 			else
-				C_Timer.After(1.5, SetPositions)
+				ReassignBindings()
 			end
-		end)
-	end
 
-	SpellFlyout:HookScript('OnShow', AddFlyout)
+			SetPositions()
+			hooksecurefunc('MultiActionBar_Update', function()
+				if  InCombatLockdown() then
+					re:RegisterEvent'PLAYER_REGEN_ENABLED'
+				else
+					SetPositions()
+				end
+			end)
 
-	hooksecurefunc('MultiActionBar_UpdateGridVisibility', AddFloatingGrid)
-	hooksecurefunc('HidePetActionBar', function()
-		HideBar(_G['iipBar7'])
-	end)
-	hooksecurefunc('ShowPetActionBar', function()
-		ShowBar(_G['iipBar7'])
-	end)
+			-- completely ridiculous, but this solves the problem with tainting frames
+			-- by entering/leaving combat before vars are properly reflecting which of our bars are enabled
+			-- ...we just delay its registration past the "not in combat" window after login
+			C_Timer.After(2, function()
+				hooksecurefunc('SetActionBarToggles', function()
+					if  InCombatLockdown() then
+						re:RegisterEvent'PLAYER_REGEN_ENABLED'
+					else
+						C_Timer.After(1.25, SetPositions)
+					end
+				end)
+			end)
 
-	local e = CreateFrame'Frame'
-	e:RegisterEvent'PLAYER_ENTERING_WORLD'
-	e:SetScript('OnEvent', SetUpButtons)
-
-	local updated = false
-	local uuupdate = function(self)
-		if not updated then
-			for i, v in pairs(FADEFRAMES) do
-				print(v:GetName())
-			end
-			updated = true
+			created = true
 		end
 	end
+
+	e:RegisterEvent'PLAYER_LOGIN'
+	e:SetScript('OnEvent', PLAYER_LOGIN)
+
+
 
 
 	--

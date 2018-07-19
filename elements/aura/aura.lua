@@ -10,7 +10,7 @@
             sort            = 'TIME',
             minWidth        = 330,
             minHeight       = 100,
-            x               = -32,
+            x               = -38,
             y               = 0,
             wrapAfter       = 6,
             wrapY           = -42,
@@ -52,14 +52,12 @@
 
     local UpdateSB = function(self, duration, expiration)
         self.sb:Hide()
-        self.stone:SetPoint('BOTTOMRIGHT', self, 4, -4)
         if  expiration and duration > 0 then
-            local p = duration/expiration
+            -- local p = duration/expiration
             self.sb:SetMinMaxValues(0, duration)
             self.sb:SetValue(expiration)
-            self.sb:SetStatusBarColor(self.debuff and 1*p or 0, self.debuff and 0 or 1*p, 0)
+            self.sb:SetStatusBarColor(self.debuff and 1 or 0, self.debuff and 0 or 1, 0)
             self.sb:Show()
-            self.stone:SetPoint('BOTTOMRIGHT', self, 4, -12)
         end
     end
 
@@ -78,10 +76,14 @@
             self.Name:SetTextColor(colour.r*1.7, colour.g*1.7, colour.b*1.7)    -- brighten up
             self.Name:SetWidth(120)
             self.Name:SetWordWrap(true)
-            self.bo:SetBackdropBorderColor(colour.r, colour.g, colour.b)
+            for  i, v in pairs(self.F.bo) do
+                 self.F.bo[i]:SetVertexColor(colour.r, colour.g, colour.b)
+            end
         else
             self.Name:SetText''
-            self.bo:SetBackdropBorderColor(0, 0, 0, 0)
+            for  i, v in pairs(self.F.bo) do
+                 self.F.bo[i]:SetVertexColor(1, 1, 1)
+            end
         end
     end
 
@@ -89,10 +91,11 @@
     	if attribute ~= 'index' then return end
         local header = self:GetParent()
         local unit, filter = header:GetAttribute'unit', header:GetAttribute'filter'
-    	local name, _, icon, count, dtype, duration, expiration = UnitAura(unit, index, filter)
+        local name, icon, count, dtype, duration, expiration = UnitAura(unit, index, filter)
+        --local name, texture, count, dtype, duration, expiration
     	if  name then
     		self:SetNormalTexture(icon)
-    		self.Count:SetText(count > 1 and count or '')
+    		self.Count:SetText(count > 0 and count or '')
 
             self.debuff     = false
             self.duration   = duration
@@ -112,41 +115,48 @@
     local AddButton = function(self, name, bu)
     	if not name:match'^child' then return end       -- ty p3lim
 
-    	ns.BD(bu)
-        ns.BUBorder(bu)
-        ns.BDStone(bu)
-
     	bu:SetScript('OnUpdate',            OnUpdate)
         bu:SetScript('OnAttributeChanged',  OnAttributeChanged)
 
-    	local icon = bu:CreateTexture('$parentTexture', 'BORDER')
+        bu.F = CreateFrame('Frame', nil, bu)
+        bu.F:SetAllPoints()
+        ns.BD(bu)
+
+        ns.BUBorder(bu.F, 20)
+
+    	local icon = bu:CreateTexture('$parentTexture', 'ARTWORK')
     	icon:SetAllPoints()
     	icon:SetTexCoord(.1, .9, .1, .9)
 
         local name = bu:CreateFontString('$parentName', nil, 'iipAuraFont')
+        name:SetFont([[Fonts\skurri.ttf]], 14)
+        name:SetShadowOffset(1, -1)
+    	name:SetShadowColor(0, 0, 0)
         name:SetJustifyH'RIGHT'
         name:SetPoint('RIGHT', bu, 'LEFT', -15, 2)
 
     	local d = bu:CreateFontString('$parentDuration', nil, 'GameFontNormalSmall')
-    	d:SetPoint('TOP', bu, 'BOTTOM', 0, -12)
+    	d:SetPoint('TOP', bu, 'BOTTOM', 0, -8)
 
     	local count = bu:CreateFontString('$parentCount', nil, 'iipAuraFont')
-    	count:SetPoint('BOTTOMRIGHT', -1, 1)
+        count:SetParent(bu.F)
+        count:SetJustifyH'CENTER'
+    	count:SetPoint('CENTER', bu, 'TOP', 0, 2)
 
         local sb = CreateFrame('StatusBar', nil, bu)
+        ns.BD(sb, 1, -2)
         ns.SB(sb)
         sb:SetHeight(5)
         sb:SetPoint'LEFT'
         sb:SetPoint'RIGHT'
-        sb:SetPoint('TOP', bu, 'BOTTOM', 0, -3)
+        sb:SetPoint'BOTTOM'
         sb:SetMinMaxValues(0, 1)
         sb:Hide()
 
-        sb.bg = sb:CreateTexture(nil, 'BACKGROUND')
-        sb.bg:SetTexture[[Interface\ChatFrame\ChatFrameBackground]]
-        sb.bg:SetPoint('TOPLEFT', -3, 1)
-        sb.bg:SetPoint('BOTTOMRIGHT', 3, -3)
-        sb.bg:SetVertexColor(0, 0, 0)
+        sb.bg = sb:CreateTexture(nil, 'BORDER')
+        ns.SB(sb.bg)
+        sb.bg:SetAllPoints()
+        sb.bg:SetVertexColor(.2, .2, .2)
 
         bu:SetFontString(d)
         bu:SetNormalTexture(icon)

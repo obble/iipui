@@ -2,7 +2,7 @@
 
 	local _, ns = ...
 
-	local size, spacing = 26, 3
+	local size, spacing = 28, 9
 	local buttons, bankbuttons = {}, {}
 
 	local ibag  = _G['iipbag']
@@ -85,9 +85,9 @@
 		local hidden = nil
 		for i = 0, 3 do
 			local slot = _G['CharacterBag'..i..'Slot']
-			if  GetInventoryItemTexture('player', slot:GetID()) then 
+			if  GetInventoryItemTexture('player', slot:GetID()) then
 				slot:Show()
-			else 
+			else
 				slot:Hide()
 				hidden = true
 			end
@@ -389,6 +389,8 @@
 	OpenAllBags    = OpenBags
 	OpenBackpack   = OpenBags
 	CloseAllBags   = CloseBags
+
+	hooksecurefunc('ContainerFrame_Update', HideBagSmall)
 
 	ibag.CloseButton:SetScript('OnClick', ToggleBags)
 	ibank.CloseButton:SetScript('OnClick', function() HideBank() CloseBankFrame() HideBankArt() end)

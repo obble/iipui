@@ -1,12 +1,13 @@
 
 
     local _, ns = ...
+    local e = CreateFrame'Frame'
 
-    local OverrideLFD = function(self)
+    local OverrideLFD = function(self, override)
 		local LFDRole = self.LFDRole
-		if LFDRole then
-			local role    = UnitGroupRolesAssigned(self.unit)
-			if self.Modifier and self.Modifier:IsShown() or self.RaidTargetIndicator:IsShown() then
+		if  LFDRole then
+			local role = UnitGroupRolesAssigned(self.unit)
+			if  (self.Modifier and self.Modifier:IsShown()) or self.RaidTargetIndicator:IsShown() or override then
 				LFDRole:SetTexture''
 				LFDRole:Hide()
 			elseif role == 'HEALER' then
@@ -24,19 +25,36 @@
 		end
 	end
 
+    local UpdateName = function(self, unit, show)
+        local v, max = UnitHealth(unit), UnitHealthMax(unit)
+        if not self.Name then return end
+        self.Name:Hide()
+        if  show and (not self.Name.locked) and (v == max or v == 0) then
+            self.Name:Show()
+        end
+    end
+
 	local UpdateModifier = function(self, unit)
 		if  self.Modifier then
 			self.Modifier:Hide()
+            UpdateName(self, unit, true)
+            if self.Health.percent then self.Health.percent:Show() end
 			if  UnitIsDead(unit) then
 				self.Modifier:SetTexture[[Interface\AddOns\iipui\art\group\modifier\dead]]
 				self.Modifier:Show()
+                UpdateName(self, unit, false)
+                if self.Health.percent then self.Health.percent:Hide() end
 			elseif UnitIsGhost(unit) then
 				self.Modifier:SetTexture[[Interface\AddOns\iipui\art\group\modifier\ghost]]
 				self.Modifier:Show()
+                UpdateName(self, unit, false)
+                if self.Health.percent then self.Health.percent:Hide() end
 			elseif UnitIsAFK(unit) then
 				self.Modifier:SetTexture[[Interface\AddOns\iipui\art\group\modifier\afk]]
 				self.Modifier:Show()
-			end
+                UpdateName(self, unit, false)
+                if self.Health.percent then self.Health.percent:Hide() end
+            end
 		end
 		OverrideLFD(self)
 	end
@@ -58,22 +76,50 @@
 	end
 
 	local PostUpdateHealth = function(Health, unit)
-		local _, class = UnitClass(unit)
-		local colour   = RAID_CLASS_COLORS[class]
-		if  UnitIsPlayer(unit) and colour then
-			UpdateModifier(Health:GetParent(), unit)
-			Health.back:SetVertexColor(colour.r*.2, colour.g*.2, colour.b*.2)
-		end
+		local _, class  = UnitClass(unit)
+		local colour    = RAID_CLASS_COLORS[class]
+        local parent    = Health:GetParent()
+        local v, max    = UnitHealth(unit), UnitHealthMax(unit)
+        local cv = GetCVar'statusTextDisplay'
+        if  cv and cv == 'BOTH' then
+            if  string.find(parent:GetName(), 'tank') then
+                Health.value:ClearAllPoints()
+                Health.value:SetPoint('LEFT', 7, 0)
+            elseif string.find(parent:GetName(), 'dps') then
+                Health.value:ClearAllPoints()
+                Health.value:SetPoint('TOP', 0, -4)
+            end
+        else
+            if  string.find(parent:GetName(), 'tank') then
+                Health.value:ClearAllPoints()
+                Health.value:SetPoint'CENTER'
+            elseif string.find(parent:GetName(), 'dps') then
+                Health.value:ClearAllPoints()
+                Health.value:SetPoint('TOP', 0, -4)
+            end
+        end
+        if  UnitIsPlayer(unit) and colour then
+            UpdateModifier(parent, unit)
+            Health.back:SetVertexColor(colour.r*.2, colour.g*.2, colour.b*.2)
+        end
+        if  v < max then
+            OverrideLFD(parent, true)
+            UpdateName(parent, unit, false)
+            if  parent.Auras and parent.Auras.visibleBuffs > 0 then
+                Health.value:Hide()
+                if Health.percent then Health.percent:Hide() end
+            else
+                Health.value:Show()
+                if Health.percent then Health.percent:Show() end
+            end
+        end
 	end
 
 	local PostUpdateReadyCheckFade = function(self)
 		local Health     = self:GetParent()
-		local Silhouette = Health:GetParent().Silhouette
+		local LFDRole    = self.LFDRole
 		if  LFDRole and not LFDRole:IsShown() then
 			LFDRole:Show()
-		end
-		if  Silhouette and not Silhoutte:IsShown() then
-			Silhouette:Show()
 		end
 	end
 
@@ -84,78 +130,25 @@
 		if  self:IsShown() and LFDRole and LFDRole:IsShown() then
 			LFDRole:Hide()
 		end
-		if  self:IsShown() and Silhouette and Silhoutte:IsShown() then
-			Silhouette:Hide()
-		end
 	end
 
-	local AnimName = function(self, unit)
-		if  _G['iipRaidStats_GRIDName'] then
-			local name     = UnitName(unit)
-			local _, class = UnitClass(unit)
-			local colour   = RAID_CLASS_COLORS[class]
-			local parent   = _G['iipRaidStats']
-			local frame    = _G['iipRaidStats_GRIDName']	-- use ns
-
-			if not SlidingGroupName then
-				local slideGroup = frame:CreateAnimationGroup'SlidingGroupName'
-
-				local slide = slideGroup:CreateAnimation'Translation'
-				slide:SetDuration(.22)
-				slide:SetOffset(-18, 0)
-				slide:SetSmoothing'OUT'
-				slide:SetScript('OnPlay', function()
-					frame:ClearAllPoints()
-					frame:SetPoint('BOTTOMLEFT', parent, 15, -20)
-				end)
-				slide:SetScript('OnFinished', function()
-					active = false
-					frame:ClearAllPoints()
-					frame:SetPoint('BOTTOMLEFT', parent, -3, -20)
-					slideGroup:Stop()
-				end)
-
-				local fade = slideGroup:CreateAnimation'Alpha'
-				fade:SetFromAlpha(0)
-				fade:SetToAlpha(1)
-				fade:SetDuration(.5)
-				fade:SetSmoothing'OUT'
-			end
-
-			SlidingGroupName:Play()
-
-			if colour then
-				frame:SetText(name and '|c'..colour.colorStr..strupper(name)..'|r')
-			else
-				frame:SetText(name and '|cffffc800'..strupper(name)..'|r')	-- probably a vehicle
-			end
-		end
-	end
-
-	local AnimHover = function(self, unit, enable)
-		if not enable then return end
-		self.Hover:Show()
-		if not pulseGroup then
-			local pulseGroup = self.Hover:CreateAnimationGroup(self:GetName()..'pulseGroup')
-			pulseGroup:SetLooping'BOUNCE'
-
-			local pulse = pulseGroup:CreateAnimation'Alpha'
-			pulse:SetDuration(.75)
-			pulse:SetFromAlpha(.8)
-			pulse:SetToAlpha(0)
-			pulse:SetSmoothing'OUT'
-		end
-		_G[self:GetName()..'pulseGroup']:Play()
-	end
+    local auraGroupElement = {
+        party   = 'Buffs',
+        raid    = 'Buffs'
+    }
+    local auraGroupDecurseElement = {
+        party   = 'Debuffs',
+        raid    = 'Debuffs'
+    }
 
     ns.AddGroupAuraElement = function(frame, unit, enable)
-		local auraElementForUnit 		 = ns.auraGroupElement[unit]
-		local auraDecurseElementsForUnit = ns.auraGroupDecurseElement[unit]
+		local auraElementForUnit 		 = auraGroupElement[unit]
+		local auraDecurseElementsForUnit = auraGroupDecurseElement[unit]
 		if  enable and auraElementForUnit then
             --  buffs [circular tracker]
             local Auras = CreateFrame('Frame', nil, frame)
             Auras:SetPoint('CENTER', 0, -1)
-            Auras:SetSize(35, 35)
+            Auras:SetSize(50, 50)
             ns.SetGroupPosition(Auras)
 
             Auras['num']              = 3
@@ -163,9 +156,10 @@
             Auras.SetPosition	      = enable and ns.SetGroupPosition
             Auras.PostCreateIcon      = enable and ns.PostCreateIcon
             Auras.PostUpdateIcon      = enable and ns.PostUpdateGroupIcon
+            Auras.PostUpdate          = enable and ns.PostUpdateGroupAuras
             Auras.CustomFilter        = enable and ns.CustomGroupAuraFilter
 
-            frame[auraElementForUnit] = Auras
+            frame.Auras = Auras
         end
         if enable and auraDecurseElementsForUnit then
 			--  debuffs [status icons]
@@ -201,25 +195,48 @@
             ReadyCheck.PostUpdate        = PostUpdateReadyCheck
             ReadyCheck.PostUpdateFadeOut = PostUpdateReadyCheckFade
         end
+    end
 
-        -- hover events
-        if  Hover then
-            self:HookScript('OnLeave', function()
-    		    if  _G['iipRaidStats_GRIDName'] then
-    				_G['iipRaidStats_GRIDName']:SetText''
-    			end
-    		    Hover:Hide()
-    			_G[self:GetName()..'pulseGroup']:Stop()
-    		end)
+    local OnEvent = function(self, event)
+        local frames = {
+            ['tank']    = 'TANK',
+            ['support'] = 'HEALER',
+            ['dps']     = 'DAMAGER' or 'NONE',
+        }
+        if  event == 'PLAYER_REGEN_ENABLED' then
+            e:UnregisterEvent'PLAYER_REGEN_ENABLED'
+        end
 
+        if  IsInGroup() and not IsInRaid() then
+            local f = _G['oUF_party']
+            f.header:Show()
+            f.header.t:Show()
+        else
+            local f = _G['oUF_party']
+            f.header:Hide()
+            f.header.t:Hide()
+        end
 
-    		self:HookScript('OnEnter', function()
-    			local last = 0
-    			AnimName(self,  unit)
-    			AnimHover(self, unit, true)
-    		end)
+        for  i, v in pairs(frames) do
+            local f = _G['oUF_'..i]
+            if f and f.header then
+                if InCombatLockdown() then
+                    e:RegisterEvent'PLAYER_REGEN_ENABLED'
+                    return
+                elseif  RaidInfoCounts and RaidInfoCounts['totalRole'..v] > 0 then
+                    f.header:Show()
+                    f.header.t:Show()
+                else
+                    f.header:Hide()
+                    f.header.t:Hide()
+                end
+            end
         end
     end
+
+    e:RegisterEvent'PLAYER_ENTERING_WORLD'
+    e:RegisterEvent'GROUP_ROSTER_UPDATE'
+    e:SetScript('OnEvent', OnEvent)
 
 
     --

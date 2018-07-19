@@ -30,7 +30,7 @@
 	hooksecurefunc(VehicleSeatIndicator,'SetPoint', function(self, _, parent)
 		if  parent == 'MinimapCluster' or parent == _G['MinimapCluster'] then
 			self:ClearAllPoints()
-			self:SetPoint('TOP', Minimap, 'BOTTOM', 0, -60)
+			self:SetPoint('BOTTOM', Minimap, 'TOP', 0, 36)
 			self:SetScale(.7)
 		end
 	end)

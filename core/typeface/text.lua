@@ -26,7 +26,7 @@
 							WorldMapFrameAreaDescription,
 							WorldMapFrameAreaPetLevels
 						},
-		['toast']	 = {	
+		['toast']	 = {
 							BNToastFrameTopLine,
 							BNToastFrameMiddleLine,
 							BNToastFrameBottomLine,
@@ -94,9 +94,8 @@
 	t:SetShadowColor(0, 0, 0)
 
 	local t = CreateFont'iipAuraFont'
-	t:SetFont([[Fonts\skurri.ttf]], 12)
-	t:SetShadowOffset(1, -1)
-	t:SetShadowColor(0, 0, 0)
+	t:SetFont([[Fonts\skurri.ttf]], 14, 'THICKOUTLINE')
+	t:SetShadowOffset(0, 0)
 
 
 	--

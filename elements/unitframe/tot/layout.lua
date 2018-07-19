@@ -11,10 +11,10 @@
 		local Health, Power, Castbar, RaidIcon = self.Health, self.Power, self.Castbar, self.RaidTargetIndicator
 
 		local Name = self:CreateFontString(nil, 'OVERLAY', 'iipNameFontSmall')
-		Name:SetPoint('LEFT', self, 'RIGHT', 45, 0)
-		Name:SetJustifyH'LEFT'
+		Name:SetPoint('RIGHT', self, 'LEFT', -15, 0)
+		Name:SetJustifyH'RIGHT'
 		Name:SetWidth(65)
-		Name:SetWordWrap(false)
+		Name:SetWordWrap(true)
 
 		Health:SetPoint'BOTTOM'
 		ns.BD(Health)
@@ -31,8 +31,14 @@
 		Portrait.BG:SetSize(42, 42)
 		Portrait.BG:SetTexture[[Interface\Artifacts\Artifacts]]
 		Portrait.BG:SetPoint('CENTER', Portrait)
-		Portrait.BG:SetTexCoord(.49, .58, .875, .9625)
+		Portrait.BG:SetTexCoord(.25, .34, .86, .9475)
 		Portrait.BG:SetVertexColor(.666, .666, .666)
+
+		Portrait.Elite = self.Health:CreateTexture(nil, 'OVERLAY')
+		Portrait.Elite:SetAtlas'worldquest-questmarker-dragon'
+		Portrait.Elite:SetSize(36, 36)
+		Portrait.Elite:SetPoint('TOP', Portrait.BG, 3, -3)
+		Portrait.Elite:Hide()
 
 		Portrait.shadow = self:CreateTexture(nil, 'BACKGROUND', nil, -7)
 		Portrait.shadow:SetSize(36, 36)

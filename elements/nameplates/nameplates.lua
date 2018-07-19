@@ -29,7 +29,6 @@
         for _, frame in pairs(C_NamePlate.GetNamePlates()) do
             frame.UnitFrame.target:Hide()
             if  frame.namePlateUnitToken and UnitIsUnit(frame.namePlateUnitToken, 'target') then
-                -- print'true'
                 frame.UnitFrame.target:Show()
             end
         end
@@ -70,7 +69,11 @@
                 frame.flag:SetAtlas'worldquest-questmarker-dragon'
                 frame.flag:SetSize(22, 22)
                 frame.flag:Show()
-                if c == 'elite' then frame.flag:SetDesaturated(false) else frame.flag:SetDesaturated(true) end
+                if  c == 'elite' then
+                    frame.flag:SetDesaturated(false)
+              else
+                    frame.flag:SetDesaturated(true)
+                end
             elseif q then
                 frame.flag:SetAtlas'worldquest-questmarker-questbang'
                 frame.flag:SetSize(6, 15)
@@ -100,12 +103,14 @@
         self:SetHeight(10)                      --  1 more px to match, no idea why
         ns.SB(self)
         ns.BD(self, 1, -2)
+
         if  not self.background then
-            self.background = self:CreateTexture(nil, 'BORDER', nil, 7)
-            ns.SB(self.background)
-            self.background:SetAllPoints()
-            self.background:SetVertexColor(.35, .35, .35)
+            self.background = self:CreateTexture(nil, 'OVERLAY', nil, 7)
         end
+        ns.SB(self.background)
+        self.background:SetAllPoints(self)
+        self.background:SetVertexColor(.35, .35, .35)
+
         ns.PLAYER_RESOURCE = self:GetParent()   --  cache our player nameplate key
     end
 
@@ -225,7 +230,7 @@
 		frame.castBar.bd.t:SetTexCoord(0, 1, .18, .3)
 
         frame.castBar.Text:ClearAllPoints()
-        frame.castBar.Text:SetPoint('TOP', frame.castBar, 'BOTTOM')
+        frame.castBar.Text:SetPoint('TOP', frame.castBar, 'BOTTOM', 0, -3)
         frame.castBar.Text:SetFont(STANDARD_TEXT_FONT, 9)
         frame.castBar.Text:SetShadowOffset(1, -1)
 	    frame.castBar.Text:SetShadowColor(0, 0, 0, 1)
@@ -277,9 +282,10 @@
         options()
     end
 
-    local e = CreateFrame'Frame'
-    e:RegisterEvent'PLAYER_TARGET_CHANGED'
-    e:SetScript('OnEvent', AddTarget)
+    -- drop this just for now
+    -- local e = CreateFrame'Frame'
+    -- e:RegisterEvent'PLAYER_TARGET_CHANGED'
+    -- e:SetScript('OnEvent', AddTarget)
 
     lip:RegisterEvent('NAME_PLATE_CREATED',     NAME_PLATE_CREATED)
 

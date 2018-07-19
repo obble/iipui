@@ -27,8 +27,6 @@
 	}
 
 	ns.auraElement             = {target = 'Debuffs'}
-	ns.auraGroupElement        = {party  = 'Buffs', raid = 'Buffs'}
-	ns.auraGroupDecurseElement = {party  = 'Debuffs', raid = 'Debuffs'}
 
 	ns.CustomAuraFilter = function(element, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossCast,_, nameplateShowAll)
 		local filter  = icon.filter
@@ -47,19 +45,22 @@
 					return true
 				end
 			elseif filter == 'HARMFUL' then	--  debuff
-				local custom, _, showforSpec = SpellGetVisibilityInfo(spellID, 'ENEMY_TARGET')
-				if playerUnits[icon.owner] or SpellIsAlwaysShown(spellID) or (custom and showforSpec) or nameplateShowAll then
+				--local custom, _, showforSpec = SpellGetVisibilityInfo(spellID, 'ENEMY_TARGET')
+				-- or (custom and showforSpec) -- taken out for error issues
+				-- or SpellIsAlwaysShown(spellID)
+				if playerUnits[icon.owner] or nameplateShowAll then
 					return true
 				end
 			end
 		else								--  friend
-			local custom, _, showforSpec = SpellGetVisibilityInfo(spellID, UnitAffectingCombat'player' and 'RAID_INCOMBAT' or 'RAID_OUTOFCOMBAT')
+			-- local custom, _, showforSpec = SpellGetVisibilityInfo(spellID, UnitAffectingCombat'player' and 'RAID_INCOMBAT' or 'RAID_OUTOFCOMBAT')
+			-- or (custom and showforSpec) -- taken out for error issues
 			if filter == 'HELPFUL' then		--  buff
-				if UnitAura(unit, name, nil, filter..'|RAID') or (custom and showforSpec) or (caster and UnitIsUnit(caster, 'player')) then
+				if UnitAura(unit, name, nil, filter..'|RAID') or (caster and UnitIsUnit(caster, 'player')) then
 					return true
 				end
 			elseif filter == 'HARMFUL' then	--  debuff
-				if (dispelTypes[dtype] and UnitAura(unit, name, nil, filter..'|RAID')) or (custom and showforSpec) or (caster and UnitIsUnit(caster, 'player')) then
+				if (dispelTypes[dtype] and UnitAura(unit, name, nil, filter..'|RAID')) or (caster and UnitIsUnit(caster, 'player')) then
 					return true
 				end
 			end
@@ -101,20 +102,7 @@
 		end
 	end
 
-	ns.SetGroupPosition = function(icons)
-		for i = 1, 3 do
-			local  bu = icons[i]
-			if not bu then break end
-			local x   = 31 - (3*(i - 1))
-			bu:ClearAllPoints()
-			bu:SetPoint('CENTER', bu:GetParent(), 0, 1)
-			bu:SetSize(x, x)
-		end
-	end
-
 	ns.PostCreateIcon = function(element, icon)
-		ns.BDStone(icon)
-
 		icon.icon:SetTexCoord(.1, .9, .1, .9)
 
 		icon.cd = CreateFrame('Cooldown', '$parentCooldown', icon, 'CooldownFrameTemplate')
@@ -136,7 +124,7 @@
 
 		icon.duration = icon:CreateFontString(nil, 'OVERLAY', 'GameFontNormalSmall')
 		icon.duration:SetFont(STANDARD_TEXT_FONT, 8)
-		icon.duration:SetPoint('TOP', icon, 'BOTTOM', 1, -12)
+		icon.duration:SetPoint('BOTTOM', icon, 'TOP', 0, 9)
 		icon.duration:SetJustifyH'CENTER'
 
 		icon.count:ClearAllPoints()
@@ -146,19 +134,19 @@
 		icon.count:SetShadowOffset(0, 0)
 
 		icon.sb = CreateFrame('StatusBar', nil, icon)
+		ns.BD(icon.sb, 1, -2)
         ns.SB(icon.sb)
-        icon.sb:SetHeight(5)
-        icon.sb:SetPoint'LEFT'
-        icon.sb:SetPoint'RIGHT'
-        icon.sb:SetPoint('TOP', icon, 'BOTTOM', 0, -3)
+        icon.sb:SetHeight(2)
+        icon.sb:SetPoint('LEFT', 1, 0)
+        icon.sb:SetPoint('RIGHT', -1, 0)
+        icon.sb:SetPoint'BOTTOM'
         icon.sb:SetMinMaxValues(0, 1)
         icon.sb:Hide()
 
-        icon.sb.bg = icon.sb:CreateTexture(nil, 'BACKGROUND')
-        icon.sb.bg:SetTexture[[Interface\ChatFrame\ChatFrameBackground]]
-        icon.sb.bg:SetPoint('TOPLEFT', -3, 1)
-        icon.sb.bg:SetPoint('BOTTOMRIGHT', 3, -3)
-        icon.sb.bg:SetVertexColor(0, 0, 0)
+        icon.sb.bg = icon.sb:CreateTexture(nil, 'BORDER')
+        ns.SB(icon.sb.bg)
+        icon.sb.bg:SetAllPoints()
+        icon.sb.bg:SetVertexColor(.2, .2, .2)
 	end
 
 	ns.PostCreateDispelIcon = function(element, icon)
@@ -179,7 +167,7 @@
 	end
 
 	ns.PostUpdateIcon = function(icons, unit, icon, index, offset, filter, isDebuff)
-		local name, _, _, count, dtype, duration, expiration, _, _, _, id = UnitAura(unit, index, icon.filter)
+		local name, _, count, dtype, duration, expiration, _, _, _, id = UnitAura(unit, index, icon.filter)
 
 		if name and duration and not icon.startTime then	-- will this work for refresh/early removal??
 			icon.startTime = GetTime()
@@ -191,7 +179,7 @@
 			ns.BD(icon)
 			ns.BUBorder(icon)
 
-			if  count > 0 then
+			if  count and count > 0 then
 				local number = icon.count:GetText()
 				if number then icon.count:SetText(number) end
 			end
@@ -199,27 +187,37 @@
 			if  duration > 0 then
 				icon.sb:SetMinMaxValues(0, duration)
 				icon.sb:Show()
-				icon.timeDur  = duration
-				icon.timeLeft = expiration - GetTime()
+				icon.timeDur  = duration and duration or 0
+				icon.timeLeft = experiration and (expiration - GetTime()) or 0
 				icon:SetScript('OnUpdate', function(self, elapsed)
 					auratime_OnUpdate(self, elapsed, name)
 				end)
-				icon.stone:SetPoint('BOTTOMRIGHT', icon, 4, -12)
 			else
 				icon.sb:Hide()
 				icon.duration:SetText''
-				icon.stone:SetPoint('BOTTOMRIGHT', icon, 4, -4)
 				icon:SetScript('OnUpdate', nil)
 			end
 		end
 
 		if icon.filter == 'HARMFUL' then
 			local colour = DebuffTypeColor[dtype or 'none']
-			if icon.bo then icon.bo:SetBackdropBorderColor(colour.r, colour.g, colour.b, .8) end
-			if icon.duration then icon.duration:SetTextColor(colour.r*1.4, colour.g*1.4, colour.b*1.4) end
+			if  icon.bo then
+				for i = 1, 4 do
+					icon.bo[i]:SetVertexColor(colour.r, colour.g, colour.b, .8)
+				end
+			end
+			if  icon.duration then
+				icon.duration:SetTextColor(colour.r*1.4, colour.g*1.4, colour.b*1.4)
+			end
 		else
-			if icon.bo then icon.bo:SetBackdropBorderColor(0, 0, 0, 0) end
-			if icon.duration then icon.duration:SetTextColor(1, .7, 0) end
+			if  icon.bo then
+				for i = 1, 4 do
+					icon.bo[i]:SetVertexColor(1, 1, 1)
+				end
+			end
+			if  icon.duration then
+				icon.duration:SetTextColor(1, .7, 0)
+			end
 		end
 	end
 

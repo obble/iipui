@@ -6,7 +6,7 @@
     local TalkingHead = function()
         TalkingHeadFrame:SetSize(240, 68)
         TalkingHeadFrame:ClearAllPoints()
-        TalkingHeadFrame:SetPoint('BOTTOM', UIParent, -20, 230)
+        TalkingHeadFrame:SetPoint('BOTTOM', UIParent, -20, 300)
         UIPARENT_MANAGED_FRAME_POSITIONS.TalkingHeadFrame = nil
 
         TalkingHeadFrame.NameFrame:SetSize(68, 24)

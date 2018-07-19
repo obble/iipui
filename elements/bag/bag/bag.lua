@@ -5,7 +5,7 @@
 	local FONT_REGULAR = ns.FONT_REGULAR
 
 	local bag = CreateFrame('Frame', 'iipbag' , UIParent, 'ButtonFrameTemplate')
-	bag:SetPoint('BOTTOMRIGHT', -27, 200)
+	bag:SetPoint('BOTTOMRIGHT', -27, 240)
 	bag:SetFrameLevel(3)
 	bag:Hide()
 
@@ -57,12 +57,24 @@
 		ns.BDStone(sort, 5)
 
 		local search = BagItemSearchBox
-		search:SetSize(70, 12)
+		search:SetSize(68, 12)
 		search:SetParent(bag.topstrip)
 		search:ClearAllPoints()
 		search:SetPoint('RIGHT', _G['CharacterBag3Slot'], 'LEFT', -8, 0)
 		ns.BD(search)
 		ns.BDStone(search, 5)
+
+		search.Instructions:ClearAllPoints()
+		search.Instructions:SetPoint('TOPLEFT', 16, 0)
+		search.Instructions:SetPoint('BOTTOMRIGHT', -8, 0)
+
+		search.clearButton:ClearAllPoints()
+		search.clearButton:SetPoint('RIGHT', 2, 0)
+
+		search.searchIcon:ClearAllPoints()
+		search.searchIcon:SetPoint('LEFT', 1, -1)
+
+		--BagItemSearchBoxText:SetWidth(100)
 
 		BackpackTokenFrame:GetRegions():Hide()
 
@@ -161,7 +173,7 @@
 		if  i == 0 then
 			slot:SetPoint('RIGHT', BagItemAutoSortButton, 'LEFT', -8, 0)
 		else
-			slot:SetPoint('RIGHT', _G['CharacterBag'..(i - 1)..'Slot'], 'LEFT', -3, 0)
+			slot:SetPoint('RIGHT', _G['CharacterBag'..(i - 1)..'Slot'], 'LEFT', -9, 0)
 		end
 
 		slot:SetScript('OnEnter', function(self)

@@ -27,23 +27,25 @@
     local ColourBagBorders = function(bu, slotID, texture, rarity)
         local q = _G[bu:GetName()..'IconQuestTexture']
         local s = _G[bu:GetName()].searchOverlay
-        if bu.bo then
-            if texture then
-                    -- search
-                if  s:IsShown() then
-                    bu.bo:SetBackdropBorderColor(0, 0, 0, 0)
-                    -- quest
-                elseif q and q:IsShown() then
-                    bu.bo:SetBackdropBorderColor(248/255, 98/255, 86/255)
-                    -- uncommon+ quality
-                elseif rarity and rarity >= 2 and BAG_ITEM_QUALITY_COLORS[rarity] then
-                    local colour = BAG_ITEM_QUALITY_COLORS[rarity]
-                    bu.bo:SetBackdropBorderColor(colour.r, colour.g, colour.b)
+        if  bu.bo then
+            for i, v in pairs(bu.bo) do
+                if  texture then
+                        -- search
+                    if  s:IsShown() then
+                        bu.bo[i]:SetVertexColor(1, 1, 1)
+                        -- quest
+                    elseif q and q:IsShown() then
+                        bu.bo[i]:SetVertexColor(248/255, 98/255, 86/255)
+                        -- uncommon+ quality
+                    elseif rarity and rarity >= 2 and BAG_ITEM_QUALITY_COLORS[rarity] then
+                        local colour = BAG_ITEM_QUALITY_COLORS[rarity]
+                        bu.bo[i]:SetVertexColor(colour.r, colour.g, colour.b)
+                    else
+                        bu.bo[i]:SetVertexColor(1, 1, 1)
+                    end
                 else
-                    bu.bo:SetBackdropBorderColor(0, 0, 0, 0)
+                    bu.bo[i]:SetVertexColor(.2, .2, .2)
                 end
-            else
-                bu.bo:SetBackdropBorderColor(0, 0, 0, 0)
             end
         end
     end
@@ -52,16 +54,18 @@
             -- don't try and colour reagent bank borders if they dont exist yet
         if ReagentBankFrame.UnlockInfo:IsShown() then return end
         local q = bu['IconQuestTexture']
-        if bu.bo then
+        if  bu.bo then
             -- quest
-            if  q and q:IsShown() then
-                bu.bo:SetBackdropBorderColor(248/255, 98/255, 86/255)
-            -- uncommon+
-            elseif bu.quality and bu.quality > 1 and BAG_ITEM_QUALITY_COLORS[bu.quality] then
-                local colour = BAG_ITEM_QUALITY_COLORS[bu.quality]
-                bu.bo:SetBackdropBorderColor(colour.r, colour.g, colour.b)
-            else
-                bu.bo:SetBackdropBorderColor(0, 0, 0, 0)
+            for i, v in pairs(bu.bo) do
+                if  q and q:IsShown() then
+                    bu.bo[i]:SetVertexColor(248/255, 98/255, 86/255)
+                -- uncommon+
+                elseif bu.quality and bu.quality > 1 and BAG_ITEM_QUALITY_COLORS[bu.quality] then
+                    local colour = BAG_ITEM_QUALITY_COLORS[bu.quality]
+                    bu.bo[i]:SetVertexColor(colour.r, colour.g, colour.b)
+                else
+                    bu.bo[i]:SetVertexColor(1, 1, 1)
+                end
             end
         end
     end
@@ -97,10 +101,10 @@
     end
 
     ns.AddButtonStyle = function(bu)
-        if bu and not bu.bo then
+        if  bu and not bu.bo then
             ns.BU(bu, 1, true)
             ns.ItemElements(bu)
-            ns.BUBorder(bu)
+            ns.BUBorder(bu, 21)
         end
     end
 
@@ -109,7 +113,6 @@
             local bu = BankSlotsFrame['Bag'..i]
             ns.BU(bu)
             ns.BUElements(bu)
-            ns.BUBorder(bu)
         end
     end
 
@@ -135,7 +138,7 @@
             local bu = _G['CharacterBag'..i..'Slot']
             ns.BU(bu)
             ns.BUElements(bu)
-            ns.BUBorder(bu)
+            bu:SetSize(18, 12)
         end
     end
 

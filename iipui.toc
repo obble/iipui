@@ -11,7 +11,10 @@
 customise\preload.lua
 
 #  ~libraries first
-core\plugins\Libstub.lua
+core\plugins\LibStub\LibStub.lua
+core\plugins\CallbackHandler-1.0\CallbackHandler-1.0.xml
+core\plugins\LibButtonGlow-1.0\LibButtonGlow-1.0.lua
+core\plugins\LibActionButton-1.0\LibActionButton-1.0.lua
 core\plugins\NoTaint_UIDropDownMenu\UIDropDownMenuTemplates.xml
 core\plugins\NoTaint_UIDropDownMenu\UIDropDownMenu.lua
 core\plugins\NoTaint_UIDropDownMenu\EasyMenu.lua
@@ -29,13 +32,17 @@ core\api\skins.lua
 core\api\style.lua
 core\api\values.lua
 core\delegate\position.lua
-core\var\svar.lua
+##core\var\svar.lua
 
 #  ~mid-load custom behaviour
 customise\customise.lua
 
 #  ~modular elements
+elements\artifact\poweritems.lua
+#
 elements\aura\aura.lua
+#
+elements\backpack\backpack.lua
 #
 elements\bag\bag\bag.lua
 elements\bag\button.lua
@@ -45,13 +52,15 @@ elements\bag\tools\tradeskills.lua
 elements\bag\update.lua
 #
 elements\bar\bar.lua
-elements\bar\backpack.lua
 elements\bar\clock.lua
-elements\bar\skin.lua
+elements\bar\hotkey.lua
 elements\bar\buttons.lua
+elements\bar\stance.lua
+elements\bar\pet.lua
 elements\bar\hide.lua
-elements\bar\update.lua
 elements\bar\bindings.lua
+elements\bar\extra.lua
+elements\bar\zone.lua
 #
 elements\boss\warnings.lua
 #
@@ -59,7 +68,6 @@ elements\chat\chat.lua
 elements\chat\cmd.lua
 elements\chat\event.lua
 elements\chat\tab.lua
-elements\chat\toast.lua
 elements\chat\url.lua
 #
 elements\gossip\gossip.lua
@@ -89,6 +97,7 @@ elements\groupframe\tags.lua
 elements\groupframe\update.lua
 elements\groupframe\sizing.lua
 elements\groupframe\shared\layout.lua
+elements\groupframe\party\layout.lua
 elements\groupframe\tanks\layout.lua
 elements\groupframe\healers\layout.lua
 elements\groupframe\dps\layout.lua
@@ -110,8 +119,8 @@ elements\unitframe\generate.lua
 elements\tooltip\content.lua
 elements\tooltip\layout.lua
 #
-elements\world_map\pins.lua
-elements\world_map\map.lua
+##elements\world_map\pins.lua
+##elements\world_map\map.lua
 #
 elements\xp\xp.lua
 #

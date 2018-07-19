@@ -13,27 +13,72 @@
 		local Health, Power, Castbar, RaidIcon, Border = self.Health, self.Power, self.Castbar, self.RaidTargetIndicator, {}
 
 		Health:SetHeight(9)
+		Health:SetFrameLevel(0)
 		Health:SetFrameStrata'MEDIUM'
 
-		Power:SetFrameStrata'MEDIUM'
+		local HealthPoints = Health:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+		HealthPoints:SetPoint('RIGHT', Health, 'LEFT', -16, 0)
+		HealthPoints:SetJustifyH'RIGHT'
+		HealthPoints:SetFont(GameFontNormal:GetFont(), 10)
+		HealthPoints:SetTextColor(1, 1, 1)
+
+		self:Tag(HealthPoints, '[iip:hp]')
+		Health.value = HealthPoints
+
+		local HealthPercent = Health:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+		HealthPercent:SetPoint('LEFT', Health, 2, 0)
+		HealthPercent:SetJustifyH'RIGHT'
+		HealthPercent:SetFont(GameFontNormal:GetFont(), 10)
+		HealthPercent:SetTextColor(1, 1, 1)
+
+		self:Tag(HealthPercent, '[iip:perhp]')
+		Health.percent = HealthPercent
+
+		Power:SetFrameStrata'LOW'
+
+		local PowerPoints = Power:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+		PowerPoints:SetPoint('RIGHT', Power, 'LEFT', -16, 0)
+		PowerPoints:SetJustifyH'RIGHT'
+		PowerPoints:SetFont(GameFontNormal:GetFont(), 10)
+		PowerPoints:SetTextColor(1, 1, 1)
+
+		self:Tag(PowerPoints, '[iip:pp]')
+		Power.value = PowerPoints
+
+		local PowerPercent = Power:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+		PowerPercent:SetPoint('LEFT', Power, 2, 0)
+		PowerPercent:SetJustifyH'RIGHT'
+		PowerPercent:SetFont(GameFontNormal:GetFont(), 10)
+		PowerPercent:SetTextColor(1, 1, 1)
+
+		self:Tag(PowerPercent, '[iip:perpp]')
+		Power.percent = PowerPercent
 
 		local Name = self:CreateFontString(nil, 'OVERLAY', 'iipNameFont')
 		Name:SetJustifyH'RIGHT'
 		Name:SetWidth(150)
 		Name:SetWordWrap(true)
+		self:Tag(Name, '[iip:name]')
 
 		local Portrait = self:CreateTexture(nil, 'ARTWORK', nil, -2)
 		Portrait:SetSize(46, 46)
-		Portrait:SetPoint('LEFT', self, -70, 0)
+		Portrait:SetPoint('RIGHT', self, 70, 0)
+
+		local mask = self.Health:CreateMaskTexture()
+		mask:SetTexture[[Interface\Minimap\UI-Minimap-Background]]
+		mask:SetPoint('TOPLEFT', Portrait, -3, 3)
+		mask:SetPoint('BOTTOMRIGHT', Portrait, 3, -3)
+
+		Portrait:AddMaskTexture(mask)
 
 		Portrait.BG = self:CreateTexture(nil, 'BACKGROUND', nil, -3)
 		Portrait.BG:SetSize(128, 128)
 		Portrait.BG:SetTexture[[Interface\COMMON\portrait-ring-withbg]]
-		Portrait.BG:SetPoint('LEFT', self, -110, 0)
+		Portrait.BG:SetPoint('RIGHT', self, 110, 0)
 
 		Portrait.Elite = self.Health:CreateTexture(nil, 'ARTWORK')
 		Portrait.Elite:SetSize(100, 100)
-		Portrait.Elite:SetPoint('LEFT', self, -90, -11)
+		Portrait.Elite:SetPoint('RIGHT', self, 104, -11)
 		Portrait.Elite:Hide()
 
 		Border.left = self:CreateTexture(nil, 'OVERLAY')
@@ -62,15 +107,16 @@
 		Border.shadow:SetTexCoord(0, .641, 0, .18)
 
 		ns.BD(Castbar)
+		Castbar:SetFrameStrata'HIGH'
 		Castbar:ClearAllPoints()
-		Castbar:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 50)
-		Castbar:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 50)
+		Castbar:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 10, 22)
+		Castbar:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', -10, 22)
 		Castbar:SetHeight(6)
 		Castbar.timeToHold = .4
 
 		Castbar.IconBD = CreateFrame('Frame', nil, Castbar)
-		Castbar.IconBD:SetSize(18, 18)
-		Castbar.IconBD:SetPoint('BOTTOMRIGHT', Castbar, 'TOPRIGHT', -3, 24)
+		Castbar.IconBD:SetSize(22, 22)
+		Castbar.IconBD:SetPoint('BOTTOMRIGHT', Castbar, 'BOTTOMLEFT', -18, 0)
 		Castbar.IconBD:SetFrameLevel(2)
 		ns.BD(Castbar.IconBD)
 
@@ -85,11 +131,11 @@
 		Castbar.Icon.Border:SetTexCoord(.5, 1, .12, .25)
 
 		Castbar.text = Castbar:CreateFontString(nil, 'ARTWORK')
-		Castbar.text:SetPoint('RIGHT', Castbar.Icon, 'LEFT', -12, 0)
+		Castbar.text:SetPoint('BOTTOM', Castbar, 'TOP', 0, 12)
 		Castbar.text:SetFont([[Fonts\ARIALN.ttf]], 11)
 		Castbar.text:SetWidth(80)
-		Castbar.text:SetJustifyH'RIGHT'
-		Castbar.text:SetWordWrap(true)
+		Castbar.text:SetJustifyH'CENTER'
+		--Castbar.text:SetWordWrap(true)
 		Castbar.text:SetShadowOffset(1, -1)
 		Castbar.text:SetShadowColor(0, 0, 0, 1)
 
@@ -107,32 +153,55 @@
 		Castbar.shadow:SetVertexColor(0, 0, 0, 1)
 		Castbar.shadow:SetTexCoord(0, .641, 0, .18)
 
-		local Level = self.Health:CreateFontString(nil, 'OVERLAY', 'GameFontNormal', 7)
-		Level:SetFont(STANDARD_TEXT_FONT, 11)
-		Level:SetPoint('RIGHT', Portrait, 'BOTTOMLEFT', 14, 6)
+		self.LvLParent = CreateFrame('Frame', nil, self)
+		self.LvLParent:SetSize(32, 32)
+		self.LvLParent:SetPoint('CENTER', Portrait, 'BOTTOMLEFT', 4, 5)
+		self.LvLParent:SetFrameStrata'HIGH'
+		self.LvLParent:SetFrameLevel(2)
+
+		local Level = self.LvLParent:CreateFontString(nil, 'OVERLAY', 'GameFontNormal', 7)
+		Level:SetFont(STANDARD_TEXT_FONT, 10)
+		Level:SetPoint('CENTER', self.LvLParent)
 		Level:SetJustifyH'CENTER'
 		self:Tag(Level, '[iip:level]')
 
-		Level.ring = self.Health:CreateTexture(nil, 'OVERLAY', nil, 5)
+		Level.ring = self.LvLParent:CreateTexture(nil, 'OVERLAY', nil, 5)
 		Level.ring:SetSize(32, 32)
 		Level.ring:SetPoint('CENTER', Portrait, 'BOTTOMLEFT', 4, 5)
 		Level.ring:SetTexture[[Interface\MINIMAP\MiniMap-TrackingBorder]]
 		Level.ring:SetTexCoord(0, .6, 0, .6)
 
-		Level.BD = self.Health:CreateTexture(nil, 'OVERLAY', nil, 3)
+		Level.BD = self.LvLParent:CreateTexture(nil, 'OVERLAY', nil, 3)
 		Level.BD:SetSize(36, 36)
 		Level.BD:SetPoint('CENTER', Portrait, 'BOTTOMLEFT', 4, 5)
 		Level.BD:SetTexture[[Interface\MINIMAP\UI-Minimap-Background]]
 
-		RaidIcon:ClearAllPoints()
-		RaidIcon:SetPoint('CENTER', self, 'TOPLEFT', 11, 0)
+		local PvPIndicator = self.Health:CreateTexture(nil, 'OVERLAY', nil, 1)
+	    PvPIndicator:SetSize(32, 32)
+	    PvPIndicator:SetPoint('CENTER', Portrait, 'LEFT', 4, 20)
 
-		ns.AddAuraElement(self, unit, isSingle)
+	    local Prestige = self.Health:CreateTexture(nil, 'OVERLAY')
+	    Prestige:SetSize(38, 40)
+	    Prestige:SetPoint('CENTER', PvPIndicator)
+
+		PvPIndicator.Prestige = Prestige
+
+		local QuestIndicator = self:CreateTexture(nil, 'OVERLAY')
+	    QuestIndicator:SetSize(36, 36)
+	    QuestIndicator:SetPoint('CENTER', Portrait, 'RIGHT')
+
+	    self.QuestIndicator = QuestIndicator
+
+		RaidIcon:ClearAllPoints()
+		RaidIcon:SetPoint('RIGHT', Name, 'LEFT')
+
+		ns.AddAuraElement(self, unit, {'BOTTOMRIGHT', self, 'TOPRIGHT', -4, 80}, 'RIGHT', 'LEFT', 'UP')
 
 		-- register new elements
-		self.Name 		= Name
-		self.Portrait	= Portrait
-		self.Level		= Level
+		self.Name 			= Name
+		self.Portrait		= Portrait
+		self.Level			= Level
+		self.PvPIndicator 	= PvPIndicator
 	end
 
 

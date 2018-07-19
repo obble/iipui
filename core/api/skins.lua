@@ -58,9 +58,9 @@
                 bgFile     = [[Interface\ChatFrame\ChatFrameBackground]],
                 tiled      = false,
                 insets     = {
-                    left    = ix or -3, 
-                    right   = ix or -3, 
-                    top     = ix or -3, 
+                    left    = ix or -3,
+                    right   = ix or -3,
+                    top     = ix or -3,
                     bottom  = ix or -3
                 }
             }
@@ -68,12 +68,12 @@
         f:SetBackdropColor(0, 0, 0, a or 1)
     end
 
-    ns.BU = function(bu, a, hover)
+    ns.BU = function(bu, a, hover, x, y)
         ns.BD(bu, a)
         bu:SetNormalTexture''
-        bu:SetHighlightTexture''
-        bu:SetPushedTexture''
-        if not InCombatLockdown() then bu:SetSize(21, 21) end
+        --bu:SetHighlightTexture''
+        -- bu:SetPushedTexture''
+        if not InCombatLockdown() then bu:SetSize(x or 21, x or y or 21) end
         bu:HookScript('OnEnter', function() if hover then ToggleHighlight(bu, true) end end)
         bu:HookScript('OnLeave', function() if hover then ToggleHighlight(bu, false) end end)
     end
@@ -115,7 +115,7 @@
 
         if  bu.NewItemTexture then
             bu.NewItemTexture:SetTexture''
-            bu.NewItemTexture:SetSize(23, 23)
+            bu.NewItemTexture:SetSize(28, 28)
         end
 
         if  q then
@@ -173,13 +173,44 @@
         end
     end
 
-    ns.BUBorder = function(bu)
+    ns.BUBorder = function(bu, size, height)
         if bu.bo then return end
-        bu.bo = CreateFrame('Frame', nil, bu)
-        bu.bo:SetAllPoints()
-        bu.bo:SetFrameLevel(bu:GetFrameLevel() + 1)
-        bu.bo:SetBackdrop(BORDER)
-        bu.bo:SetBackdropBorderColor(0, 0, 0, 0)
+        local x, y = (bu:GetWidth()/2) + 6, (bu:GetHeight()/2) + 7
+
+        if  size then
+            x = size
+            y = size
+        end
+
+        if  height then
+            y = height
+        end
+
+        bu.bo = {}
+
+        bu.bo[1] = bu:CreateTexture(nil, 'BORDER')
+        bu.bo[1]:SetTexture[[Interface\Tooltips\UI-Tooltip-Border]]
+        bu.bo[1]:SetPoint('TOPLEFT', -6, 7)
+        bu.bo[1]:SetSize(x, y)
+        bu.bo[1]:SetTexCoord(.5, .673, 0, 1)
+
+        bu.bo[2] = bu:CreateTexture(nil, 'BORDER')
+        bu.bo[2]:SetTexture[[Interface\Tooltips\UI-Tooltip-Border]]
+        bu.bo[2]:SetPoint('TOPRIGHT', 6, 7)
+        bu.bo[2]:SetSize(x, y)
+        bu.bo[2]:SetTexCoord(.675, .5, 0, 1)
+
+        bu.bo[3] = bu:CreateTexture(nil, 'BORDER')
+        bu.bo[3]:SetTexture[[Interface\Tooltips\UI-Tooltip-Border]]
+        bu.bo[3]:SetPoint('BOTTOMLEFT', -6, -7)
+        bu.bo[3]:SetSize(x, y)
+        bu.bo[3]:SetTexCoord(.76, .873, 0, 1)
+
+        bu.bo[4] = bu:CreateTexture(nil, 'BORDER')
+        bu.bo[4]:SetTexture[[Interface\Tooltips\UI-Tooltip-Border]]
+        bu.bo[4]:SetPoint('BOTTOMRIGHT', 6, -7)
+        bu.bo[4]:SetSize(x, y)
+        bu.bo[4]:SetTexCoord(.873, .76, 0, 1)
     end
 
     ns.BDStone = function(bu, x, path)

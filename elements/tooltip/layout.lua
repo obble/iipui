@@ -4,6 +4,8 @@
 
     -- todo: statusbar
 
+    GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT = {}
+
     local tooltips = {
         'GameTooltip',
     	'ShoppingTooltip1',
@@ -33,10 +35,12 @@
             self.BD:SetPoint('TOPLEFT', -8.5, 10)
             self.BD:SetPoint('BOTTOMRIGHT', 9, -10)
             self.BD:SetBackdrop({
-                bgFile     = '',
+                bgFile     = [[Interface\Tooltips\UI-Tooltip-Background]],
                 edgeFile   = [[Interface\LFGFRAME\LFGBorder]],
                 edgeSize   = 18,
+                insets = {left = 2, right = 2, top = 2, bottom = 2},
             })
+            self.BD:SetBackdropColor(0, 0, 0, .7)
 
             self.BD.shadow = self:CreateTexture(nil, 'BACKGROUND')
     		self.BD.shadow:SetPoint('TOPLEFT', self.BD, -5, 12)
@@ -44,6 +48,16 @@
     		self.BD.shadow:SetTexture[[Interface\Scenarios\ScenarioParts]]
     		self.BD.shadow:SetVertexColor(0, 0, 0, .6)
     		self.BD.shadow:SetTexCoord(0, .641, 0, .18)
+
+            self.BD.top = self.BD:CreateTexture(nil, 'OVERLAY')
+    		self.BD.top:SetPoint('CENTER', self, 'TOP', 0, 1)
+    		self.BD.top:SetAtlas('AzeriteTooltip-Topper', true)
+            self.BD.top:Hide()
+
+            self.BD.bottom = self.BD:CreateTexture(nil, 'OVERLAY')
+    		self.BD.bottom:SetPoint('CENTER', self, 'BOTTOM', 0, -2)
+    		self.BD.bottom:SetAtlas('AzeriteTooltip-Bottom', true)
+            self.BD.bottom:Hide()
         end
     end
 
@@ -58,7 +72,7 @@
         --                        we might need to use the ugly unit offset onupdate in this function
         ns.BD(bar)
         ns.SB(bar)
-        bar:SetHeight(5)
+        bar:SetHeight(4)
         bar:ClearAllPoints()   -- reposition hp bar left of tooltip
         if  vertical then
             bar:SetPoint('TOPLEFT', tooltip)
@@ -83,18 +97,43 @@
         else
             local bar = _G['iipbar_collapse']
             tooltip:ClearAllPoints()
-            tooltip:SetPoint('BOTTOMRIGHT', UIParent, -170, 100)
+            tooltip:SetPoint('BOTTOMRIGHT', UIParent, -40, 222)
             AddStatusBar(GameTooltipStatusBar, tooltip, false)
+        end
+    end
+
+    local UpdateStyle = function(self)
+        local _, link = self:GetItem()
+        if  link and (C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID(link) or C_AzeriteItem.IsAzeriteItemByID(link)) then
+            if  self.BD then
+                self.BD:ClearAllPoints()
+            end
+        else
+            if  self.BD then
+                self.BD:ClearAllPoints()
+                self.BD:SetPoint('TOPLEFT', -8.5, 10)
+                self.BD:SetPoint('BOTTOMRIGHT', 9, -10)
+                self.BD:SetBackdrop({
+                    bgFile     = '',
+                    edgeFile   = [[Interface\LFGFRAME\LFGBorder]],
+                    edgeSize   = 18,
+                })
+                self.BD.top:Hide()
+                self.BD.bottom:Hide()
+            end
         end
     end
 
     for _, v in next, tooltips do
     	local f = _G[v]
-    	ns.BD(f)
+        ns.BD(f)
     	f:HookScript('OnShow',             AddBackdrop)
     	f:HookScript('OnHide',             AddBackdrop)
     	f:HookScript('OnTooltipCleared',   AddBackdrop)
     end
+
+    hooksecurefunc('GameTooltip_UpdateStyle', UpdateStyle)
+    hooksecurefunc('GameTooltip_SetBackdropStyle', UpdateStyle)
 
     hooksecurefunc('GameTooltip_SetDefaultAnchor',  AddAnchor)
 
