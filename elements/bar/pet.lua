@@ -39,14 +39,6 @@
 		end
 	end
 
-	local remove = function(bu)
-		for i, v in pairs(ns.bar_elements) do
-			if  bu:GetName() == v:GetName() then
-				tremove(ns.bar_elements, i)
-			end
-		end
-	end
-
 	local HideGrid = function(self)
 		if  self.showgrid > 0 then
 			self.showgrid = self.showgrid - 1
@@ -120,6 +112,10 @@
 	local UpdateButton = function(self)
 		local id = self:GetID()
 		local name, texture, isToken, isActive, autoCastAllowed, autoCastEnabled = GetPetActionInfo(id)
+
+		if  name then
+			add(self)
+		end
 
 		if  not isToken then
 			self.icon:SetTexture(texture)
@@ -195,8 +191,7 @@
 		if  rangeTimer <= 0 or flashTime <= 0 then
 			if  PetHasActionBar() then
 				for _, button in next, _G['iipPetBar']._buttons do
-
-					if  button.flashing and flashTime <= 0 then
+					if button.flashing and flashTime <= 0 then
 						if  button.Flash:IsShown() then
 							button.Flash:Hide()
 						else
@@ -359,15 +354,6 @@
 		bar:SetPoint(point[1], point[2], point[3], point[4], point[5])
 
 		e:SetScript('OnUpdate', AddRange)
-
-		hooksecurefunc('ShowPetActionBar', function()
-			for _, button in next, _G['iipPetBar']._buttons do add(button) end
-			ns.AddBarMouseoverElements()
-		end)
-		hooksecurefunc('HidePetActionBar', function()
-			for _, button in next, _G['iipPetBar']._buttons do remove(button) end
-			ns.AddBarMouseoverElements()
-		end)
 
 		AddPositions(bar)
 		Update(bar)
