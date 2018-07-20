@@ -3,6 +3,7 @@
 
 	IIP_VAR = {
 		['clock'] = {
+			fontsize 		= "small",
 			military		= false,
 		},
 		['minimap'] = {

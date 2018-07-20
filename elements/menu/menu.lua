@@ -176,6 +176,12 @@
 			)
 			add(
 				level, i, nil,
+				'Clock Size', nil, true,
+				nil,
+				nil, true, 'ClockSize'
+			)
+			add(
+				level, i, nil,
 				'Always Show Actionbar', nil, false,
 				function()
 					if  iipAlwaysActionBar == 1 then
@@ -230,6 +236,40 @@
 					Minimap:UpdateBanner()
 				end,
 				IIP_VAR['minimap'].show_banner == true, nil
+			)
+		elseif level == 3 and LIB_UIDROPDOWNMENU_MENU_VALUE == 'ClockSize' then
+			add(
+				level, i, nil,
+				'Small', nil, false,
+				function()
+					if IIP_VAR['clock'].fontsize ~= 'small' then
+						IIP_VAR['clock'].fontsize = 'small'
+						iipclock:UpdateSize()
+					end
+				end,
+				IIP_VAR['clock'].fontsize == 'small', nil
+			)
+			add(
+				level, i, nil,
+				'Medium', nil, false,
+				function()
+					if IIP_VAR['clock'].fontsize ~= 'medium' then
+						IIP_VAR['clock'].fontsize = 'medium'
+						iipclock:UpdateSize()
+					end
+				end,
+				IIP_VAR['clock'].fontsize == 'medium', nil
+			)
+			add(
+				level, i, nil,
+				'Large', nil, false,
+				function()
+					if IIP_VAR['clock'].fontsize ~= 'large' then
+						IIP_VAR['clock'].fontsize = 'large'
+						iipclock:UpdateSize()
+					end
+				end,
+				IIP_VAR['clock'].fontsize == 'large', nil
 			)
 		end
 	end

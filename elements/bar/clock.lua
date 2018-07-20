@@ -10,6 +10,7 @@
 	local bar = _G['iipbar'].collapse
 	local var = IIP_VAR['clock']
 	local x   = 0
+	local firstUpdate = true
 
 	local OnClick = function(self)
 		if  var.military then
@@ -22,6 +23,10 @@
 	end
 
 	local OnUpdate = function(self, elapsed)
+		if firstUpdate then
+			firstUpdate = false
+			iipclock:UpdateSize()
+		end
 		x = x + elapsed
 		if  x > 1 then
 			x = 0
@@ -45,6 +50,12 @@
 	bar.clock:SetScript('OnUpdate', OnUpdate)
 	bar.clock:SetScript('OnEnter', function(self) self.t:SetTextColor(1, .5, 0) end)
 	bar.clock:SetScript('OnLeave', function(self) self.t:SetTextColor(1, .8, 0) end)
+
+	bar.clock.UpdateSize = function ()
+		local var = IIP_VAR['clock']
+		local font, fontSize = bar.clock.t:GetFont()
+		bar.clock.t:SetFont(font, var.fontsize == 'small' and 10 or var.fontsize == "medium" and 13 or var.fontsize == "large" and 15)
+	end
 
 	for _, e in pairs(events) do
 		bar.clock:RegisterEvent(e)
