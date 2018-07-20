@@ -28,7 +28,7 @@
 
 	ns.auraElement             = {target = 'Debuffs'}
 
-	ns.CustomAuraFilter = function(element, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossCast,_, nameplateShowAll)
+	ns.CustomAuraFilter = function(element, unit, icon, name, texture, count, dtype, duration, timeLeft, caster, isStealable, nameplateShowSelf, spellID, canApplyAura, isBossCast, casterIsPlayer, nameplateShowAll)
 		local filter  = icon.filter
 		local hostile = UnitCanAttack('player', unit) or not UnitCanAssist('player', unit)
 
@@ -39,28 +39,23 @@
 			return true
 		end
 
-		if hostile then						--  enemy
+		if  hostile then
 			if filter == 'HELPFUL' then		--  buff
-				if  isStealable or (caster and UnitIsUnit(unit, caster)) or nameplateShowAll then
+				if  isStealable or icon.isPlayer or (caster and UnitIsUnit(caster, 'pet')) or nameplateShowAll then
 					return true
 				end
 			elseif filter == 'HARMFUL' then	--  debuff
-				--local custom, _, showforSpec = SpellGetVisibilityInfo(spellID, 'ENEMY_TARGET')
-				-- or (custom and showforSpec) -- taken out for error issues
-				-- or SpellIsAlwaysShown(spellID)
 				if playerUnits[icon.owner] or nameplateShowAll then
 					return true
 				end
 			end
 		else								--  friend
-			-- local custom, _, showforSpec = SpellGetVisibilityInfo(spellID, UnitAffectingCombat'player' and 'RAID_INCOMBAT' or 'RAID_OUTOFCOMBAT')
-			-- or (custom and showforSpec) -- taken out for error issues
 			if filter == 'HELPFUL' then		--  buff
-				if UnitAura(unit, name, nil, filter..'|RAID') or (caster and UnitIsUnit(caster, 'player')) then
+				if  icon.isPlayer or (caster and UnitIsUnit(caster, 'pet')) then
 					return true
 				end
 			elseif filter == 'HARMFUL' then	--  debuff
-				if (dispelTypes[dtype] and UnitAura(unit, name, nil, filter..'|RAID')) or (caster and UnitIsUnit(caster, 'player')) then
+				if (dispelTypes[dtype] and UnitIsFriend('player', unit)) or icon.isPlayer or (caster and UnitIsUnit(caster, 'pet')) then
 					return true
 				end
 			end
@@ -68,7 +63,7 @@
 		return false
 	end
 
-	ns.CustomPartyAuraFilter = function(element, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossCast,_, nameplateShowAll)
+	ns.CustomPartyAuraFilter = function(element, unit, icon, name, texture, count, dtype, duration, timeLeft, caster, isStealable, nameplateShowSelf, spellID, canApplyAura, isBossCast, casterIsPlayer, nameplateShowAll)
 		if  list[spellID] and playerUnits[icon.owner] then
 			return true
 		else
@@ -77,7 +72,7 @@
 	end
 
 	local dispels = {}
-	ns.DispelPartyAuraFilter = function(element, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossCast,_, nameplateShowAll)
+	ns.DispelPartyAuraFilter = function(element, unit, icon, name, texture, count, dtype, duration, timeLeft, caster, isStealable, nameplateShowSelf, spellID, canApplyAura, isBossCast, casterIsPlayer, nameplateShowAll)
 		local filter = icon.filter
 		wipe(dispels) 													--  wipe table
 		for i = 1, #element do

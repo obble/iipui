@@ -30,7 +30,7 @@
 	ns.auraGroupElement        = {party  = 'Buffs', raid = 'Buffs'}
 	ns.auraGroupDecurseElement = {party  = 'Debuffs', raid = 'Debuffs'}
 
-	ns.CustomGroupAuraFilter = function(element, unit, icon, name, rank, texture, count, dType, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossCast,_, nameplateShowAll)
+	ns.CustomGroupAuraFilter = function(element, unit, icon, name, texture, count, dtype, duration, timeLeft, caster, isStealable, nameplateShowSelf, spellID, canApplyAura, isBossCast, casterIsPlayer, nameplateShowAll)
 		if  list[spellID] and icon.isPlayer then
 			return true
 		else
@@ -38,7 +38,7 @@
 		end
 	end
 
-	ns.DispelGroupAuraFilter = function(element, unit, icon, name, rank, texture, count, dType, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossCast,_, nameplateShowAll)
+	ns.DispelGroupAuraFilter = function(element, unit, icon, name, texture, count, dtype, duration, timeLeft, caster, isStealable, nameplateShowSelf, spellID, canApplyAura, isBossCast, casterIsPlayer, nameplateShowAll)
 		local filter = icon.filter
 		wipe(dispels) 													--  wipe table
 		for i = 1, #element do
@@ -102,7 +102,7 @@
 	end
 
 	ns.PostUpdateGroupIcon = function(icons, unit, icon, index, offset, filter, isDebuff)
-		local name, _, _, count, dtype, duration, expiration, _, _, _, id = UnitAura(unit, index, icon.filter)
+		local name, texture, count, dtype, duration, timeLeft, caster, isStealable, nameplateShowSelf, id, canApplyAura, isBossCast, casterIsPlayer, nameplateShowAll = UnitAura(unit, index, icon.filter)
 		local parent = icons:GetParent()
 		local t = icon:GetName()
 		local header
@@ -119,7 +119,7 @@
 
 		if  duration > 0 then
 			local i = icon:GetName():gsub('oUF_'..header..'UnitButton(%d+).AurasButton(%d+)', '%2')
-			icon.cd:SetCooldown(expiration - duration, duration)
+			icon.cd:SetCooldown(timeLeft - duration, duration)
 			icon.cd:SetSwipeTexture('Interface\\AddOns\\iipui\\art\\group\\cd\\'..i..'.tga')
 			if tonumber(i) > 1 then
 				icon.cd.bg:SetPoint('TOPLEFT', 4, -4)
