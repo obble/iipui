@@ -10,6 +10,11 @@
 	MinimapCluster:ClearAllPoints()
 	Minimap:SetFrameLevel(15)
 	MinimapCluster:SetPoint('BOTTOMRIGHT', -5, 16)
+	
+	-- bug fix for people fucking about with the map cluster
+	MinimapCluster:SetMovable(true)
+	MinimapCluster:SetUserPlaced(true)
+	MinimapCluster:SetMovable(false)
 
 	Minimap.ring = Minimap:CreateTexture(nil, 'BACKGROUND', nil, -1)
 	Minimap.ring:SetPoint('TOPLEFT', Minimap, -24, 24)

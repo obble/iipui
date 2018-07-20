@@ -4,7 +4,7 @@
 
     -- todo: statusbar
 
-    GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT = {}
+    GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT['edgeFile'] = ''
 
     local tooltips = {
         'GameTooltip',
@@ -35,12 +35,10 @@
             self.BD:SetPoint('TOPLEFT', -8.5, 10)
             self.BD:SetPoint('BOTTOMRIGHT', 9, -10)
             self.BD:SetBackdrop({
-                bgFile     = [[Interface\Tooltips\UI-Tooltip-Background]],
+                bgFile     = '',
                 edgeFile   = [[Interface\LFGFRAME\LFGBorder]],
                 edgeSize   = 18,
-                insets = {left = 2, right = 2, top = 2, bottom = 2},
             })
-            self.BD:SetBackdropColor(0, 0, 0, .7)
 
             self.BD.shadow = self:CreateTexture(nil, 'BACKGROUND')
     		self.BD.shadow:SetPoint('TOPLEFT', self.BD, -5, 12)

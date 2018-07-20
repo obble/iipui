@@ -21,6 +21,7 @@
 		BD.t:SetPoint('TOPLEFT', -8, 8)
 		BD.t:SetPoint('BOTTOMRIGHT', 7, -8)
 		BD.t:SetTexture[[Interface/Glues/CHARACTERCREATE/UI-CharacterCreatePatchwerk]]
+		BD.t:SetVertexColor(.8, .8, .8)
 		BD.t:SetTexCoord(0, .42, .6, .69)
 
 		local border = self:CreateTexture(nil, 'OVERLAY')
@@ -106,14 +107,13 @@
 	local AddPortrait = function(self)
 		local Portrait = self.Health:CreateTexture(nil, 'OVERLAY')
 		Portrait:SetSize(38, 38)
-		Portrait:SetPoint('RIGHT', self.Health, 'LEFT', 0, 1)
+		Portrait:SetPoint('RIGHT', self.Health, 'LEFT')
 
 		Portrait.BG = self.Health:CreateTexture(nil, 'OVERLAY', nil, 7)
 		Portrait.BG:SetSize(54, 54)
 		Portrait.BG:SetTexture[[Interface\Artifacts\Artifacts]]
 		Portrait.BG:SetPoint('CENTER', Portrait)
-		Portrait.BG:SetTexCoord(.25, .3385, .9075, .995)
-		-- Portrait.BG:SetVertexColor(.666, .666, .666)
+		Portrait.BG:SetTexCoord(.9175, 1, .075, .16)
 
 		return Portrait
 	end

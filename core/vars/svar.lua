@@ -2,6 +2,9 @@
 	local _, ns = ...
 
 	IIP_VAR = {
+		['clock'] = {
+			military		= false,
+		},
 		['raid']  = {
 			pets			= true, -- undecided
 			name  			= true,
