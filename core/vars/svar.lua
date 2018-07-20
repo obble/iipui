@@ -3,7 +3,11 @@
 
 	IIP_VAR = {
 		['clock'] = {
+			fontsize 		= "small",
 			military		= false,
+		},
+		['minimap'] = {
+			show_banner		= true,
 		},
 		['raid']  = {
 			pets			= true, -- undecided

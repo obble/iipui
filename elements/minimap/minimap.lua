@@ -118,6 +118,7 @@
 	end
 
 	local MapTextUpdate = function()
+		Minimap:UpdateBanner()
 		MinimapZoneText:SetTextColor(0, 0, 0)
 		if  MinimapZoneText:GetStringWidth() > 80 then
 			local t = GetMinimapZoneText():gsub('(%u)%S* %l*%s*', '%1. ')
@@ -125,6 +126,16 @@
 			if  MinimapZoneText:GetStringWidth() > 70 then	-- repeat!
 				t =   GetMinimapZoneText():gsub('(%a)([%w_\']*)', '%1.')
 				MinimapZoneText:SetText(t)
+			end
+		end
+	end
+
+	Minimap.UpdateBanner = function()
+		if IIP_VAR['minimap'].show_banner and not Minimap.banner:IsShown() then
+			Minimap.banner:Show()
+		else
+			if not IIP_VAR['minimap'].show_banner and Minimap.banner:IsShown() then
+				Minimap.banner:Hide()
 			end
 		end
 	end
