@@ -170,6 +170,12 @@
 			)
 			add(
 				level, i, nil,
+				'Basic Options', nil, true,
+				nil,
+				nil, true, 'BasicOptions'
+			)
+			add(
+				level, i, nil,
 				'Always Show Actionbar', nil, false,
 				function()
 					if  iipAlwaysActionBar == 1 then
@@ -210,6 +216,20 @@
 				'This one too', '|cff999999', nil,
 				function() end,
 				true, nil
+			)
+		elseif level == 3 and LIB_UIDROPDOWNMENU_MENU_VALUE == 'BasicOptions' then
+			add(
+				level, i, nil,
+				'Show Minimap Banner', nil, false,
+				function()
+					if IIP_VAR['minimap'].show_banner then
+						IIP_VAR['minimap'].show_banner = false
+					else
+						IIP_VAR['minimap'].show_banner = true
+					end
+					Minimap:UpdateBanner()
+				end,
+				IIP_VAR['minimap'].show_banner == true, nil
 			)
 		end
 	end

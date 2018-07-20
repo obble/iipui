@@ -5,6 +5,9 @@
 		['clock'] = {
 			military		= false,
 		},
+		['minimap'] = {
+			show_banner		= true,
+		},
 		['raid']  = {
 			pets			= true, -- undecided
 			name  			= true,
