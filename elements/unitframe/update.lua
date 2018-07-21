@@ -2,6 +2,8 @@
 
     local _, ns = ...
 
+    local u = CreateFrame'Frame'
+
     local reactions   = {
         [1] = {r =  1,  g =  0,     b = 0},
         [2] = {r =  1,  g =  0,     b = 0},
@@ -210,7 +212,7 @@
 
     local PostCastStart = function(Castbar, unit, spell, spellrank)
         local parent = Castbar:GetParent()
-    
+
         if  unit == 'player' or unit == 'target' then
             ns.CLASS_COLOUR(Castbar)
             UIFrameFadeIn(Castbar, .05, 0, 1)
@@ -281,6 +283,12 @@
 		return PostCastStop(self.Castbar, unit)
     end
 
+    local UpdateFeedback = function(self, event, unit, arg2, arg3, arg4, arg5)
+		if unit ~= self.unit then return end
+        if not self.Portrait.feedback then return end
+        CombatFeedback_OnCombatEvent(self.Portrait, arg2, arg3, arg4, arg5)
+    end
+
     local PostUpdatePortraitRing = function(self)
     	local classification  = UnitClassification(self.unit)
         if  self.unit == 'target' then
@@ -304,6 +312,14 @@
 			end
 		end
 	end
+
+    local OnUpdate = function(self, elapsed)
+        if  self.unit == 'player' then
+            if  self.Portrait.feedbackStartTime then
+                CombatFeedback_OnUpdate(self.Portrait, elapsed)
+            end
+        end
+    end
 
     ns.AddAuraElement = function(frame, unit, position, anchor, x, y)
         -- TODO:  consider writing these as single buff/debuff elements?
@@ -337,22 +353,25 @@
     ns.PreAndPostUpdatesForElements = function(self)
         local Health, Power, Castbar = self.Health, self.Power, self.Castbar
 
-        Health.PostUpdate             = PostUpdateHealth
-        Power.PostUpdate              = PostUpdatePower
-		Castbar.PostChannelStart      = PostCastStart
-		Castbar.PostCastStart         = PostCastStart
-		Castbar.PostCastStop          = PostCastStop
-		Castbar.PostChannelStop       = PostCastStop
-        Castbar.PostCastInterrupted   = PostCastInterrupted
-        Castbar.PostCastFailed        = PostCastInterrupted
+        Health.PostUpdate = PostUpdateHealth
+        Power.PostUpdate = PostUpdatePower
+		Castbar.PostChannelStart = PostCastStart
+		Castbar.PostCastStart = PostCastStart
+		Castbar.PostCastStop = PostCastStop
+		Castbar.PostChannelStop = PostCastStop
+        Castbar.PostCastInterrupted = PostCastInterrupted
+        Castbar.PostCastFailed = PostCastInterrupted
+
+        self:HookScript('OnUpdate', OnUpdate)
 
         -- register update events
         self:RegisterEvent('UNIT_NAME_UPDATE', PostCastStopUpdate)
         table.insert(self.__elements, PostCastStopUpdate)
+
+        self:RegisterEvent('UNIT_COMBAT', UpdateFeedback)
+        table.insert(self.__elements, UpdateFeedback)
         --
         self:RegisterEvent('PLAYER_TARGET_CHANGED', PostUpdatePortraitRing)
         table.insert(self.__elements, PostUpdatePortraitRing)
     end
-
-
     --

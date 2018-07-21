@@ -232,16 +232,10 @@
 		Portrait.vehicle:SetPoint('RIGHT', self, 82, 0)
 		Portrait.vehicle:SetTexCoord(.59, .66, .49, .56)
 
-		local FCF = CreateFrame('Frame', nil, self.Health)
-		FCF:SetSize(32, 32)
-		FCF:SetPoint('CENTER', Portrait)
-		
-		FCF.xOffset = 0
-		FCF.yOffset = 0
-		FCF.abbreviateNumbers = true
-
-		FCF[1] = FCF:CreateFontString(nil, 'OVERLAY', 'CombatTextFont')
-		self.FloatingCombatFeedback = FCF
+		Portrait.feedback = self.Health:CreateFontString(nil, 'OVERLAY', NumberFontNormalHuge)
+		Portrait.feedback:SetFont(STANDARD_TEXT_FONT, 20, 'OUTLINE')
+		Portrait.feedback:SetPoint('CENTER', Portrait)
+		CombatFeedback_Initialize(Portrait, Portrait.feedback, 20)
 
 		self.Border  = {}
 

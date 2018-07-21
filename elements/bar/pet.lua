@@ -379,6 +379,7 @@
 			for _, button in next, _G['iipPetBar']._buttons do add(button) end
 			ns.AddBarMouseoverElements()
 		end)
+
 		hooksecurefunc('HidePetActionBar', function()
 			for _, button in next, _G['iipPetBar']._buttons do remove(button) end
 			ns.AddBarMouseoverElements()
