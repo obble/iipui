@@ -140,7 +140,14 @@
 			mask2:SetPoint('TOPLEFT', -5, 5)
 			mask2:SetPoint('BOTTOMRIGHT', 5, -5)
 
-			button:GetCheckedTexture():AddMaskTexture(mask)
+			button:SetCheckedTexture[[Interface\LevelUp\BossBanner]]
+			local check = button:GetCheckedTexture()
+			check:SetDrawLayer'BACKGROUND'
+			check:ClearAllPoints()
+			check:SetPoint('TOPLEFT', button, -18, 18)
+			check:SetPoint('BOTTOMRIGHT', button, 18, -18)
+			check:SetTexCoord(0, .18, .805, 1)
+
 			button:GetPushedTexture():AddMaskTexture(mask)
 			button:GetHighlightTexture():AddMaskTexture(mask)
 			button:GetNormalTexture():SetTexture''

@@ -147,7 +147,7 @@
 		end
 
 		if  autoCastAllowed and not autoCastEnabled then
-			self.auto:Hise()
+			self.auto:Hide()
 			AutoCastShine_AutoCastStop(self.shine)
 		elseif autoCastAllowed then
 			self.auto:Show()
@@ -269,8 +269,6 @@
 			button.UpdateCooldown 	= UpdateCooldown
 			button.UpdateUsable 	= UpdateUsable
 
-			-- button:SetFrameLevel(bu:GetParent():GetFrameLevel() + 1)
-
 			bu:SetAllPoints(button)
 			bu:SetAttribute('statehidden', true)
 			bu:SetParent(hide)
@@ -289,9 +287,26 @@
 
 			_G[n..'Icon']:AddMaskTexture(mask)
 
-			button:GetCheckedTexture():AddMaskTexture(mask)
-			button:GetPushedTexture():AddMaskTexture(mask)
-			button:GetHighlightTexture():AddMaskTexture(mask)
+			button:SetCheckedTexture[[Interface\LevelUp\BossBanner]]
+			local check = button:GetCheckedTexture()
+			check:SetDrawLayer'BACKGROUND'
+			check:ClearAllPoints()
+			check:SetPoint('TOPLEFT', button, -18, 18)
+			check:SetPoint('BOTTOMRIGHT', button, 18, -18)
+			check:SetTexCoord(0, .18, .805, 1)
+
+			for _, v in pairs(
+				{
+					button:GetPushedTexture(),
+					button:GetHighlightTexture()
+				}
+			) do
+				v:AddMaskTexture(mask)
+				v:ClearAllPoints()
+				v:SetPoint('TOPLEFT', button, 2, -2)
+				v:SetPoint('BOTTOMRIGHT', button, -2, 2)
+			end
+
 			button:GetNormalTexture():SetTexture''
 
 			button.shine = _G[n..'Shine']

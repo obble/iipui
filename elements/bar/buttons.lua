@@ -494,8 +494,16 @@
 	local SetPositions = function()
 		for id,  bar in next, ABARS do
 			local one, two, three, four	= GetActionBarToggles()
+			local bar2 = _G['iipbar2']
 			local t	= bars[id]
 			local point
+
+			if  three or four then
+				bar2:Show()
+			else
+				bar2:Hide()
+			end
+
 
 			if  two and t.wrappositions then
 				point = t.wrappositions

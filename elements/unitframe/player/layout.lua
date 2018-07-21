@@ -232,6 +232,17 @@
 		Portrait.vehicle:SetPoint('RIGHT', self, 82, 0)
 		Portrait.vehicle:SetTexCoord(.59, .66, .49, .56)
 
+		local FCF = CreateFrame('Frame', nil, self.Health)
+		FCF:SetSize(32, 32)
+		FCF:SetPoint('CENTER', Portrait)
+		
+		FCF.xOffset = 0
+		FCF.yOffset = 0
+		FCF.abbreviateNumbers = true
+
+		FCF[1] = FCF:CreateFontString(nil, 'OVERLAY', 'CombatTextFont')
+		self.FloatingCombatFeedback = FCF
+
 		self.Border  = {}
 
 		self.Border.left = self:CreateTexture(nil, 'OVERLAY')

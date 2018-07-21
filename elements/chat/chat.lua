@@ -97,7 +97,8 @@
             HideChatElements(v)
             if not chat.loaded and i == 1 then PlaceChat(chat) end
 
-            chat:SetFrameLevel(3)
+            chat:SetFrameLevel(99)
+            chat:SetFrameStrata'MEDIUM'
             chat:SetShadowOffset(1, -1)
             chat:SetClampedToScreen(false)
             chat:SetClampRectInsets(0, 0, 0, 0)
@@ -111,7 +112,7 @@
             edit:SetAltArrowKeyMode(false)
             edit:SetFont(FONT_REGULAR, 12)
             edit:SetTextInsets(11 + header:GetWidth() + (suffix:IsShown() and suffix:GetWidth() or 0), 11, 0, 0)
-        
+
             if not edit.f then
                 edit.f = CreateFrame('Frame', nil, edit)
                 ns.BD(edit.f)
