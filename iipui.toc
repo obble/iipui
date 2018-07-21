@@ -3,7 +3,7 @@
 ## Author: modernist
 ## Dependencies: oUF
 ## OptionalDeps: Clique
-## SavedVariables: iipAlwaysActionBar, iipCombatActionBar, iipRaidLayout, iipRaidX, iipRaidY, IIP_VAR
+## SavedVariables: iipRaidLayout, iipRaidX, iipRaidY, IIP_VAR
 ## X-credits: haste, lyn
 ## Notes: a ui
 

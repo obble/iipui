@@ -103,8 +103,8 @@
     ns.AddButtonStyle = function(bu)
         if  bu and not bu.bo then
             ns.BU(bu, 1, true)
-            ns.ItemElements(bu)
             ns.BUBorder(bu, 21)
+            ns.ItemElements(bu)
         end
     end
 

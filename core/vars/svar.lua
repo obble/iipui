@@ -2,6 +2,10 @@
 	local _, ns = ...
 
 	IIP_VAR = {
+		['bar']	  = {
+			always			= false,
+			combat			= true,
+		},
 		['clock'] = {
 			military		= false,
 		},

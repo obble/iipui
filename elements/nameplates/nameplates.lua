@@ -92,8 +92,10 @@
         for i = 1, 4 do
             local bu = _G[f:GetName()..'Buff'..i]
             if  bu and not bu.skinned then
+                local x = {bu:GetPoint()}
                 bu:SetSize(18, 12)
                 ns.BD(bu)
+                -- ns.BUBorder(bu, 16, 13)
                 bu.skinned = true
             end
         end

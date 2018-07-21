@@ -5,6 +5,7 @@
     -- todo: statusbar
 
     GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT['edgeFile'] = ''
+    GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT['insets'] = {left = -2, right = -2, top = -2, bottom = -2}
 
     local tooltips = {
         'GameTooltip',
@@ -19,10 +20,8 @@
     local GetMouseoverUnit = function()
         local _, unit = GameTooltip:GetUnit()
         if not unit or not UnitExists(unit) or UnitIsUnit(unit, 'mouseover') then
-            --  print'true'
             return true
         else
-            --  print'false'
             return false
         end
     end

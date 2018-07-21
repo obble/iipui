@@ -8,6 +8,7 @@
 	local _, class = UnitClass'player'
 	local _, race  = UnitRace'player'
 	local colour = ns.INTERNAL_CLASS_COLORS[class]
+	local var = IIP_VAR['bar']
 
 	local f = CreateFrame('Frame', 'iipMenu', UIParent)
 	f.displayMode = 'MENU'
@@ -50,6 +51,7 @@
 	bu.bo:SetTexture[[Interface\Artifacts\Artifacts]]
 	bu.bo:SetPoint'CENTER'
 	bu.bo:SetTexCoord(.25, .34, .86, .9475)
+	bu.bo:SetVertexColor(.7, .7, .7)
 
 	local add = function(...)
 		level, i, i.icon, i.text, i.colorCode, i.notCheckable, i.func, i.checked, i.hasArrow, i.value, i.disabled = ...
@@ -172,28 +174,28 @@
 				level, i, nil,
 				'Always Show Actionbar', nil, false,
 				function()
-					if  iipAlwaysActionBar == 1 then
-						iipAlwaysActionBar = 0
+					if  var and var.always then
+						var.always = false
 					else
-						iipAlwaysActionBar = 1
+						var.always = true
 					end
 					ns.AddBarLocks()
 				end,
-				iipAlwaysActionBar == 1, nil
+				var.always, nil
 			)
 			add(
 				level, i, nil,
 				'Expand Actionbar in Combat', nil, false,
 				function()
-					if  iipCombatActionBar == 1 then
-						iipCombatActionBar = 0
+					if  var and var.combat then
+						var.combat = false
 					else
-						iipCombatActionBar = 1
+						var.combat = true
 					end
 					ns.AddBarLocks()
 				end,
-				iipCombatActionBar == 1, nil,
-				iipAlwaysActionBar == 1
+				var.combat, nil,
+				var.combat
 			)
 		elseif level == 3 and LIB_UIDROPDOWNMENU_MENU_VALUE == 'UFLayout' then
 			add(

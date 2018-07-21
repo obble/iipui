@@ -1,6 +1,7 @@
 ﻿
 
 	local _, ns = ...
+	local var = IIP_VAR['bar']
 
 	-- todo: reorient flyover buttons
 
@@ -108,7 +109,7 @@
 	local shrink = function(self)
 		local x = {bar.collapse:GetPoint()}
 		local z =  bar:GetHeight()/4
-		if 	x[5] > 4 and not InCombatLockdown() then
+		if 	x[5] > 4 then
 			bar.collapse:SetPoint('TOP', bar, 'BOTTOM', 0, x[5] - 12)
 			UpdateElements(x[5] > (bar:GetHeight()/4 - 20) and true or false)
 		else
@@ -121,7 +122,7 @@
 	end
 
 	local OnLeave = function()
-		if ns.bar_always or ns.bar_spellbook then return end
+		if ns.bar_always or ns.bar_spellbook or (var and var.combat and InCombatLockdown()) then return end
 		bar:SetScript('OnUpdate', shrink)
 	end
 
@@ -136,7 +137,7 @@
 	end
 
 	local OnLock = function(ignore)
-		if  iipAlwaysActionBar == 1 then
+		if  var and var.always then
 			e:UnregisterAllEvents()
 			e:SetScript('OnEvent', nil)
 			ns.bar_always = true
@@ -148,7 +149,7 @@
 	end
 
 	local OnCombat = function()
-		if  iipCombatActionBar == 1 then
+		if  var and var.combat then
 			e:RegisterEvent'PLAYER_REGEN_DISABLED'
 			e:RegisterEvent'PLAYER_REGEN_ENABLED'
 			e:SetScript('OnEvent', function(self, event)
@@ -209,6 +210,16 @@
 		end)
 	end
 
+	local NewActionHighlightUpdate = function()
+		OnEnter()
+		C_Timer.After(5, function()
+			local focus = GetMouseFocus()
+			if  not var.always and not var.combat and not ns.bar_elements[focus] and not ns.bar_spellbook then
+				OnLeave()
+			end
+		end)
+	end
+
 	ns.grow 	= OnEnter
 	ns.shrink 	= OnLeave
 
@@ -219,6 +230,8 @@
 
 	SpellBookFrame:HookScript('OnShow', OnShow)
 	SpellBookFrame:HookScript('OnHide', OnHide)
+
+	hooksecurefunc('MarkNewActionHighlight', NewActionHighlightUpdate)
 
 	local init = CreateFrame'Frame'
 	init:RegisterEvent'PLAYER_LOGIN'

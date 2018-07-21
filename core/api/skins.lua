@@ -91,8 +91,8 @@
 
         if  c then
             c:ClearAllPoints()
-            c:SetPoint('BOTTOM', bu, 0, -1)
-            c:SetFont(FONT_REGULAR, 9, 'OUTLINE')
+            c:SetPoint('BOTTOM', bu)
+            c:SetFont(FONT_REGULAR, 14, 'OUTLINE')
             c:SetShadowOffset(0, 0)
             c:SetJustifyH'CENTER'
             c:SetDrawLayer('OVERLAY', 7)
@@ -143,9 +143,10 @@
 
 
         if  c then
+            if bu.bo then c:SetParent(bu.bo) end
             c:ClearAllPoints()
-            c:SetPoint('BOTTOM', bu, 0, -1)
-            c:SetFont(FONT_REGULAR, 14, 'OUTLINE')
+            c:SetPoint('CENTER', bu, 'TOP', 0, -1)
+            c:SetFont(FONT_REGULAR, 15, 'OUTLINE')
             c:SetShadowOffset(0, 0)
             c:SetJustifyH'CENTER'
             c:SetDrawLayer('OVERLAY', 7)
