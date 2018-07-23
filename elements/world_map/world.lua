@@ -1,55 +1,48 @@
 
     local _, ns     = ...
-    
+
     local size      = 5
     local elapsed   = 0
 
-    local coord = CreateFrame('Frame', nil, WorldMapButton)
+    local coord = CreateFrame('Frame', nil, WorldMapFrame)
+    coord:SetFrameLevel(WorldMapFrame:GetFrameLevel() + 2)
+    coord:SetPoint('TOPLEFT', WorldMapFrame, 30, -100)
+    coord:SetSize(200, 16)
 
     coord.Player = coord:CreateFontString(nil, 'OVERLAY')
-    coord.Player:SetFont(STANDARD_TEXT_FONT, 18, 'OUTLINE')
+    coord.Player:SetFont(STANDARD_TEXT_FONT, 15, 'OUTLINE')
     coord.Player:SetShadowOffset(0, -0)
     coord.Player:SetJustifyH'LEFT'
-    coord.Player:SetPoint('BOTTOMRIGHT', WorldMapButton, 'BOTTOM', -12, 12)
+    coord.Player:SetPoint'TOPLEFT'
     coord.Player:SetTextColor(1, 1, 1)
 
     coord.Cursor = coord:CreateFontString(nil, 'OVERLAY')
-    coord.Cursor:SetFont(STANDARD_TEXT_FONT, 18, 'OUTLINE')
+    coord.Cursor:SetFont(STANDARD_TEXT_FONT, 15, 'OUTLINE')
     coord.Cursor:SetShadowOffset(0, -0)
     coord.Cursor:SetJustifyH'LEFT'
-    coord.Cursor:SetPoint('LEFT', coord.Player, 'RIGHT', 3, 0)
+    coord.Cursor:SetPoint('TOPLEFT', coord.Player, 'BOTTOMLEFT', 0, -2)
     coord.Cursor:SetTextColor(1, 1, 1)
 
     coord:SetScript('OnUpdate', function(self, elapsed)
-        local width = WorldMapDetailFrame:GetWidth()
-        local height = WorldMapDetailFrame:GetHeight()
-        local mx, my = WorldMapDetailFrame:GetCenter()
-        local px, py = GetPlayerMapPosition'player'
-        local cx, cy = GetCursorPosition()
-
-        mx = ((cx/WorldMapDetailFrame:GetEffectiveScale()) - (mx - width/2))/width
-        my = ((my + height/2) - (cy/WorldMapDetailFrame:GetEffectiveScale()))/height
-
-        if mx >= 0 and my >= 0 and mx <= 1 and my <= 1 then
-            coord.Cursor:SetText('•  '..MOUSE_LABEL..format(': %.0f / %.0f', mx*100, my*100))
-        else
-            coord.Cursor:SetText''
+        local x, y
+        local id = C_Map.GetBestMapForUnit'player'
+        if  id then
+            local player = C_Map.GetPlayerMapPosition(id, 'player')
+            if  player then
+                x, y = player:GetXY()
+            end
         end
 
-        if px ~= 0 and py ~= 0 then
-            coord.Player:SetText(PLAYER..format(': %.0f / %.0f', px*100, py*100))
-        else
-            coord.Player:SetText'X / X'
-        end
+        x = x or 0
+        y = y or 0
 
-            -- update font size based on windowed mode
-        if WorldMapFrame_InWindowedMode() then
-            coord.Player:SetFont(STANDARD_TEXT_FONT, 22, 'OUTLINE')
-            coord.Cursor:SetFont(STANDARD_TEXT_FONT, 22, 'OUTLINE')
-        else
-           coord.Player:SetFont(STANDARD_TEXT_FONT, 18, 'OUTLINE')
-           coord.Cursor:SetFont(STANDARD_TEXT_FONT, 18, 'OUTLINE')
-        end
+        coord.Player:SetShown(x + y > 0)
+        coord.Player:SetText(PLAYER..format(': %.0f / %.0f', x*100, y*100))
+
+        x, y = WorldMapFrame.ScrollContainer:GetNormalizedCursorPosition()
+
+        coord.Cursor:SetShown(x + y > 0)
+        coord.Cursor:SetText('Mouse'..format(': %.0f / %.0f', x*100, y*100))
     end)
 
 

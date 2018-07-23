@@ -162,7 +162,7 @@
 	end
 
 	ns.PostUpdateIcon = function(icons, unit, icon, index, offset, filter, isDebuff)
-		local name, _, count, dtype, duration, expiration, _, _, _, id = UnitAura(unit, index, icon.filter)
+		local name, texture, count, dtype, duration, timeLeft, caster, isStealable, nameplateShowSelf, id = UnitAura(unit, index, icon.filter)
 
 		if name and duration and not icon.startTime then	-- will this work for refresh/early removal??
 			icon.startTime = GetTime()
@@ -170,20 +170,15 @@
 			icon.startTime = nil
 		end
 
-		if  unit:sub(1, 6) == 'target' then
+		if  unit == 'player' or unit == 'target' or unit:sub(1, 5) == 'party' then
 			ns.BD(icon)
 			ns.BUBorder(icon)
-
-			if  count and count > 0 then
-				local number = icon.count:GetText()
-				if number then icon.count:SetText(number) end
-			end
 
 			if  duration > 0 then
 				icon.sb:SetMinMaxValues(0, duration)
 				icon.sb:Show()
 				icon.timeDur  = duration and duration or 0
-				icon.timeLeft = experiration and (expiration - GetTime()) or 0
+				icon.timeLeft = timeLeft and (timeLeft - GetTime()) or 0
 				icon:SetScript('OnUpdate', function(self, elapsed)
 					auratime_OnUpdate(self, elapsed, name)
 				end)
@@ -194,7 +189,7 @@
 			end
 		end
 
-		if icon.filter == 'HARMFUL' then
+		if  icon.filter == 'HARMFUL' then
 			local colour = DebuffTypeColor[dtype or 'none']
 			if  icon.bo then
 				for i = 1, 4 do

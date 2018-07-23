@@ -15,6 +15,7 @@
 			num			= 10,
 			padding		= 20,
 			positions 	= {'BOTTOM', UIParent, 'BOTTOM', -4, 190},
+			visibility = '[vehicleui][petbattle][overridebar][possessbar] hide; show',
 			size		= 30,
 		}
 	}
@@ -238,6 +239,8 @@
 		add(bar)
 
 		bar:SetSize(((t.size + t.padding)*t.num) - t.padding, t.size)
+
+		RegisterStateDriver(bar, 'visibility', bars['bar6'].visibility)
 
 		bar.Update 		= Update
 

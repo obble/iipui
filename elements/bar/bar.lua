@@ -9,6 +9,7 @@
 	wipe(ns.bar_elements)
 
 	local e = CreateFrame'Frame'
+	local petbattle = false
 
 	local bar = CreateFrame('Frame', 'iipbar', UIParent)
 	bar:SetHeight(250)
@@ -118,11 +119,12 @@
 	end
 
 	local OnEnter = function()
+		if petbattle then return end
 		bar:SetScript('OnUpdate', grow)
 	end
 
 	local OnLeave = function()
-		if ns.bar_always or ns.bar_spellbook or (var and var.combat and InCombatLockdown()) then return end
+		if (ns.bar_always and not petbattle) or ns.bar_spellbook or (var and var.combat and InCombatLockdown()) then return end
 		bar:SetScript('OnUpdate', shrink)
 	end
 
@@ -210,6 +212,16 @@
 		end)
 	end
 
+	local PetBattleOnEvent = function(self, event)
+		if  event == 'PET_BATTLE_CLOSE' then
+			petbattle = false
+			if ns.bar_always then OnEnter() end
+		else
+			if ns.bar_always then OnLeave() end
+			petbattle = true
+		end
+	end
+
 	local NewActionHighlightUpdate = function()
 		OnEnter()
 		C_Timer.After(5, function()
@@ -237,6 +249,11 @@
 	init:RegisterEvent'PLAYER_LOGIN'
 	init:RegisterEvent'VARIABLES_LOADED'
 	init:SetScript('OnEvent', OnEvent)
+
+	local pet = CreateFrame'Frame'
+	pet:RegisterEvent'PET_BATTLE_OPENING_START'
+	pet:RegisterEvent'PET_BATTLE_CLOSE'
+	pet:SetScript('OnEvent', PetBattleOnEvent)
 
 
 	--

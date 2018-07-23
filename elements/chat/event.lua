@@ -158,7 +158,7 @@
     end
 
     UIErrorsFrame:UnregisterEvent'UI_ERROR_MESSAGE'
-    UIErrorsFrame:SetScript('OnEvent', SYSMSG)
+    --UIErrorsFrame:SetScript('OnEvent', SYSMSG)
 
     hooksecurefunc('FCF_SetTemporaryWindowType', TemporaryWindow)
 

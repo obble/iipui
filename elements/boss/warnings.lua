@@ -8,9 +8,9 @@
         local bu = CreateFrame('Frame', 'iipbossemoteicon'..i, RaidBossEmoteFrame)
 		ns.BD(bu)
 		bu:SetSize(40, 40)
-        bu:SetPoint('TOP', RaidWarningFrame, 'BOTTOM', 0, -50)
+        bu:SetPoint('TOP', RaidWarningFrame, 'BOTTOM', 0, -70)
 
-		ns.BUBorder(bu)
+		ns.BUBorder(bu, 26, 27)
 
 		bu.icon = bu:CreateTexture(nil, 'ARTWORK')
 		bu.icon:SetTexCoord(.1, .9, .1, .9)

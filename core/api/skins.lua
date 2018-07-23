@@ -205,13 +205,15 @@
         bu.bo[3]:SetTexture[[Interface\Tooltips\UI-Tooltip-Border]]
         bu.bo[3]:SetPoint('BOTTOMLEFT', -6, -7)
         bu.bo[3]:SetSize(x, y)
-        bu.bo[3]:SetTexCoord(.76, .873, 0, 1)
+        bu.bo[3]:SetTexCoord(.75875, .87325, 0, 1)
+        bu.bo[3]:SetVertexColor(.9, .9, .9)
 
         bu.bo[4] = bu:CreateTexture(nil, 'BORDER')
         bu.bo[4]:SetTexture[[Interface\Tooltips\UI-Tooltip-Border]]
         bu.bo[4]:SetPoint('BOTTOMRIGHT', 6, -7)
         bu.bo[4]:SetSize(x, y)
-        bu.bo[4]:SetTexCoord(.873, .76, 0, 1)
+        bu.bo[4]:SetTexCoord(.87325, .75875, 0, 1)
+        bu.bo[4]:SetVertexColor(.9, .9, .9)
     end
 
     ns.BDStone = function(bu, x, path)

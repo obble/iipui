@@ -11,6 +11,7 @@
 			num			= 10,
 			padding		= 40,
 			positions 	= {'BOTTOM', UIParent, 'BOTTOM', 0, 205},
+			visibility = '[vehicleui][petbattle][overridebar][possessbar] hide; show',
 			size		= 42,
 		}
 	}
@@ -83,7 +84,6 @@
 	end
 
 	local Update = function(self)
-		local num = GetNumShapeshiftForms()
 		for i, button in next, self._buttons do
 			UpdateButton(button)
 		end
@@ -99,6 +99,8 @@
 
 		bar.Update 		= Update
 		bar.UpdateForms = Update
+
+		RegisterStateDriver(bar, 'visibility', bars['bar7'].visibility)
 
 		for i = 1, bars['bar7'].num do
 			local bu 		= _G[t.buttons..'Button'..i]

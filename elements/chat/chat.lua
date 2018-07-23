@@ -87,9 +87,18 @@
     end
 
     local AddChat = function()
+        ChatFrameChannelButton:ClearAllPoints()
+        ChatFrameChannelButton:SetPoint('BOTTOM', ChatFrame1ButtonFrame)
+
+        ChatFrameToggleVoiceDeafenButton:ClearAllPoints()
+        ChatFrameToggleVoiceDeafenButton:SetPoint('BOTTOM', ChatFrameChannelButton, 'TOP', 0, 2)
+
+        ChatFrameToggleVoiceMuteButton:ClearAllPoints()
+        ChatFrameToggleVoiceMuteButton:SetPoint('BOTTOM', ChatFrameToggleVoiceDeafenButton, 'TOP', 0, 2)
+
         for i, v in pairs(CHAT_FRAMES) do
-            local chat   = _G[v]
-            local edit   = _G[v..'EditBox']
+            local chat = _G[v]
+            local edit = _G[v..'EditBox']
             local header = _G[v..'EditBoxHeader']
             local suffix = _G[v..'EditBoxHeaderSuffix']
 

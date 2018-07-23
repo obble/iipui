@@ -50,6 +50,15 @@
 			MicroButtonAndBagsBar,
 			ActionBarUpButton,
 			ActionBarDownButton,
+			--[[PetBattleFrameXPBar,
+			PetBattleFrame.BottomFrame.Background,
+			PetBattleFrame.BottomFrame.FlowFrame,
+			PetBattleFrame.BottomFrame.Delimiter,
+			PetBattleFrame.BottomFrame.LeftEndCap,
+			PetBattleFrame.BottomFrame.MicroButtonFrame,
+			PetBattleFrame.BottomFrame.RightEndCap,
+			PetBattleFrame.BottomFrame.TurnTimer.ArtFrame2,
+			PetBattleFrame.BottomFrame]]
 		}
 	) do
 		v:SetParent(hide)

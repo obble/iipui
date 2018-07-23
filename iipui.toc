@@ -58,6 +58,7 @@ elements\bar\hotkey.lua
 elements\bar\buttons.lua
 elements\bar\stance.lua
 elements\bar\pet.lua
+elements\bar\petbattle.lua
 elements\bar\hide.lua
 elements\bar\bindings.lua
 elements\bar\extra.lua
@@ -121,7 +122,7 @@ elements\tooltip\content.lua
 elements\tooltip\layout.lua
 #
 ##elements\world_map\pins.lua
-##elements\world_map\map.lua
+elements\world_map\world.lua
 #
 elements\xp\xp.lua
 #

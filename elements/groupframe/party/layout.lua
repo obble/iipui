@@ -165,14 +165,13 @@
 	local AddPortrait = function(self)
 		local Portrait = self.Health:CreateTexture(nil, 'OVERLAY')
 		Portrait:SetSize(38, 38)
-		Portrait:SetPoint('RIGHT', self.Health, 'LEFT', -16, -4)
+		Portrait:SetPoint('RIGHT', self.Health, 'LEFT', -16, -6)
 
 		Portrait.BG = self.Health:CreateTexture(nil, 'OVERLAY', nil, 7)
 		Portrait.BG:SetSize(54, 54)
 		Portrait.BG:SetTexture[[Interface\Artifacts\Artifacts]]
 		Portrait.BG:SetPoint('CENTER', Portrait)
-		Portrait.BG:SetTexCoord(.25, .3385, .9075, .995)
-		-- Portrait.BG:SetVertexColor(.666, .666, .666)
+		Portrait.BG:SetTexCoord(.9175, 1, .075, .16)
 
 		return Portrait
 	end
