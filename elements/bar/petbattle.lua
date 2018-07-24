@@ -25,9 +25,7 @@
 		bar._buttons = {}
 
 		bar.Update = function(self)
-			-- AddConfig(self) -- might be NEEDED
 			RegisterStateDriver(bar, 'visibility', layout['visibility'])
-			-- E:UpdateBarLayout(self)
 		end
 
 		bar._buttons[1] = PetBattleFrame.BottomFrame.abilityButtons[1]
@@ -43,6 +41,8 @@
 			for i, button in next, bar._buttons do
 				button._parent = bar
 				button._command = 'ACTIONBUTTON'..i
+
+				-- print(button, GetBindingKey(button._command))
 
 				button:SetParent(bar)
 
