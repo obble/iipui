@@ -10,7 +10,7 @@
 	MinimapCluster:ClearAllPoints()
 	Minimap:SetFrameLevel(15)
 	MinimapCluster:SetPoint('BOTTOMRIGHT', -5, 16)
-	
+
 	-- bug fix for people fucking about with the map cluster
 	MinimapCluster:SetMovable(true)
 	MinimapCluster:SetUserPlaced(true)
@@ -46,16 +46,11 @@
 	Minimap.compass:SetPoint'CENTER'
 	Minimap.compass:SetTexture[[Interface\Minimap\CompassRing]]
 
-	local f = CreateFrame('Frame', nil, UIParent)
-	f:SetFrameLevel(3)
-	f:SetFrameStrata'HIGH'
-	f:SetSize(160, 30)
-	f:SetPoint('BOTTOM', Minimap, -5, -7)
-
-	Minimap.banner = f:CreateTexture(nil, 'OVERLAY', nil, 4)
-	Minimap.banner:SetAllPoints(f)
+	Minimap.banner = Minimap:CreateTexture(nil, 'OVERLAY', nil, 4)
 	Minimap.banner:SetTexture[[Interface\Store\Store-Main]]
 	Minimap.banner:SetTexCoord(.35, .725, .53, .46)
+	Minimap.banner:SetSize(160, 30)
+	Minimap.banner:SetPoint('BOTTOM', Minimap, -5, -7)
 
 	--[[Minimap.top = Minimap:CreateTexture(nil, 'BACKGROUND', nil, -1)
 	Minimap.top:SetSize(150, 18)
@@ -97,7 +92,6 @@
 	MinimapZoneTextButton:SetPoint('BOTTOM', Minimap, 0, -3)
 	MinimapZoneTextButton:SetWidth(160)
 
-	MinimapZoneText:SetParent(f)
 	MinimapZoneText:SetFont(FONT_BOLD, 12)
 	MinimapZoneText:SetDrawLayer('OVERLAY', 7)
 	MinimapZoneText:SetShadowOffset(0, 0)

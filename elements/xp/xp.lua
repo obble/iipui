@@ -25,7 +25,7 @@
     mouseover:SetFrameLevel(1)
     mouseover:SetPoint('BOTTOMRIGHT', header, 0, -50)
 
-    local xp = CreateFrame('StatusBar', 'iipXP', UIParent, 'AnimatedStatusBarTemplate')
+    local xp = CreateFrame('StatusBar', 'iipXP', Minimap, 'AnimatedStatusBarTemplate')
     ns.SB(xp)
     xp:SetSize(100, 5)
     xp:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -118, -13)
@@ -92,7 +92,7 @@
     rest.bd:SetPoint('TOPLEFT', rest, -20, 20)
     rest.bd:SetPoint('BOTTOMRIGHT', rest, 20, -20)
 
-    local artifact = CreateFrame('StatusBar', nil, UIParent, 'AnimatedStatusBarTemplate')
+    local artifact = CreateFrame('StatusBar', nil, Minimap, 'AnimatedStatusBarTemplate')
     ns.SB(artifact)
     ns.BD(artifact)
     artifact:SetSize(100, 5)
@@ -126,7 +126,7 @@
     artifact.data:SetPoint('RIGHT', artifact, 'LEFT', -18, 0)
     artifact.data:Hide()
 
-    local rep = CreateFrame('StatusBar', 'iipRep', UIParent, 'AnimatedStatusBarTemplate')
+    local rep = CreateFrame('StatusBar', 'iipRep', Minimap, 'AnimatedStatusBarTemplate')
     ns.SB(rep)
     ns.BD(rep)
     rep:SetSize(100, 5)
@@ -157,7 +157,7 @@
     rep.bd:SetPoint('TOPLEFT', -20, 20)
     rep.bd:SetPoint('BOTTOMRIGHT', 20, -20)
 
-    local honour = CreateFrame('StatusBar', 'iipHonour', UIParent, 'AnimatedStatusBarTemplate')
+    local honour = CreateFrame('StatusBar', 'iipHonour', Minimap, 'AnimatedStatusBarTemplate')
     ns.SB(honour)
     ns.BD(honour)
     honour:SetSize(100, 5)

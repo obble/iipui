@@ -167,7 +167,7 @@
     end
 
     local AddHeader = function(unit, filter, attribute)
-        local Header = CreateFrame('Frame', 'iipauras'..filter, UIParent, 'SecureAuraHeaderTemplate')
+        local Header = CreateFrame('Frame', 'iipauras'..filter, Minimap, 'SecureAuraHeaderTemplate')
         Header:SetAttribute('template',         'iipauraTemplate')
         Header:SetAttribute('unit',             unit)
         Header:SetAttribute('filter',           filter)

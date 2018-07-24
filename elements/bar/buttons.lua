@@ -524,61 +524,67 @@
 
 	re:SetScript('OnEvent', PositionBarsAfterCombat)
 
-	local PLAYER_LOGIN = function()
-		if  not created then
-			AddWrapper()
-			AddBars()
-
-			-- MODULE:CreatePetActionBar()
-			-- MODULE:CreatePetBattleBar()
-			-- MODULE:CreateExtraButton()
-			-- MODULE:CreateZoneButton()
-			-- MODULE:CreateVehicleExitButton()
-			-- CreateMicroMenu()
-			-- CreateXPBar()
-
+	local OnEvent = function(self, event)
+		if event == 'PET_BATTLE_CLOSE' or event == 'UPDATE_BINDINGS' then
 			ReassignBindings()
+		elseif event == 'PET_BATTLE_OPENING_DONE' then
+			ClearBindings()
+		else
+			if  not created then
+				AddWrapper()
+				AddBars()
 
-			--MODULE:UpdateBlizzVehicle()
+				-- MODULE:CreatePetActionBar()
+				-- MODULE:CreatePetBattleBar()
+				-- MODULE:CreateExtraButton()
+				-- MODULE:CreateZoneButton()
+				-- MODULE:CreateVehicleExitButton()
+				-- CreateMicroMenu()
+				-- CreateXPBar()
 
-			e:RegisterEvent('PET_BATTLE_CLOSE',	ReassignBindings)
-			e:RegisterEvent('PET_BATTLE_OPENING_DONE', ClearBindings)
-			e:RegisterEvent('UPDATE_BINDINGS', ReassignBindings)
-
-			if  C_PetBattles.IsInBattle() then
-				ClearBindings()
-			else
 				ReassignBindings()
-			end
 
-			SetPositions()
-			hooksecurefunc('MultiActionBar_Update', function()
-				if  InCombatLockdown() then
-					re:RegisterEvent'PLAYER_REGEN_ENABLED'
+				--MODULE:UpdateBlizzVehicle()
+
+				e:RegisterEvent('PET_BATTLE_CLOSE',	ReassignBindings)
+				e:RegisterEvent('PET_BATTLE_OPENING_DONE', ClearBindings)
+				e:RegisterEvent('UPDATE_BINDINGS', ReassignBindings)
+
+				if  C_PetBattles.IsInBattle() then
+					ClearBindings()
 				else
-					SetPositions()
+					ReassignBindings()
 				end
-			end)
 
-			-- completely ridiculous, but this solves the problem with tainting frames
-			-- by entering/leaving combat before vars are properly reflecting which of our bars are enabled
-			-- ...we just delay its registration past the "not in combat" window after login
-			C_Timer.After(2, function()
-				hooksecurefunc('SetActionBarToggles', function()
+				SetPositions()
+				hooksecurefunc('MultiActionBar_Update', function()
 					if  InCombatLockdown() then
 						re:RegisterEvent'PLAYER_REGEN_ENABLED'
 					else
-						C_Timer.After(1.25, SetPositions)
+						SetPositions()
 					end
 				end)
-			end)
 
-			created = true
+				-- completely ridiculous, but this solves the problem with tainting frames
+				-- by entering/leaving combat before vars are properly reflecting which of our bars are enabled
+				-- ...we just delay its registration past the "not in combat" window after login
+				C_Timer.After(2, function()
+					hooksecurefunc('SetActionBarToggles', function()
+						if  InCombatLockdown() then
+							re:RegisterEvent'PLAYER_REGEN_ENABLED'
+						else
+							C_Timer.After(1.25, SetPositions)
+						end
+					end)
+				end)
+
+				created = true
+			end
 		end
 	end
 
 	e:RegisterEvent'PLAYER_LOGIN'
-	e:SetScript('OnEvent', PLAYER_LOGIN)
+	e:SetScript('OnEvent', OnEvent)
 
 
 

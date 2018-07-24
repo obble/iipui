@@ -47,14 +47,14 @@
 		local _, class = UnitClass'player'
 		ns.SharedLayout(self, ...)
 
-		self:SetFrameLevel(2)	-- for layering
+		self:SetFrameLevel(1)	-- for layering
 		self:SetSize(137, 20)
 
 		local Health, Power, Castbar, RaidIcon = self.Health, self.Power, self.Castbar, self.RaidTargetIndicator
 
-		Health:SetFrameLevel(2)
+		Health:SetFrameLevel(1)
 		Health:SetHeight(9)
-		Health:SetFrameStrata'HIGH'
+		Health:SetFrameStrata'MEDIUM'
 
 		local HealthPoints = Health:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
 		HealthPoints:SetPoint('RIGHT', Health, 'LEFT', -16, 0)

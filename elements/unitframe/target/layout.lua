@@ -155,8 +155,8 @@
 
 		self.LvLParent = CreateFrame('Frame', nil, self)
 		self.LvLParent:SetSize(32, 32)
-		self.LvLParent:SetPoint('CENTER', Portrait, 'BOTTOMLEFT', 4, 5)
-		self.LvLParent:SetFrameStrata'HIGH'
+		self.LvLParent:SetPoint('CENTER', Portrait, 'BOTTOMLEFT', 4, 4)
+		self.LvLParent:SetFrameStrata'MEDIUM'
 		self.LvLParent:SetFrameLevel(2)
 
 		local Level = self.LvLParent:CreateFontString(nil, 'OVERLAY', 'GameFontNormal', 7)
