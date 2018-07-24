@@ -296,7 +296,7 @@
 			check:ClearAllPoints()
 			check:SetPoint('TOPLEFT', button, -18, 18)
 			check:SetPoint('BOTTOMRIGHT', button, 18, -18)
-			check:SetTexCoord(0, .18, .805, 1)
+			check:SetTexCoord(0, .18, .81, 1)
 
 			for _, v in pairs(
 				{

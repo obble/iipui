@@ -250,7 +250,7 @@
             if event == 'UPDATE_FACTION' and v ~= reputation then
                 if  rep:GetAlpha() < 1 then
                     rep:SetAlpha(1)
-                    C_Timer.After(5, function() UIFrameFadeOut(rep, .5, 1, 0) end)
+                    if xp:IsShown() or artifact:IsShown() then C_Timer.After(5, function() UIFrameFadeOut(rep, .5, 1, 0) end) end
                 end
                 reputation = v
             end
@@ -287,10 +287,30 @@
             artifact:SetAlpha(1)
             artifact:ClearAllPoints()
             artifact:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -118, -13)
+
+            header:Show()
+            header.Background:SetAlpha(1)
+
             if UnitInBattleground'player' then
-                header:SetText'Honour' artifact:SetAlpha(0) honour:SetAlpha(1)
+                header:SetText'Honour'
+                artifact:SetAlpha(0)
+                honour:SetAlpha(1)
             else
-                header:SetText'Artifact' artifact:SetAlpha(1) honour:SetAlpha(0)
+                if  HasArtifactEquipped() and not C_ArtifactUI.IsEquippedArtifactMaxed() and not C_ArtifactUI.IsEquippedArtifactDisabled() then
+                    header:SetText'Artifact'
+                    artifact:SetAlpha(1)
+                    honour:SetAlpha(0)
+                else
+                    if  GetWatchedFactionInfo() then
+                        header:SetText'Faction'
+                        RepUpdate()
+                        rep:SetAlpha(1)
+                        honour:SetAlpha(0)
+                    else
+                        header:Hide()
+                        header.Background:SetAlpha(0)
+                    end
+                end
             end
         else
             xp:SetAnimatedValues(XP, 0, max, level)
@@ -319,10 +339,10 @@
 
     mouseover:SetScript('OnLeave', function()
         artifact.data:Hide()
-        rep:SetAlpha(0)
         rep.data:Hide()
         honour.data:Hide()
         ns.shrink()
+        if xp:IsShown() or artifact:IsShown() then rep:SetAlpha(0) end
         if  UnitLevel'player' < MAX_PLAYER_LEVEL then
             artifact:SetAlpha(0)
             xp.data:Hide()
@@ -351,15 +371,8 @@
     }
 
     local OnEvent = function(self, event, ...)
-        if  event == 'ARTIFACT_UPDATE'
-        or  event == 'PLAYER_XP_UPDATE'
-        or  event == 'PLAYER_LEVEL_UP'
-        or  event == 'UPDATE_EXHAUSTION'
-        or  event == 'PLAYER_ENTERING_WORLD'
-        then
-            XPUpdate()
-        elseif
-            event == 'UPDATE_FACTION' then
+        XPUpdate()
+        if event == 'UPDATE_FACTION' then
             RepUpdate()
         elseif
             event == 'ZONE_CHANGED_NEW_AREA' then

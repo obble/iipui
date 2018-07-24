@@ -14,8 +14,8 @@
 		local bu  = CreateFrame('Button', 'iipTool'..i, UIParent, 'SecureActionButtonTemplate')
 		ns.BU(bu)
 		ns.BUElements(bu)
-		ns.DELEGATE_FRAMES_TO_POSITION[bu] = {'BOTTOMRIGHT', UIParent, i == 1 and -50 or i == 2 and -73 or -96, 61}
 		ns.BDStone(bu, 5)
+		bu:SetPoint('BOTTOMRIGHT', UIParent, i == 1 and -50 or i == 2 and -73 or -96, 61)
 		bu:SetAttribute('type', 'spell')
 		bu:SetFrameLevel(1)
 		bu:SetAlpha(0)

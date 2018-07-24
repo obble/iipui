@@ -4,11 +4,11 @@
 
 	local bag = _G['iipbag']
 
-	local bu = CreateFrame('Button', nil, bag, 'ActionButtonTemplate')
+	local bu = CreateFrame('Button', nil, MerchantFrame, 'ActionButtonTemplate')
 	ns.BU(bu)
-	ns.BDStone(bu)
-	bu:SetSize(11, 11)
-	bu:SetPoint('BOTTOMLEFT', 35, 7)
+	ns.BUBorder(bu, 16, 16)
+	bu:SetSize(17, 17)
+	bu:SetPoint('TOPLEFT', MerchantFrame, 70, -34)
 	bu:SetFrameStrata'MEDIUM'
 	bu:Hide()
 
