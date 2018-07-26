@@ -104,7 +104,7 @@
 			name				= 'iipActionBar5',
 			num 				= 12,
 			padding 			= 9,
-			page				= 4,
+			page				= 3,
 			positions			= {'BOTTOMLEFT', UIParent, 'BOTTOMRIGHT', -91, 232},
 			row					= 1,
 			size 				= 30,
