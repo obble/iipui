@@ -24,12 +24,13 @@
     mouseover:SetPoint('TOPLEFT', header)
     mouseover:SetFrameLevel(1)
     mouseover:SetPoint('BOTTOMRIGHT', header, 0, -50)
+    mouseover:SetFrameStrata'LOW'
 
     local xp = CreateFrame('StatusBar', 'iipXP', Minimap, 'AnimatedStatusBarTemplate')
     ns.SB(xp)
     xp:SetSize(100, 5)
     xp:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -118, -13)
-    xp:SetFrameLevel(0)
+    xp:SetFrameLevel(1)
     xp:SetStatusBarColor(120/255, 88/255, 237/255)
     xp:SetAnimatedTextureColors(120/255, 88/255, 237/255)
     xp:EnableMouse(false)
@@ -85,6 +86,7 @@
     rest:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -118, -13)
     rest:SetStatusBarColor(157/255, 187/255, 244/255)
     rest:SetFrameLevel(0)
+    rest:SetFrameStrata'LOW'
     rest:EnableMouse(false)
 
     rest.bd = rest:CreateTexture(nil, 'BACKGROUND', nil, 7)

@@ -85,7 +85,7 @@
 		},
 		['bar4'] = {
 			buttons				= 'MultiBarLeft',
-			flyout				= 'LEFT',
+			flyout				= 'RIGHT',
 			grid				= true,
 			name				= 'iipActionBar4',
 			num 				= 12,
@@ -99,7 +99,7 @@
 		},
 		['bar5'] = {
 			buttons				= 'MultiBarRight',
-			flyout				= 'LEFT',
+			flyout				= 'RIGHT',
 			grid				= true,
 			name				= 'iipActionBar5',
 			num 				= 12,
@@ -184,7 +184,7 @@
 		self.buttonConfig.clickOnDown 			= false
 		self.buttonConfig.desaturateOnCooldown 	= true
 		self.buttonConfig.drawBling 			= true
-		self.buttonConfig.flyout 				= 'UP'
+		self.buttonConfig.flyout 				= bars[self._id].flyout
 		self.buttonConfig.outOfManaColoring 	= true
 		self.buttonConfig.outOfRangeColoring 	= true
 		self.buttonConfig.showGrid 				= tonumber(GetCVar'alwaysShowActionBars')
@@ -534,18 +534,6 @@
 				AddWrapper()
 				AddBars()
 
-				-- MODULE:CreatePetActionBar()
-				-- MODULE:CreatePetBattleBar()
-				-- MODULE:CreateExtraButton()
-				-- MODULE:CreateZoneButton()
-				-- MODULE:CreateVehicleExitButton()
-				-- CreateMicroMenu()
-				-- CreateXPBar()
-
-				ReassignBindings()
-
-				--MODULE:UpdateBlizzVehicle()
-
 				e:RegisterEvent('PET_BATTLE_CLOSE',	ReassignBindings)
 				e:RegisterEvent('PET_BATTLE_OPENING_DONE', ClearBindings)
 				e:RegisterEvent('UPDATE_BINDINGS', ReassignBindings)
@@ -557,11 +545,23 @@
 				end
 
 				SetPositions()
+
 				hooksecurefunc('MultiActionBar_Update', function()
 					if  InCombatLockdown() then
 						re:RegisterEvent'PLAYER_REGEN_ENABLED'
 					else
 						SetPositions()
+					end
+				end)
+
+				hooksecurefunc(SpellFlyout, 'Toggle', function(self, id)
+					if self:IsShown() then
+						local _, _, num = GetFlyoutInfo(id)
+						add(self)
+						for i = 1, num do
+							add(_G['SpellFlyoutButton' .. i])
+						end
+						ns.AddBarMouseoverElements()
 					end
 				end)
 

@@ -17,7 +17,7 @@
 	bar:SetPoint('RIGHT', -350, 0)
 	bar:SetPoint'BOTTOM'
 	bar:SetFrameLevel(0)
-	bar:SetFrameStrata'MEDIUM'
+	bar:SetFrameStrata'LOW'
 
 	bar.collapse = CreateFrame('Frame', nil, bar)
 	bar.collapse:SetHeight(100)

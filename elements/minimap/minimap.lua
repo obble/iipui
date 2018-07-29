@@ -8,7 +8,6 @@
 	Minimap:SetSize(111, 111)
 	-- Minimap:SetMaskTexture[[Interface\ChatFrame\ChatFrameBackground]]
 	MinimapCluster:ClearAllPoints()
-	Minimap:SetFrameLevel(15)
 	MinimapCluster:SetPoint('BOTTOMRIGHT', -5, 16)
 
 	-- bug fix for people fucking about with the map cluster

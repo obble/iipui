@@ -213,7 +213,7 @@
 
 	ns.PostUpdateDispelIcon = function(icons, unit, icon, index, offset, filter, isDebuff)
 		local element = icons:GetParent()
-		local name, _, _, _, dtype = UnitAura(unit, index, icon.filter)
+		local name, _, _, dtype = UnitAura(unit, index, icon.filter)
 		icon.dtype = dtype or 'none'
 		icon.icon:SetTexture(icon.dtype == 'none' and 'Interface\\MINIMAP\\POIICONS' or 'Interface\\RaidFrame\\Raid-Icon-Debuff'..dtype)
 		if  icon.dtype == 'none' then

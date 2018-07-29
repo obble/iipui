@@ -2,14 +2,7 @@
 
 	local _, ns = ...
 
-	local UpdateBackpackFreeSlots = function()
-		local total = 0
-		for i = BACKPACK_CONTAINER, NUM_BAG_SLOTS do
-			local free, family = GetContainerNumFreeSlots(i)
-			if family == 0 then total = total + free end
-		end
-		MainMenuBarBackpackButtonCount:SetText(string.format('%s', total))
-	end
+	local free, total = 0, 0
 
 	local bu = MainMenuBarBackpackButton
 	bu:SetParent(UIParent)
@@ -19,7 +12,13 @@
 	bu:GetNormalTexture():SetTexture''
 	ns.BUElements(bu)
 
-	--SetPortraitToTexture(MainMenuBarBackpackButtonIconTexture, [[Interface\Buttons\Button-Backpack-Up]])
+	bu.space = CreateFrame('StatusBar', 'iipui_bagspace', bu)
+	ns.BD(bu.space, 1, -2)
+	ns.SB(bu.space)
+	bu.space:SetSize(22, 3)
+	bu.space:SetPoint('TOP', bu, 'BOTTOM', 1, -1.5)
+	bu.space:SetStatusBarColor(1, 1, 1)
+	bu.space:SetFrameLevel(bu:GetFrameLevel() - 1)
 
 	local mask = bu:CreateMaskTexture()
 	mask:SetTexture[[Interface\Minimap\UI-Minimap-Background]]
@@ -41,7 +40,20 @@
 		bu.bo:SetVertexColor(.7, .7, .7)
 	end
 
-	UpdateBackpackFreeSlots()
-	hooksecurefunc('MainMenuBarBackpackButton_UpdateFreeSlots', UpdateBackpackFreeSlots)
+	local UpdateFreeSlots = function()
+		free, total = 0, 0
+		for i = BACKPACK_CONTAINER, NUM_BAG_SLOTS do
+			local slots, type = GetContainerNumFreeSlots(i)
+			if  type == 0 then
+				free, total = free + slots, total + GetContainerNumSlots(i)
+			end
+		end
+		bu.space:SetMinMaxValues(0, total)
+		bu.space:SetValue(free)
+		ns.GRADIENT_COLOUR(bu.space, free, 0, total)
+	end
+
+	UpdateFreeSlots()
+	hooksecurefunc('MainMenuBarBackpackButton_UpdateFreeSlots', UpdateFreeSlots)
 
 	--

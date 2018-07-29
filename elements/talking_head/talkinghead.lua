@@ -7,6 +7,7 @@
         TalkingHeadFrame:SetSize(240, 68)
         TalkingHeadFrame:ClearAllPoints()
         TalkingHeadFrame:SetPoint('BOTTOM', UIParent, -20, 300)
+        TalkingHeadFrame.ignoreFramePositionManager = true
         UIPARENT_MANAGED_FRAME_POSITIONS.TalkingHeadFrame = nil
 
         TalkingHeadFrame.NameFrame:SetSize(68, 24)
@@ -32,11 +33,9 @@
             TalkingHeadFrame.MainFrame.Overlay
         }) do v:Hide() end
 
-        TalkingHeadFrame.TextFrame:SetWidth(200)
-        TalkingHeadFrame.TextFrame:ClearAllPoints()
-        TalkingHeadFrame.TextFrame:SetPoint('TOPLEFT', TalkingHeadFrame, 'BOTTOMLEFT', 20, -20)
-        TalkingHeadFrame.TextFrame.Text:SetFont(STANDARD_TEXT_FONT, 10)
-        TalkingHeadFrame.TextFrame.Text:SetWidth(200)
+        TalkingHeadFrame.TextFrame.Text:SetFont(STANDARD_TEXT_FONT, 12)
+        TalkingHeadFrame.TextFrame.Text:SetPoint('TOPLEFT', TalkingHeadFrame.NameFrame, 'BOTTOMLEFT', -200, -6)
+        TalkingHeadFrame.TextFrame.Text:SetPoint('BOTTOMRIGHT', 50, -150)
 
         TalkingHeadFrame.MainFrame:SetSize(68, 48)
 

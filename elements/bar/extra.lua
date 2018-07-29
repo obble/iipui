@@ -42,7 +42,6 @@
 		ns.BUElements(ExtraActionButton1)
 		ns.BUBorder(ExtraActionButton1, 27, 28)
 
-		ExtraActionButton1:SetParent(bar)
 		ExtraActionButton1:SetFrameStrata'HIGH'
 		ExtraActionButton1:ClearAllPoints()
 		ExtraActionButton1:SetPoint('TOPLEFT', bar, 2, -2)

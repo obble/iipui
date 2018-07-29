@@ -42,9 +42,12 @@
 	bu.icon:SetTexture(allied[strlower(race)] or 'Interface\\Icons\\Achievement_character_'..strlower(race == 'Scourge' and 'undead' or race)..'_'..Gender[UnitSex'player'])
 	bu.icon:AddMaskTexture(mask)
 
-	--[[bu.bo.m = bu:CreateMaskTexture()
-	bu.bo.m:SetTextureInterface\Minimap\UI-Minimap-Background
-	bu.bo.m:SetAllPoints()]]
+	bu.latency = bu:CreateTexture(nil, 'BACKGROUND')
+	ns.BD(bu.latency, 1, -2)
+	ns.SB(bu.latency)
+	bu.latency:SetSize(22, 3)
+	bu.latency:SetPoint('TOP', bu, 'BOTTOM', 1, -1.5)
+	bu.latency:SetVertexColor(1, 1, 1)
 
 	bu.bo = bu:CreateTexture(nil, 'OVERLAY')
 	bu.bo:SetSize(36, 36)
@@ -60,6 +63,20 @@
 		i.padding    = 15
 		Lib_UIDropDownMenu_AddButton(i, level)
 		wipe(i)
+	end
+
+	local AddLatency = function()
+		local _, _, home, world = GetNetStats()
+		local latency = home > world and home or world
+		local r, g, b
+		if  latency > PERFORMANCEBAR_MEDIUM_LATENCY then
+			r, g, b = 1, 0, 0
+		elseif latency > PERFORMANCEBAR_LOW_LATENCY then
+			r, g, b = 1, 1, 0
+		else
+			r, g, b = 0, 1, 0
+		end
+		bu.latency:SetVertexColor(r, g, b)
 	end
 
 	f.initialize = function(self, level)
@@ -234,6 +251,16 @@
 			Lib_ToggleDropDownMenu(1, nil, f, self, -160, 400)
 		end
 	end)
+
+	local OnEvent = function()
+		AddLatency()
+		f.Ticker = C_Timer.NewTicker(30, function()
+			 AddLatency()
+		end)
+	end
+
+	f:RegisterEvent'PLAYER_LOGIN'
+	f:SetScript('OnEvent', OnEvent)
 
 
 	--
