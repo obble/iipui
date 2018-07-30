@@ -62,6 +62,7 @@ elements\bar\petbattle.lua
 elements\bar\hide.lua
 elements\bar\bindings.lua
 elements\bar\extra.lua
+elements\bar\vehicleleave.lua
 elements\bar\zone.lua
 #
 elements\boss\warnings.lua

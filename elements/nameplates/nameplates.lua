@@ -147,11 +147,7 @@
         frame.name:SetFont([[Fonts\skurri.ttf]], 13)
         frame.name:ClearAllPoints()
         frame.name:SetPoint('BOTTOM', frame, 'TOP', 0, -12)
-
-        for _, v in pairs({frame.selectionHighlight, frame.aggroHighlight}) do
-            v:SetTexture''
-        end
-
+        
         frame.bd = CreateFrame('Frame', nil, frame)
         ns.BD(frame.bd, 1, -1)
         frame.bd:SetBackdropColor(.025, .025, .025)
@@ -187,6 +183,24 @@
         frame.flag = frame.healthBar:CreateTexture(nil, 'OVERLAY')
         frame.flag:SetPoint('RIGHT', frame.healthBar, 7, 0)
         frame.flag:Hide()
+
+        frame.selectionHighlight:SetParent(frame.bd)
+        frame.selectionHighlight:ClearAllPoints()
+        frame.selectionHighlight:SetPoint('TOPLEFT', frame.bd, -2, 1)
+        frame.selectionHighlight:SetPoint('BOTTOMRIGHT', frame.bd,  2, 0)
+        frame.selectionHighlight:SetTexture[[Interface\Scenarios\ScenarioParts]]
+        frame.selectionHighlight:SetVertexColor(1, 1, 0, .2)
+        frame.selectionHighlight:SetTexCoord(0, .641, 0, .18)
+        frame.selectionHighlight:SetDrawLayer('BACKGROUND', -7)
+
+        frame.aggroHighlight:ClearAllPoints()
+        frame.aggroHighlight:SetPoint('TOPLEFT', frame.bd, -2, 1)
+        frame.aggroHighlight:SetPoint('BOTTOMRIGHT', frame.bd,  2, 0)
+        frame.aggroHighlight:SetTexture[[Interface\Scenarios\ScenarioParts]]
+        frame.aggroHighlight:SetVertexColor(1, 0, 0, 1)
+        frame.aggroHighlight:SetTexCoord(0, .641, 0, .18)
+        frame.aggroHighlight:SetDrawLayer('BACKGROUND', -7)
+        frame.aggroHighlight:SetAlpha(0)
 
         frame.target = frame.healthBar:CreateTexture(nil, 'OVERLAY')
         frame.target:SetSize(18, 18)

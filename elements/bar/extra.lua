@@ -4,7 +4,7 @@
 	local e = CreateFrame'Frame'
 
 	local bars = {
-		positions 	= {'BOTTOM', UIParent, 'BOTTOM', 0, 142},
+		positions 	= {'BOTTOM', UIParent, 'BOTTOM', 0, 148},
 		size		= 46,
 		scale		= .925,
 	}
@@ -34,9 +34,13 @@
 		ExtraActionBarFrame:EnableMouse(false)
 		ExtraActionBarFrame:SetParent(bar)
 		ExtraActionBarFrame:SetAllPoints()
-		ExtraActionBarFrame:SetFrameStrata'LOW'
-		--ExtraActionBarFrame.button.style:SetParent(UIParent)
+		ExtraActionBarFrame:SetFrameStrata'MEDIUM'
 		ExtraActionBarFrame.button.style:SetScale(bars.scale)
+		
+		ExtraActionBarFrame:HookScript('OnShow', function()
+			ns.grow()
+			C_Timer.After(5, function() ns.shrink() end)
+		end)
 
 		ns.BU(ExtraActionButton1)
 		ns.BUElements(ExtraActionButton1)
