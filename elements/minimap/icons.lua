@@ -41,7 +41,7 @@
 
 	local bugs = CreateFrame('Button', 'iipFuck', Minimap)
 	ns.BD(bugs)
-	bugs:SetPoint'BOTTOMLEFT'
+	bugs:SetPoint('TOPLEFT', -10, 10)
 	bugs:SetSize(6, 8)
 	bugs:SetAlpha(0)
 

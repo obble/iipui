@@ -6,7 +6,7 @@
 	-- todo: reorient flyover buttons
 
 	ns.bar_elements = {} --  inserted in buttons.lua
-	wipe(ns.bar_elements)
+	ns.bar_elements_nohide = {}
 
 	local e = CreateFrame'Frame'
 	local petbattle = false
@@ -173,17 +173,22 @@
 		OnLock(ignore)
 	end
 
-	ns.AddBarMouseoverElements = function()				-- assert "sticky" behaviour for bar pseudo-children
-		ns.AddBarLocks(true)						-- preventing the bar collapsing when we mouseover elements within
-		for i, v in pairs(ns.bar_elements) do	-- this is run on the initial login OnUpdate collapse
-												-- in order to collect elements added after this file is run
-			if not v.RegisteredForBar then		-- kill overhead
-				v:HookScript('OnEnter', OnEnter)
-				v:HookScript('OnLeave', OnLeave)
-				v.RegisteredForBar = true
+	ns.AddBarMouseoverElements = function()		-- assert "sticky" behaviour for bar pseudo-children
+		ns.AddBarLocks(true)					-- preventing the bar collapsing when we mouseover elements within
+		for _, v in pairs(
+			{
+				ns.bar_elements,
+				ns.bar_elements_nohide
+			}
+		) do
+			for k, j in pairs(v) do
+				if not j.RegisteredForBar then
+					j:HookScript('OnEnter', OnEnter)
+					j:HookScript('OnLeave', OnLeave)
+					j.RegisteredForBar = true
+				end
 			end
-		end
-						  						-- defined in customise/customise.lua
+		end			  						-- defined in customise/customise.lua
 		for  _, v in pairs(ns.bar_elements_custom) do
 			if 	v and not ns.bar_elements[v] then
 				tinsert(ns.bar_elements, v)

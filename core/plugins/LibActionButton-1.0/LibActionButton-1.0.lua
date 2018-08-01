@@ -3,16 +3,16 @@ Copyright (c) 2010-2017, Hendrik "nevcairiel" Leppkes <h.leppkes@gmail.com>
 
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without
+Redistribution and use in source and binary forms, with or without 
 modification, are permitted provided that the following conditions are met:
 
-    * Redistributions of source code must retain the above copyright notice,
+    * Redistributions of source code must retain the above copyright notice, 
       this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above copyright notice,
-      this list of conditions and the following disclaimer in the documentation
+    * Redistributions in binary form must reproduce the above copyright notice, 
+      this list of conditions and the following disclaimer in the documentation 
       and/or other materials provided with the distribution.
-    * Neither the name of the developer nor the names of its contributors
-      may be used to endorse or promote products derived from this software without
+    * Neither the name of the developer nor the names of its contributors 
+      may be used to endorse or promote products derived from this software without 
       specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
@@ -29,7 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ]]
 local MAJOR_VERSION = "LibActionButton-1.0-ls"
-local MINOR_VERSION = 72
+local MINOR_VERSION = 99999
 
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
@@ -59,7 +59,7 @@ local str_match, format, tinsert, tremove = string.match, format, tinsert, tremo
 -- GLOBALS: RANGE_INDICATOR, ATTACK_BUTTON_FLASH_TIME, TOOLTIP_UPDATE_TIME
 -- GLOBALS: ZoneAbilityFrame, HasZoneAbility, GetLastZoneAbilitySpellTexture
 
-local KeyBound = LibStub("LibKeyBound-1.0", true)
+local KeyBound = LibStub("LibKeyBound-1.0-ls", true)
 local CBH = LibStub("CallbackHandler-1.0")
 local LBG = LibStub("LibButtonGlow-1.0", true)
 local Masque = LibStub("Masque", true)
@@ -131,7 +131,6 @@ local DefaultConfig = {
 	outOfRangeColoring = "hotkey",
 	outOfManaColoring = "button",
 	drawBling = true,
-	desaturateOnCooldown = false,
 	tooltip = "enabled",
 	showGrid = false,
 	colors = {
@@ -139,6 +138,13 @@ local DefaultConfig = {
 		mana = { 0.5, 0.5, 1.0 },
 		normal = { 1.0, 1.0, 1.0 },
 		equipped = { 0.0, 1.0, 0.0 },
+		unusable = { 0.4, 0.4, 0.4 },
+	},
+	desaturation = {
+		cooldown = false,
+		mana = false,
+		range = false,
+		unusable = false,
 	},
 	hideElements = {
 		macro = false,
@@ -163,7 +169,7 @@ function lib:CreateButton(id, name, header, config)
 	end
 
 	if not KeyBound then
-		KeyBound = LibStub("LibKeyBound-1.0", true)
+		KeyBound = LibStub("LibKeyBound-1.0-ls", true)
 	end
 
 	local button = setmetatable(CreateFrame("CheckButton", name, header, "SecureActionButtonTemplate, ActionButtonTemplate"), Generic_MT)
@@ -190,6 +196,12 @@ function lib:CreateButton(id, name, header, config)
 
 	SetupSecureSnippets(button)
 	WrapOnClick(button)
+
+	-- adjust hotkey style for better readability
+	-- button.HotKey:SetFont(button.HotKey:GetFont(), 13, "OUTLINE")
+
+	-- adjust count/stack size
+	-- button.Count:SetFont(button.Count:GetFont(), 16, "OUTLINE")
 
 	-- Store the button in the registry, needed for event and OnUpdate handling
 	if not next(ButtonRegistry) then
@@ -1017,19 +1029,19 @@ local function getKeys(binding, keys)
 		if keys ~= "" then
 			keys = keys .. ", "
 		end
-		keys = keys .. GetBindingText(hotKey, "KEY_")
+		keys = keys .. GetBindingText(hotKey)
 	end
 	return keys
 end
 
 function Generic:GetBindings()
-	local keys, binding
+	local keys
 
 	if self.config.keyBoundTarget then
 		keys = getKeys(self.config.keyBoundTarget)
 	end
 
-	keys = getKeys("CLICK "..self:GetName()..":LeftButton")
+	keys = getKeys("CLICK "..self:GetName()..":LeftButton", keys)
 
 	return keys
 end
@@ -1106,8 +1118,7 @@ function Update(self)
 
 	-- Add a green border if button is an equipped item
 	if self:IsEquipped() and not self.config.hideElements.equipped then
-		local color = self.config.colors.equipped
-		self.Border:SetVertexColor(color[1], color[2], color[3], 0.35)
+		self.Border:SetVertexColor(unpack(self.config.colors.equipped))
 		self.Border:Show()
 	else
 		self.Border:Hide()
@@ -1204,30 +1215,23 @@ function UpdateButtonState(self)
 end
 
 function UpdateUsable(self)
-	-- TODO: make the colors configurable
-	-- TODO: allow disabling of the whole recoloring
 	if self.config.outOfRangeColoring == "button" and self.outOfRange then
-		local color = self.config.colors.range
-		self.icon:SetDesaturated(true)
-		self.icon:SetVertexColor(color[1], color[2], color[3], 0.65)
+		self.icon:SetDesaturated(self.config.desaturation.range == true)
+		self.icon:SetVertexColor(unpack(self.config.colors.range))
 	elseif self.config.outOfManaColoring == "button" and self.outOfMana then
-		local color = self.config.colors.mana
-		self.icon:SetDesaturated(true)
-		self.icon:SetVertexColor(color[1], color[2], color[3], 0.65)
-	elseif self.config.desaturateOnCooldown and self.onCooldown then
-		local color = self.config.colors.normal
-		self.icon:SetDesaturated(true)
-		self.icon:SetVertexColor(color[1], color[2], color[3], 0.65)
+		self.icon:SetDesaturated(self.config.desaturation.mana == true)
+		self.icon:SetVertexColor(unpack(self.config.colors.mana))
+	elseif self.onCooldown then
+		self.icon:SetDesaturated(self.config.desaturation.cooldown == true)
+		self.icon:SetVertexColor(unpack(self.config.colors.unusable))
 	else
 		local isUsable = self:IsUsable()
 		if isUsable then
-			local color = self.config.colors.normal
 			self.icon:SetDesaturated(false)
-			self.icon:SetVertexColor(color[1], color[2], color[3], 1)
+			self.icon:SetVertexColor(unpack(self.config.colors.normal))
 		else
-			local color = self.config.colors.normal
-			self.icon:SetDesaturated(true)
-			self.icon:SetVertexColor(color[1], color[2], color[3], 0.65)
+			self.icon:SetDesaturated(self.config.desaturation.unusable == true)
+			self.icon:SetVertexColor(unpack(self.config.colors.unusable))
 		end
 	end
 	lib.callbacks:Fire("OnButtonUsable", self)
@@ -1336,7 +1340,7 @@ function UpdateCooldown(self)
 
 	local oldOnCooldown = self.onCooldown
 	self.onCooldown = enable and enable ~= 0 and start > 0 and duration > 1.5
-	if self.config.desaturateOnCooldown and self.onCooldown ~= oldOnCooldown then
+	if self.onCooldown ~= oldOnCooldown then
 		UpdateUsable(self)
 		if self.onCooldown then
 			self.cooldown:SetScript("OnCooldownDone", OnCooldownDone)

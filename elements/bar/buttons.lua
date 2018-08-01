@@ -173,29 +173,43 @@
 	local AddConfig = function(self)
 		if  not self.buttonConfig then
 			self.buttonConfig = {
-				tooltip 		= 'enabled',
-				colors 			= {},
-				hideElements 	= {
+				tooltip = 'enabled',
+				colors = {},
+				desaturation = {},
+				hideElements = {
 					equipped = false,
 				},
 			}
 		end
 
-		self.buttonConfig.clickOnDown 			= false
+		self.buttonConfig.clickOnDown = false
 		self.buttonConfig.desaturateOnCooldown 	= true
-		self.buttonConfig.drawBling 			= true
-		self.buttonConfig.flyout 				= bars[self._id].flyout
-		self.buttonConfig.outOfManaColoring 	= true
-		self.buttonConfig.outOfRangeColoring 	= true
-		self.buttonConfig.showGrid 				= tonumber(GetCVar'alwaysShowActionBars')
+		self.buttonConfig.drawBling = true
+		self.buttonConfig.flyout = bars[self._id].flyout
+		self.buttonConfig.desaturation = {
+			cooldown = false,
+			mana = false,
+			range = false,
+			unusable = false,
+		}
+		self.buttonConfig.outOfManaColoring = 'button'
+		self.buttonConfig.outOfRangeColoring = 'button'
+		self.buttonConfig.showGrid = tonumber(GetCVar'alwaysShowActionBars')
 
-		self.buttonConfig.colors.mana 			= {r = 38/255, 	g = 97/255,	b = 172/255}
-		self.buttonConfig.colors.normal 		= {r = 1,		g = 1,		b = 1}
-		self.buttonConfig.colors.range 			= {r = 141/255, g = 28/255, b = 33/255}
+		self.buttonConfig.desaturation = {
+			cooldown = true,
+			mana = true,
+			range = false,
+			unusable = true,
+		}
+
+		self.buttonConfig.colors.range = { 141/255, 28/255, 22/255 }
+		self.buttonConfig.colors.mana = { .8, .8, .8 }
+		self.buttonConfig.colors.unusable = { .4, .4, .4 }
 
 
-		self.buttonConfig.hideElements.hotkey 	= false
-		self.buttonConfig.hideElements.macro 	= false
+		self.buttonConfig.hideElements.hotkey = false
+		self.buttonConfig.hideElements.macro = false
 
 		for i, bu in pairs(self._buttons) do
 			self.buttonConfig.keyBoundTarget = bu._command

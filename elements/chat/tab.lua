@@ -15,7 +15,8 @@
     -- GENERAL_CHAT_DOCK:SetWidth(ChatFrame1:GetWidth())
 
     local ColourTab = function(self)
-        local tab = _G[self:GetName()..'Tab']  or self
+        local  tab = _G[self:GetName()..'Tab']  or self or nil
+        if not tab then return end
         local t   = _G[self:GetName()..'Text'] or _G[self:GetName()..'TabText']
         if  tab:IsMouseOver() then
             t:SetTextColor(0, 1, 1)

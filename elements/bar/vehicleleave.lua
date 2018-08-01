@@ -9,7 +9,7 @@
   		bu:RegisterForClicks'AnyUp'
   		bu:GetNormalTexture():SetTexture''
 
-		tinsert(ns.bar_elements, bu)
+		tinsert(ns.bar_elements_nohide, bu)
 
 		local mask = bu:CreateMaskTexture()
 		mask:SetTexture[[Interface\Minimap\UI-Minimap-Background]]
