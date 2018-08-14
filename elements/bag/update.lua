@@ -377,8 +377,9 @@
 
 	ReagentBankFrame:HookScript('OnShow', ReAnchorReagentBank)
 	ReagentBankFrame:HookScript('OnHide', function()
-		if BankFrame:IsShown() then
+		if  BankFrame:IsShown() then
 			for i = 0, 11 do OpenBag(i) end
+			HideBankArt()
 			ReAnchorBank()
 		end
 	end)

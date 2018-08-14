@@ -102,7 +102,9 @@
 		local slot = BankSlotsFrame['Bag'..i]
 		local _, highlight = slot:GetChildren()
 
+		ns.BD(slot)
 		ns.BDStone(slot, 5)
+
 		slot:UnregisterEvent'ITEM_PUSH'
 		slot:SetNormalTexture''
 		slot:SetHighlightTexture''
@@ -112,9 +114,6 @@
 		slot:SetParent(bank)
 		slot:SetFrameStrata'MEDIUM'
 
-		ns.BD(slot)
-		ns.BDStone(slot, 5)
-
 		slot.IconBorder:SetAlpha(0)
 
 		slot.icon:SetTexCoord(.1, .9, .225, .775)
@@ -122,7 +121,7 @@
 		highlight:Hide()
 
 		if i == 1 then
-			slot:SetPoint('TOPRIGHT', bank, -15, -40)
+			slot:SetPoint('TOPRIGHT', bank, -15, -32)
 		else
 			slot:SetPoint('RIGHT', BankSlotsFrame['Bag'..(i - 1)], 'LEFT', -3, 0)
 		end

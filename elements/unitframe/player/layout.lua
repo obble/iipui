@@ -30,7 +30,11 @@
 	local AddWarlockPower = function(self)
 		WarlockPowerFrame:SetParent(self)
 		WarlockPowerFrame:ClearAllPoints()
-		WarlockPowerFrame:SetPoint('TOPLEFT', self, 'BOTTOM', -55, -4)
+		if 	UnitExists'pet' then
+			WarlockPowerFrame:SetPoint('TOPLEFT', self, 'BOTTOM', -55, -22)
+		else
+			WarlockPowerFrame:SetPoint('TOPLEFT', self, 'BOTTOM', -55, -4)
+		end
 	end
 
 	local AddRunePower = function(self)

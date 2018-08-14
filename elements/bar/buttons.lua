@@ -3,9 +3,9 @@
 
 	local _, ns = ...
 
-	local ABARS 	= {}
-	local e, re		= CreateFrame'Frame', CreateFrame'Frame'
-	local created 	= false
+	local ABARS = {}
+	local e, re = CreateFrame'Frame', CreateFrame'Frame'
+	local created = false
 
 	local controller
 	local anim_controller
@@ -15,6 +15,8 @@
 	local hide = CreateFrame'Frame'
 	hide:Hide()
 
+	local x = 30 --  button size! the bars will scale to accommodate changes to this value
+				 --  change size in the tables for each bar individually if you're a loon and like to break things
 	local bars = {
 		['bar1'] = {
 			buttons				= 'Action',
@@ -26,12 +28,12 @@
 			positions			= {'BOTTOM', UIParent, 'BOTTOM', 0, 	80},
 			wrappositions		= {'BOTTOM', UIParent, 'BOTTOM', -120, 	80},
 			row					= 12,
-			size 				= 30,
+			size 				= x,
 			type				= 'ACTIONBUTTON',
 			visibility 			= '[vehicleui][petbattle][possessbar] hide; show',
 			textureL			= {.02, .5, 0, 1},
 			textureR			= {.5, .98, 0, 1},
-			textureLpositionsT	= {'TOPLEFT', nil, 'TOPLEFT', -11, 14},	-- parent (textureLpositions[2]) defined in call
+			textureLpositionsT	= {'TOPLEFT', nil, 'TOPLEFT', -11, 14},	-- parent (textureLpositions[2]) is defined in function
 			textureLpositionsB	= {'BOTTOMRIGHT', nil, 'BOTTOM', 0, -16},
 			textureRpositionsT	= {'TOPRIGHT', nil, 'TOPRIGHT', 11, 14},
 			textureRpositionsB	= {'BOTTOMLEFT', nil, 'BOTTOM', 0, -16},
@@ -49,7 +51,7 @@
 			positions			= {'BOTTOM', UIParent, 'BOTTOM', 0, 119},
 			wrappositions		= {'BOTTOM', UIParent, 'BOTTOM', -120, 	119},
 			row					= 12,
-			size 				= 30,
+			size 				= x,
 			type				= 'MULTIACTIONBAR1BUTTON',
 			visibility 			= '[vehicleui][petbattle][overridebar][possessbar] hide; show',
 			textureL			= {.018, .5, 0, .8},
@@ -71,7 +73,7 @@
 			page				= 5,
 			positions			= {'BOTTOM', UIParent, 'BOTTOM', 231, 80},
 			row					= 6,
-			size 				= 30,
+			size 				= x,
 			type				= 'MULTIACTIONBAR2BUTTON',
 			visibility 			= '[vehicleui][petbattle][overridebar][possessbar] hide; show',
 			textureL			= {.2, 1, 0, 1},
@@ -93,7 +95,7 @@
 			page				= 4,
 			positions			= {'BOTTOMLEFT', UIParent, 'BOTTOMRIGHT', -130, 232},
 			row					= 1,
-			size 				= 30,
+			size 				= x,
 			type				= 'MULTIACTIONBAR4BUTTON',
 			visibility 			= '[vehicleui][petbattle][overridebar][possessbar] hide; show',
 		},
@@ -107,7 +109,7 @@
 			page				= 3,
 			positions			= {'BOTTOMLEFT', UIParent, 'BOTTOMRIGHT', -91, 232},
 			row					= 1,
-			size 				= 30,
+			size 				= x,
 			type				= 'MULTIACTIONBAR3BUTTON',
 			visibility 			= '[vehicleui][petbattle][overridebar][possessbar] hide; show',
 		},
