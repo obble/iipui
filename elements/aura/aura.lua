@@ -74,7 +74,7 @@
             local colour = DebuffTypeColor[dtype or 'none']
             self.Name:SetText(strupper(name))
             self.Name:SetTextColor(colour.r*1.7, colour.g*1.7, colour.b*1.7)    -- brighten up
-            self.Name:SetWidth(120)
+            self.Name:SetWidth(150)
             self.Name:SetWordWrap(true)
             for  i, v in pairs(self.F.bo) do
                  self.F.bo[i]:SetVertexColor(colour.r, colour.g, colour.b)
@@ -133,7 +133,7 @@
         name:SetShadowOffset(1, -1)
     	name:SetShadowColor(0, 0, 0)
         name:SetJustifyH'RIGHT'
-        name:SetPoint('RIGHT', bu, 'LEFT', -15, 2)
+        name:SetPoint('RIGHT', bu, 'LEFT', -15, 0)
 
     	local d = bu:CreateFontString('$parentDuration', nil, 'GameFontNormalSmall')
     	d:SetPoint('TOP', bu, 'BOTTOM', 0, -8)

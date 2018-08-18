@@ -239,7 +239,7 @@
 		end
 
         if  parent.Portrait and unit ~= 'player' then
-            local _, _, _, texture = UnitCastingInfo(unit)
+            local _, _, texture = UnitCastingInfo(unit)
             if  texture then
                 SetPortraitToTexture(parent.Portrait, texture)
             end
@@ -302,12 +302,12 @@
             	self.Portrait.Elite:Show()
 			end
 		elseif  self.unit == 'targettarget' then
-				if  classification == 'elite' or classification == 'worldboss' or classification == 'rareelite' or classification == 'rare' then
-				self.Portrait.Elite:Show()
-				if classification == 'rareelite' or classification == 'rare' then
-						self.Portrait.Elite:SetDesaturated(true)
+			if  classification == 'elite' or classification == 'worldboss' or classification == 'rareelite' or classification == 'rare' then
+                self.Portrait.Elite:Show()
+				if  classification == 'rareelite' or classification == 'rare' then
+                    self.Portrait.Elite:SetDesaturated(true)
 				else
-						self.Portrait.Elite:SetDesaturated(false)
+					self.Portrait.Elite:SetDesaturated(false)
 				end
 			end
 		end
