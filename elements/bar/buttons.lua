@@ -285,9 +285,9 @@
 		self.HotKey:SetFont(STANDARD_TEXT_FONT, 11, 'OUTLINE')
 		self.HotKey:SetTextColor(1, 1, 1)
 		self.HotKey:ClearAllPoints()
-		self.HotKey:SetPoint'TOPLEFT'
+		self.HotKey:SetPoint'BOTTOMRIGHT'
 		self.HotKey:SetWidth(100)
-		self.HotKey:SetJustifyH'LEFT'
+		self.HotKey:SetJustifyH'CENTER'
 
 		UpdateHotkeyText(self.HotKey)
 		hooksecurefunc(self.HotKey, 'SetText', UpdateHotkeyText)
