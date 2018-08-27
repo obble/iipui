@@ -321,7 +321,7 @@
         end
     end
 
-    ns.AddAuraElement = function(frame, unit, position, anchor, x, y)
+    ns.AddAuraElement = function(frame, unit, position, anchor, x, y, party)
         -- TODO:  consider writing these as single buff/debuff elements?
 		local BUFF_HEIGHT = 20
 		local BUFF_SPACING = 13
@@ -345,7 +345,7 @@
 
 		Auras.PostCreateIcon   = ns.PostCreateIcon
 		Auras.PostUpdateIcon   = ns.PostUpdateIcon
-		Auras.CustomFilter     = ns.CustomAuraFilter
+		Auras.CustomFilter     = party and ns.CustomPartyAuraFilter or ns.CustomAuraFilter
 
 		frame.Auras = Auras
 	end

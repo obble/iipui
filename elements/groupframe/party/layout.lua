@@ -257,7 +257,7 @@
 			frequentUpdates = true,
 		}]]
 
-		ns.AddAuraElement(self, unit, {'LEFT', self, 'RIGHT', 80, 0}, 'LEFT', 'RIGHT', 'UP')
+		ns.AddAuraElement(self, unit, {'LEFT', self, 'RIGHT', 80, 0}, 'LEFT', 'RIGHT', 'UP', true)
 
 		--  pull pre- & post- updates
 		ns.PreAndPostUpdatesForGroupElements(self)

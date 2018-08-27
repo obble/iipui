@@ -64,11 +64,26 @@
 	end
 
 	ns.CustomPartyAuraFilter = function(element, unit, icon, name, texture, count, dtype, duration, timeLeft, caster, isStealable, nameplateShowSelf, spellID, canApplyAura, isBossCast, casterIsPlayer, nameplateShowAll)
-		if  list[spellID] and playerUnits[icon.owner] then
+		local filter  = icon.filter
+		local hostile = UnitCanAttack('player', unit) or not UnitCanAssist('player', unit)
+
+		if isBossCast then					--  all boss auras go through
 			return true
-		else
-			return false
+											--  as do all vehicle-cast auras
+		elseif caster and UnitIsUnit(caster, 'vehicle') and not UnitIsPlayer'vehicle' then
+			return true
 		end
+
+		if  filter == 'HELPFUL' then	--  buff
+			if  (icon.isPlayer and not unit == 'player') or (caster and UnitIsUnit(caster, 'pet')) then
+				return true
+			end
+		elseif filter == 'HARMFUL' then	--  debuff
+			if (dispelTypes[dtype] and UnitIsFriend('player', unit)) or icon.isPlayer or (caster and UnitIsUnit(caster, 'pet')) then
+				return true
+			end
+		end
+		return false
 	end
 
 	local dispels = {}

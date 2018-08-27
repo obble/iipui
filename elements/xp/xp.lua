@@ -29,7 +29,7 @@
     local xp = CreateFrame('StatusBar', 'iipXP', Minimap, 'AnimatedStatusBarTemplate')
     ns.SB(xp)
     xp:SetSize(100, 5)
-    xp:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -118, -13)
+    xp:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -118, -10)
     xp:SetFrameLevel(1)
     xp:SetStatusBarColor(120/255, 88/255, 237/255)
     xp:SetAnimatedTextureColors(120/255, 88/255, 237/255)
@@ -83,7 +83,7 @@
     ns.SB(rest)
     ns.BD(rest)
     rest:SetSize(100, 5)
-    rest:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -118, -13)
+    rest:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -118, -10)
     rest:SetStatusBarColor(157/255, 187/255, 244/255)
     rest:SetFrameLevel(0)
     rest:SetFrameStrata'LOW'
@@ -102,7 +102,6 @@
     artifact:SetAnimatedTextureColors(230/255, 204/255, 128/255)
     artifact:SetFrameLevel(1)
     artifact:EnableMouse(false)
-    artifact:Hide()
 
     artifact.bg = artifact:CreateTexture(nil, 'BORDER')
     ns.SB(artifact.bg)
@@ -190,26 +189,24 @@
 
     local ArtifactUpdate = function(self, event)
         local azerite = C_AzeriteItem.FindActiveAzeriteItem()
-        if  HasArtifactEquipped() and not C_ArtifactUI.IsEquippedArtifactMaxed() and not C_ArtifactUI.IsEquippedArtifactDisabled() then
-            local id, altid, name, icon, total, spent, _, _, _, _, _, _, tier = C_ArtifactUI.GetEquippedArtifactInfo()
-            local num, XP, next = _G.MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(spent, total, tier)
-            local percent       = math.ceil(XP/next*100)
-
-            artifact:SetAnimatedValues(XP, 0, next, num + spent)
-            artifact.data:SetFormattedText(percent..'%% ap — points to spend: '..num)
-            artifact.spark:SetPoint('CENTER', artifact, 'LEFT', XP/next*artifact:GetWidth(), -.5)
-            artifact:Show()
-        elseif azerite then
+        if  azerite then
             local v, max    = C_AzeriteItem.GetAzeriteItemXPInfo(azerite)
             local level     = C_AzeriteItem.GetPowerLevel(azerite)
             local percent   = math.ceil(v/max*100)
 
+            artifact:ClearAllPoints()
+            artifact:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -118, xp:IsShown() and -25 or -10)
+
             artifact:SetAnimatedValues(v, 0, max, lvl)
             artifact.data:SetFormattedText(percent..'%% ap')
             artifact.spark:SetPoint('CENTER', artifact, 'LEFT', v/max*artifact:GetWidth(), -.5)
-            artifact:Show()
+
+            -- show at max level, otherwise hover/event to reveal
+            if  UnitLevel'player' == MAX_PLAYER_LEVEL then
+                artifact:SetAlpha(1)
+            end
         else
-            artifact:Hide()
+            artifact:SetAlpha(0)
         end
         if  event == 'ARTIFACT_XP_UPDATE' and UnitLevel'player' < MAX_PLAYER_LEVEL then
             if  artifact:GetAlpha() < 1 then
@@ -242,7 +239,13 @@
             rep:SetStatusBarColor(colour.r, colour.g, colour.b)
             rep:SetAnimatedTextureColors(colour.r, colour.g, colour.b)
             rep:ClearAllPoints()
-            rep:SetPoint('TOPRIGHT',  Minimap, 'BOTTOMRIGHT', -118, artifact:IsShown() and -32 or xp:IsShown() and -32 or -13)
+            rep:SetPoint(
+                'TOPRIGHT',
+                Minimap,
+                'BOTTOMRIGHT',
+                -118,
+                (artifact:IsShown() and xp:IsShown()) and -40 or (artifact:IsShown() or xp:IsShown()) and -25 or -10
+            )
 
             rep.spark:SetPoint('CENTER', rep, 'LEFT', ((v - min)/(max - min))*rep:GetWidth(), -.5)
             rep.spark:SetVertexColor(colour.r, colour.g, colour.b)
@@ -333,7 +336,7 @@
         ns.grow()
         if UnitInBattleground'player' then honour.data:Show() end
         if GetWatchedFactionInfo() then rep.data:Show() rep:SetAlpha(1) end
-        if UnitLevel'player' < MAX_PLAYER_LEVEL then
+        if  UnitLevel'player' < MAX_PLAYER_LEVEL then
             artifact:SetAlpha(1)
             xp.data:Show()
         end
